@@ -7,8 +7,9 @@ calibrated routing decisions — in ~15ms on CPU, fully self-hosted — and
 knows when to say "not my job".
 
 - **Model**: [javimosch/mtlm-7m-router3s384](https://huggingface.co/javimosch/mtlm-7m-router3s384)
-  (Hugging Face · ModelScope coming soon) — weights, tokenizer, three
-  decision heads. [Model card](docs/MODEL-CARD.md) (EN/中文).
+  ([Hugging Face](https://huggingface.co/javimosch/mtlm-7m-router3s384) ·
+  [ModelScope](https://www.modelscope.ai/models/javimosch/mtlm-7m-router3s384)) —
+  weights, tokenizer, three decision heads. [Model card](docs/MODEL-CARD.md) (EN/中文).
 - **Runtime**: [machin-anvil](https://github.com/javimosch/machin-anvil) —
   pure-MFL OpenAI-compatible server with the typed decision endpoints.
 - **This repo**: training/eval tooling, the self-serve customer-head
@@ -46,6 +47,21 @@ primitives (`/v1/decide`, `/v1/noul`, `/v1/score`, `/v1/assess`,
 | latency | ~15ms / decision, 6-core LXC, no GPU |
 | size | 7.2M params, 8.06 MB int8 |
 
+## Appliance — the whole product in 7.5 MB
+
+```bash
+# https://github.com/javimosch/mtlm-router/releases (v0.1.1)
+tar xzf mtlm-router-m7router3s384-linux-amd64.tar.gz
+cd mtlm-router-m7router3s384-linux-amd64
+./start.sh        # /v1/route on :8097 — or install mtlm-router.service
+```
+
+Static binary + int8 model + tokenizer + three heads + launcher — no
+dependencies, no GPU, no cloud. Auth and multi-tenancy are env vars:
+`ANVIL_KEYS="k1,k2"` gates `/v1/*` behind Bearer tokens, and
+`ANVIL_TENANTS="k1:helpdesk.head"` gives a key its own decision head —
+per-customer routing on one trunk, hot-swapped per request.
+
 ## Customer heads — self-serve
 
 A customer's tool vocabulary is a JSON config of example phrases, not a
@@ -70,6 +86,8 @@ artifact + manifest. Demo helpdesk head: **100%** held-out on router3.
 - `tools/eval_*.py`, `*_probes.json` — acceptance evals (agreement,
   natural, edge, exact)
 - `tools/calibrate.py`, `tools/health_check.py` — ops tooling
+- `tools/probe_gate.py` — probe-suite regression gate for CI
+- `tools/package_appliance.sh` — build the self-hosted tarball
 - `tools/router_demo.py`, `tools/jev_demo.py` — reference dispatchers
 - `docs/MODEL-CARD.md` — bilingual (EN/中文) model card
 
