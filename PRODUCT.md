@@ -85,6 +85,17 @@ calibration; `tools/health_check.py` is the one-command prod smoke.
 - Calibration is proven on synthetic holdout; real-traffic curves need volume.
 - Chat quality is TinyStories-grade — this is a dispatcher, not a chatbot.
 
+## Appliance
+
+```
+tar xzf mtlm-router-m7router3s384-linux-amd64.tar.gz   # v0.1.0 release
+cd mtlm-router-m7router3s384-linux-amd64 && ./start.sh  # serves :8097
+```
+
+7.5MB total: static MFL binary + int8 model + three heads + systemd unit +
+start.sh. No Python, no GPU, no cloud key. `tools/package_appliance.sh`
+rebuilds the tarball from any trunk+heads set.
+
 ## Stack
 
 - model + heads: [javimosch/mtlm-7m-router3s384](https://huggingface.co/javimosch/mtlm-7m-router3s384)
