@@ -1,0 +1,14 @@
+{"system": "You are an IT helpdesk dispatcher. Route each request.",
+ "slots": {"name": ["alice", "bob", "carol", "dave", "erin", "the new intern"],
+           "app": ["slack", "zoom", "jira", "vpn", "outlook", "the crm"],
+           "env": ["prod", "staging", "dev", "qa"]},
+ "routes": {
+  "reset_password": ["reset {name}'s password", "{name} is locked out", "password reset for {name}", "{name} can't log in", "unlock {name}'s account", "forgot my password", "i'm locked out of {app}"],
+  "ticket_status": ["what's the status of ticket {num}", "check ticket {num}", "any update on my ticket", "where is my {app} request", "status of INC{num}", "did anyone look at ticket {num}"],
+  "provision_vm": ["spin up a vm in {env}", "provision a new box for {env}", "i need a {env} server", "create a vm for the {app} team", "new instance in {env}", "stand up a {env} machine"],
+  "file_ticket": ["open a ticket about {app}", "log an issue with {app}", "{app} is broken again", "report a problem with {app}", "file a bug for {app}", "{app} keeps crashing"],
+  "chat": ["hello", "good morning", "thanks!", "lol", "ok", "you're the best", "bye", "cool, got it"],
+  "escalate": ["migrate our whole infra to kubernetes", "audit our security posture", "write the disaster recovery plan", "design the new network topology", "we need a complete {app} migration strategy"]
+ },
+ "_note": "num slot filled below via numeric range",
+ "_num_range": [1000, 99999]}
