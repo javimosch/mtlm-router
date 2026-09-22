@@ -68,11 +68,19 @@ def g_time():
     # users say city names, not IANA zones — "what time is it in tokyo" must
     # still route get_time (the arg shape stays TZ-ish; routing is what matters)
     z = lc(pick(TZ + CITIES)); return pick([f"what time is it in {z}?", f"current time in {z}", f"tell me the time ({z})", "what time is it?" if z == "UTC" else f"time now in {z}", f"what's the time in {z}?", f"what's the time over in {z}?", f"what time is it over in {z}?", f"do you know the time in {z}?", f"got the time in {z}?", f"what time is it rn in {z}?"]), "get_time", {"timezone": z}
+# absolute/home-relative paths — "read /etc/passwd" was a live miss to http_get.
+# NOTE: keep "cat" out of the abs-path templates — g_shell owns "cat /etc/hostname"
+# (run_shell) and the two labels would fight.
+PATHS = ["/etc/passwd", "/etc/hosts", "/var/log/syslog", "~/notes.txt", "./config.yaml",
+         "/tmp/output.log", "~/Documents/report.pdf", "/var/log/auth.log"]
 def g_read():
+    if random.random() < 0.3:
+        f = pick(PATHS)
+        return pick([f"read {f}", f"open the file {f}", f"show me what is in {f}", f"what does {f} contain?", f"what's inside {f}?", f"what's in {f}?", f"can you pull up {f}?", f"check {f} for me", f"peek at {f}", f"tell me what {f} says"]), "read_file", {"path": f}
     f = lc(pick(FILES)); return pick([f"read {f}", f"open the file {f}", f"show me what is in {f}", f"what does {f} contain?", f"cat {f}", f"open up {f}", f"what's inside {f}?", f"what's in {f}?", f"load {f} for me", f"can you pull up {f}?", f"open up my {f.split('.')[0]} file", f"check {f} for me", f"peek at {f}"]), "read_file", {"path": f}
 def g_write():
     f = pick(FILES); txt = pick(["buy milk and eggs", "meeting at 10", "call Tom tomorrow", "hello world", "chapter one: the beginning"])
-    return pick([f"write '{txt}' to {f}", f"save the text '{txt}' in {f}", f"create {f} with the content: {txt}", f"put this in {f}: {txt}"]), "write_file", {"path": f, "content": txt}
+    return pick([f"write '{txt}' to {f}", f"save the text '{txt}' in {f}", f"save '{txt}' to {f}", f"create {f} with the content: {txt}", f"put this in {f}: {txt}"]), "write_file", {"path": f, "content": txt}
 def g_http():
     u = pick(URLS); return pick([f"fetch {u}", f"get {u}", f"download the page at {u}", f"what does {u} return?", f"request {u}"]), "http_get", {"url": u}
 def g_email():
@@ -86,8 +94,14 @@ def g_shell():
 def g_convert():
     a, b, k = pick(UNITS); v = pick([num(1, 500), round(random.uniform(1, 500), 1)]); return pick([f"convert {v} {a} to {b}", f"how many {b} is {v} {a}?", f"{v} {a} in {b}", f"turn {v} {a} into {b}", f"how many {b} in {v} {a}?", f"{v} {a} is how much in {b}?", f"whats {v} {a} in {b}"]), "convert_units", {"value": v, "from": a, "to": b}
 def g_remind():
-    when = pick(["tomorrow at 9", "in 10 minutes", "on Monday", "tonight at 8", "next Friday"]); what = pick(["call Lily", "water the plants", "send the report", "buy bread", "take a break"])
-    return pick([f"remind me to {what} {when}", f"set a reminder: {what}, {when}", f"{when}, remind me to {what}", f"add a reminder to {what} {when}", f"can you remind me to {what} {when}?", f"don't let me forget to {what} {when}", f"remind me about {what} {when}"]), "set_reminder", {"text": what, "when": when}
+    # ~half recurring — "remind me to stretch every hour" was a live prod miss
+    # (routed web_search): the corpus only had one-shot times.
+    when = pick(["tomorrow at 9", "in 10 minutes", "on Monday", "tonight at 8", "next Friday",
+                 "every hour", "every morning", "every day at noon", "each evening",
+                 "every 30 minutes", "every weekday at 7", "hourly", "twice a day"])
+    what = pick(["call Lily", "water the plants", "send the report", "buy bread", "take a break",
+                 "stretch", "stand up", "take my meds", "check the oven", "drink water"])
+    return pick([f"remind me to {what} {when}", f"set a reminder: {what}, {when}", f"{when}, remind me to {what}", f"add a reminder to {what} {when}", f"can you remind me to {what} {when}?", f"don't let me forget to {what} {when}", f"remind me about {what} {when}", f"ping me to {what} {when}", f"ping me about {what} {when}", f"give me a nudge to {what} {when}", f"nag me to {what} {when}"]), "set_reminder", {"text": what, "when": when}
 def g_note():
     t = pick(["idea: tiny models", "meeting notes: ship on Friday", "shopping: milk, eggs", "quote of the day: keep it simple", "todo: fix the bug", "buy coffee", "the wifi password is blue123", "call the dentist", "project deadline moved to June"])
     return pick([f"take a note: {t}", f"note this down: {t}", f"remember: {t}", f"save a note saying {t}", f"jot this down: {t}", f"remember that {t}", f"make a note of {t}", f"note to self: {t}"]), "save_note", {"text": t}
@@ -187,6 +201,12 @@ def nat(t):
         t = t.replace("'", "")    # casual typers drop apostrophes: whats, dont
     if random.random() < 0.08:
         t = "".join(c.upper() if random.random() < 0.5 else c for c in t)  # sticky caps
+    if random.random() < 0.07:
+        t = t.upper()  # caps-lock typers: "WHAT TIME IS IT IN TOKYO"
+    if random.random() < 0.08:
+        # emoji-prefixed requests — "🌤️ what's the weather in paris" was a live
+        # miss; route must ignore the decoration.
+        t = pick(["🌤️ ", "⏰ ", "📧 ", "🔍 ", "💡 ", "🙏 ", "👉 ", "📝 ", "🔧 ", "❓ ", "😅 ", "🔥 ", "🌧️ ", "☀️ ", "🌤 ", "⛅ ", "🌦️ ", "💬 ", "🗒️ ", "📌 "]) + t
     return t
 def nat_maybe(t, p=0.4):
     return nat(t) if random.random() < p else t

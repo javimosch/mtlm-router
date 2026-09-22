@@ -1,39 +1,206 @@
-[["hey can you check what the weather is like in Paris rn","get_weather"],
-["is it gonna rain in london this afternoon","get_weather"],
-["what's the temp in berlin right now","get_weather"],
-["do i need a jacket in tokyo today","get_weather"],
-["quick maths: 47 times 23","calculator"],
-["what's 18% of 240","calculator"],
-["can you figure out 500 divided by 8 for me","calculator"],
-["hiya what's the time in new york","get_time"],
-["what time is it over in tokyo rn","get_time"],
-["search for good ramen recipes","web_search"],
-["can you look up the population of canada","web_search"],
-["find me some info on electric cars","web_search"],
-["open up my notes file","read_file"],
-["what's inside report.csv","read_file"],
-["save 'pick up dry cleaning' to todo.md","write_file"],
-["send an email to tom@example.com saying hello","send_email"],
-["can you email lily@example.com about the meeting","send_email"],
-["how do i say good morning in spanish","translate"],
-["what's 'thank you' in french","translate"],
-["run ls -la for me","run_shell"],
-["can you execute uptime","run_shell"],
-["convert 10 km to miles","convert_units"],
-["how many pounds is 80 kilos","convert_units"],
-["remind me to call mom tomorrow","set_reminder"],
-["set a reminder to buy milk tonight","set_reminder"],
-["jot this down: buy coffee","save_note"],
-["remember that the wifi password is blue123","save_note"],
-["what does wikipedia say about penguins","wikipedia"],
-["get me the wiki page on black holes","wikipedia"],
-["write me a long essay on the roman empire","escalate"],
-["help me build a react app","escalate"],
-["can you review this legal contract for me","escalate"],
-["i need a full business plan for my startup","escalate"],
-["hey what's up","chat"],
-["lol that's funny","chat"],
-["you're the best, thanks!","chat"],
-["how are you doing today","chat"],
-["what do you think about cats","chat"],
-["who even are you","chat"]]
+[
+[
+"hey can you check what the weather is like in Paris rn",
+"get_weather"
+],
+[
+"is it gonna rain in london this afternoon",
+"get_weather"
+],
+[
+"what's the temp in berlin right now",
+"get_weather"
+],
+[
+"do i need a jacket in tokyo today",
+"get_weather"
+],
+[
+"quick maths: 47 times 23",
+"calculator"
+],
+[
+"what's 18% of 240",
+"calculator"
+],
+[
+"can you figure out 500 divided by 8 for me",
+"calculator"
+],
+[
+"hiya what's the time in new york",
+"get_time"
+],
+[
+"what time is it over in tokyo rn",
+"get_time"
+],
+[
+"search for good ramen recipes",
+"web_search"
+],
+[
+"can you look up the population of canada",
+"web_search"
+],
+[
+"find me some info on electric cars",
+"web_search"
+],
+[
+"open up my notes file",
+"read_file"
+],
+[
+"what's inside report.csv",
+"read_file"
+],
+[
+"save 'pick up dry cleaning' to todo.md",
+"write_file"
+],
+[
+"send an email to tom@example.com saying hello",
+"send_email"
+],
+[
+"can you email lily@example.com about the meeting",
+"send_email"
+],
+[
+"how do i say good morning in spanish",
+"translate"
+],
+[
+"what's 'thank you' in french",
+"translate"
+],
+[
+"run ls -la for me",
+"run_shell"
+],
+[
+"can you execute uptime",
+"run_shell"
+],
+[
+"convert 10 km to miles",
+"convert_units"
+],
+[
+"how many pounds is 80 kilos",
+"convert_units"
+],
+[
+"remind me to call mom tomorrow",
+"set_reminder"
+],
+[
+"set a reminder to buy milk tonight",
+"set_reminder"
+],
+[
+"jot this down: buy coffee",
+"save_note"
+],
+[
+"remember that the wifi password is blue123",
+"save_note"
+],
+[
+"what does wikipedia say about penguins",
+"wikipedia"
+],
+[
+"get me the wiki page on black holes",
+"wikipedia"
+],
+[
+"write me a long essay on the roman empire",
+"escalate"
+],
+[
+"help me build a react app",
+"escalate"
+],
+[
+"can you review this legal contract for me",
+"escalate"
+],
+[
+"i need a full business plan for my startup",
+"escalate"
+],
+[
+"hey what's up",
+"chat"
+],
+[
+"lol that's funny",
+"chat"
+],
+[
+"you're the best, thanks!",
+"chat"
+],
+[
+"how are you doing today",
+"chat"
+],
+[
+"what do you think about cats",
+"chat"
+],
+[
+"who even are you",
+"chat"
+],
+[
+"remind me to stretch every hour",
+"set_reminder"
+],
+[
+"remind me to drink water every 30 minutes",
+"set_reminder"
+],
+[
+"remind me to take my meds every morning",
+"set_reminder"
+],
+[
+"ping me to check the oven hourly",
+"set_reminder"
+],
+[
+"🌤️ what's the weather in paris today",
+"get_weather"
+],
+[
+"⏰ what time is it in tokyo",
+"get_time"
+],
+[
+"🔍 look up black holes for me",
+"web_search"
+],
+[
+"WHAT TIME IS IT IN LONDON",
+"get_time"
+],
+[
+"wHaT iS tHe WeAtHeR iN oSlO",
+"get_weather"
+],
+[
+"read /etc/passwd",
+"read_file"
+],
+[
+"show me what's in /var/log/syslog",
+"read_file"
+],
+[
+"what does ~/notes.txt contain",
+"read_file"
+]
+]
