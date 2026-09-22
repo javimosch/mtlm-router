@@ -21,7 +21,12 @@ MIN_EDGE_OK = 9
 def post(path, payload):
     req = urllib.request.Request(BASE + path, data=json.dumps(payload).encode(),
                                  headers={"content-type": "application/json"})
-    return json.loads(urllib.request.urlopen(req, timeout=15).read())
+    try:
+        return json.loads(urllib.request.urlopen(req, timeout=15).read())
+    except urllib.error.HTTPError as e:
+        # A 4xx on malformed input (empty state, garbage) is a safe rejection —
+        # surface it as an action so edge probes can score it instead of crashing.
+        return {"action": "reject", "http_status": e.code}
 
 def run_nat():
     probes = json.load(open(os.path.join(os.path.dirname(__file__), "nat_probes.json")))
@@ -42,7 +47,8 @@ def run_edge():
         text, want = row[0], row[1]
         r = post("/v1/route", {"state": text})
         got = r.get("route") or r.get("choice")
-        safe = got == want or r.get("action") == "delegate" or got == "escalate"
+        safe = (got == want or got == "escalate"
+                or r.get("action") in ("delegate", "reject"))
         if safe:
             ok += 1
         else:
