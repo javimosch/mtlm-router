@@ -67,7 +67,7 @@ direction.
 Per-deployment route tables are ~7 KB `.head` artifacts trained on the
 frozen trunk — no fine-tuning. A customer's tool vocabulary is a JSON
 config of example phrases; `tools/head_studio.py` (in the
-[mtlm repo](https://github.com/javimosch/mtlm)) validates → synthesizes →
+[mtlm repo](https://github.com/javimosch/mtlm-router)) validates → synthesizes →
 trains → evaluates → emits the artifact. Demo 6-route IT-helpdesk head:
 **100%** on leakage-filtered holdout.
 
