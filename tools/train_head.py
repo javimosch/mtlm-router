@@ -75,9 +75,11 @@ def train_lr(H, y, ncls, iters=600, lr=0.05, l2=1e-4):
     return W.astype(np.float32), b.astype(np.float32)
 
 def fit_temperature(Z, y):
-    # grid search T minimizing val NLL — enough for a calibration knob
+    # grid search T minimizing val NLL — log-spaced, reaches far past 1.0:
+    # real-traffic logits from memorized heads need T >> 8 (observed: a head
+    # saturated at conf 1.0 still needed T~20+ to bring conf near acc ~0.4).
     best_t, best_nll = 1.0, 1e18
-    for t in np.linspace(0.25, 8.0, 128):
+    for t in np.exp(np.linspace(np.log(0.25), np.log(64.0), 200)):
         p = softmax(Z / t)
         nll = -np.log(np.maximum(p[np.arange(len(y)), y], 1e-12)).mean()
         if nll < best_nll:

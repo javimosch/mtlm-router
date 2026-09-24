@@ -85,7 +85,7 @@ artifact + manifest. Demo helpdesk head: **100%** held-out on router3.
 - `tools/synth_tools.py` — trunk training corpus generator
 - `tools/eval_*.py`, `*_probes.json` — acceptance evals (agreement,
   natural, edge, exact)
-- `tools/calibrate.py`, `tools/health_check.py` — ops tooling
+- `tools/calibrate.py`, `tools/refit_temp.py`, `tools/health_check.py` — ops tooling (confidence histograms, temperature refit on your labeled traffic, prod smoke)
 - `tools/probe_gate.py` — probe-suite regression gate for CI
 - `tools/package_appliance.sh` — build the self-hosted tarball
 - `tools/router_demo.py`, `tools/jev_demo.py` — reference dispatchers

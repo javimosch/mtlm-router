@@ -74,7 +74,9 @@ brains.
 
 **Observability is built in**: `ANVIL_LOG` streams every decision as JSONL;
 `tools/calibrate.py` buckets confidence vs labeled outcomes for real-traffic
-calibration; `tools/health_check.py` is the one-command prod smoke.
+calibration; `tools/refit_temp.py` refits a head's temperature on your own
+labeled traffic so the confidence gate stays honest; `tools/health_check.py`
+is the one-command prod smoke.
 
 ## Honest limits
 
@@ -82,7 +84,18 @@ calibration; `tools/health_check.py` is the one-command prod smoke.
   platform-side before executing.
 - `noul`/`score` answer *fixed* trained questions, not arbitrary criteria text
   (dynamic criteria is the roadmap item).
-- Calibration is proven on synthetic holdout; real-traffic curves need volume.
+- **Calibration needs your traffic.** A head's stored temperature is fit on
+  synthetic holdout; on real traffic softmax confidences saturate ~1.0 even
+  when wrong (measured on a production shadow deployment: 65/72 decisions at
+  conf ≥0.99 with 61.5% accuracy). Run `tools/refit_temp.py --labels
+  your_traffic.jsonl --mode marginal` once you have ~50+ labeled rows — it
+  rewrites T so mean confidence tracks empirical accuracy, and an untrusted
+  head degrades to honest abstention instead of confident guessing.
+- **Ambiguous human-judgment tasks need label volume, not a bigger model.**
+  On a fuzzy 3-way boundary ("is this issue a good fit for a drive-by
+  comment") a 0.6B web-pretrained backbone scored *worse* than this 7M trunk
+  (37% vs 48% on a 27-row holdout). The ceiling is label clarity and count;
+  heads shine on well-defined structured decisions.
 - Chat quality is TinyStories-grade — this is a dispatcher, not a chatbot.
 
 ## Appliance
