@@ -55,14 +55,14 @@ def main():
             if k in seen:
                 skipped += 1
                 continue
-            # seq-384 trunk minus ~80 tokens of system+template leaves
-            # ~300 tokens of state budget — ~700 chars is safely under.
+            # 384-token context: serving prompt + template eats ~110 tok —
+            # ~450 chars is the safe state budget (verified vs head_probe).
             title = iss.get("title") or ""
-            body = (iss.get("body") or "")[:500]
-            state = (title + "\n\n" + body)[:700]
+            body = (iss.get("body") or "")[:400]
+            state = (title + "\n\n" + body)[:450]
             r = route(a.router, state)
             if "error" in r and "400" in r["error"]:
-                r = route(a.router, state[:350])  # dense text: retry halved
+                r = route(a.router, state[:220])  # dense text: retry halved
             if "error" in r:
                 errors += 1
                 print(f"{k}: {r['error']}", file=sys.stderr)
