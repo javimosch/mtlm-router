@@ -78,6 +78,33 @@ calibration; `tools/refit_temp.py` refits a head's temperature on your own
 labeled traffic so the confidence gate stays honest; `tools/health_check.py`
 is the one-command prod smoke.
 
+## Mixture of experts — one trunk, many brains
+
+Heads are experts: a ~7KB `.head` file is a domain's whole routing brain on
+the same frozen trunk. The MoE product is automatic expert selection — a
+**gate head** whose "routes" are domain names picks the expert, then the
+expert head scores the domain routes. Both read one prefill's hidden state,
+so the second decision costs ~1ms, not a second forward pass.
+
+```
+ANVIL_KEYS="gate,helpdesk,fleet,rpg,default" \
+ANVIL_TENANTS="gate:moe_gate.head,helpdesk:helpdesk.head,fleet:fleet_gate.head,rpg:rpg.head" \
+./anvil-serve model.bin 8400
+python3 tools/moe_route.py --state "reset my password"
+# gate: it_helpdesk (0.77) → route: reset_password (1.0)
+```
+
+v0.1 gate head (`out/moe_gate.head`, trained on rbm4 — `tools/build_gate_spec.py`
+assembled 981 domain-labeled rows from the real corpora): **95.4% held-out
+expert selection, ECE 0.035**. Live two-hop demo on rbm4 routed
+helpdesk/tools/chat requests correctly; its two misses degraded to
+`escalate` on the generic head — a wrong gate delegates instead of
+misrouting. Weak lane is `rpg` (64 real rows) — thin domains need label
+volume, same rule as everywhere else.
+
+The shim is the pattern, not the product: native `ANVIL_EXPERTS` support
+(gate → set_head → score in one `/v1/route` call) is the serving follow-up.
+
 ## Honest limits
 
 - 7M params: argument values from the generative path can be sloppy — validate
