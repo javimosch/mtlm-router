@@ -87,23 +87,28 @@ expert head scores the domain routes. Both read one prefill's hidden state,
 so the second decision costs ~1ms, not a second forward pass.
 
 ```
-ANVIL_KEYS="gate,helpdesk,fleet,rpg,default" \
-ANVIL_TENANTS="gate:moe_gate.head,helpdesk:helpdesk.head,fleet:fleet_gate.head,rpg:rpg.head" \
+ANVIL_HEAD=models/m7router3s384.head \
+ANVIL_GATE=models/moe_gate.head \
+ANVIL_EXPERTS="it_helpdesk:models/helpdesk.head,fleet_gate:models/fleet_gate.head,rpg:models/rpg.head" \
 ./anvil-serve model.bin 8400
-python3 tools/moe_route.py --state "reset my password"
-# gate: it_helpdesk (0.77) → route: reset_password (1.0)
+curl localhost:8400/v1/route -d '{"state":"status of ticket INC4821"}'
+# {"action":"tool_call","route":"ticket_status","confidence":0.86,
+#  "domain":"it_helpdesk","gate_confidence":0.99,"expert":"it_helpdesk",...}
 ```
+
+One `/v1/route` call, one prefill, two decisions. `ANVIL_GATE_MINCONF` (or
+per-request `min_gate_conf`) delegates with `low_gate_confidence` when the
+gate itself is unsure; an unmapped domain falls back to `ANVIL_HEAD`. The
+older key-per-head pattern (`ANVIL_TENANTS` + `tools/moe_route.py` shim)
+still works for manual expert selection, but native mode is the product API.
 
 v0.1 gate head (`out/moe_gate.head`, trained on rbm4 — `tools/build_gate_spec.py`
 assembled 981 domain-labeled rows from the real corpora): **95.4% held-out
-expert selection, ECE 0.035**. Live two-hop demo on rbm4 routed
-helpdesk/tools/chat requests correctly; its two misses degraded to
-`escalate` on the generic head — a wrong gate delegates instead of
+expert selection, ECE 0.035**. Live demo on rbm4 routes helpdesk/tools/chat
+requests correctly in ~22ms end-to-end; wrong-gate cases degrade to
+`escalate` on the fallback head — a wrong gate delegates instead of
 misrouting. Weak lane is `rpg` (64 real rows) — thin domains need label
 volume, same rule as everywhere else.
-
-The shim is the pattern, not the product: native `ANVIL_EXPERTS` support
-(gate → set_head → score in one `/v1/route` call) is the serving follow-up.
 
 ## Honest limits
 
