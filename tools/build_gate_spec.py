@@ -66,6 +66,20 @@ random.shuffle(allrows)
 # 85/15 stratified-ish split: mark holdout by keeping domain mix via index
 n_hold = max(1, int(len(allrows) * 0.15))
 hold, train = allrows[:n_hold], allrows[n_hold:]
+
+# harvested live-traffic rows (harvest_gate.py): spec-format but auto-labeled
+# by the router's own agreement — train only, never holdout, or the eval
+# would grade the gate against its own labels.
+try:
+    hv = [json.loads(l) for l in open("/root/mtlm/data/gate_harvest.jsonl")]
+except FileNotFoundError:
+    hv = []
+for r in hv:
+    if r.get("expect_tool") and r.get("user"):
+        train.append({"system": GATE_SYS, "user": r["user"],
+                      "expect_tool": r["expect_tool"]})
+if hv:
+    print(f"harvest: {len(hv)} live-labeled rows merged into train", file=sys.stderr)
 with open("/root/mtlm/data/moe_gate_train.jsonl", "w") as f:
     for r in train: f.write(json.dumps(r) + "\n")
 with open("/root/mtlm/data/moe_gate_holdout.jsonl", "w") as f:

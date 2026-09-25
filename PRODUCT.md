@@ -110,6 +110,15 @@ requests correctly in ~22ms end-to-end; wrong-gate cases degrade to
 misrouting. Weak lane is `rpg` (64 real rows) — thin domains need label
 volume, same rule as everywhere else.
 
+**The label flywheel runs daily** (`mtlm-gate-flywheel.timer` on rbm21):
+`ANVIL_LOG` records every decision on rbm4; `tools/harvest_gate.py`
+auto-labels rows where gate and expert agreed at ≥0.90 conf into
+`gate_harvest.jsonl` (train-only — auto-labels never touch holdout) and
+files uncertain/delegated rows to `gate_review.jsonl` for judging;
+`tools/shadow_feed.py` streams real GitHub issues into the router as
+shadow traffic. Re-run `build_gate_spec.py` + `train_head.py` to fold
+harvested rows into the next `moe_gate.head`.
+
 ## Honest limits
 
 - 7M params: argument values from the generative path can be sloppy — validate
