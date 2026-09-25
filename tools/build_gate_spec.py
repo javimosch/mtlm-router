@@ -43,10 +43,22 @@ random.shuffle(hd)
 fg = [json.loads(l)["user"] for l in open("/root/mtlm/data/machinfit_real.jsonl")]
 random.shuffle(fg)
 
-# --- rpg: real logged game states ------------------------------------------
-rpg = list(dict.fromkeys(
+# --- rpg: logged game states + expert-spec phrasings ------------------------
+# The rpg expert spec (/data/pooled/rpg_train.jsonl on rbm4, synced to
+# /root/mtlm/data/rpg_expert_train.jsonl) contains the natural phrasings the
+# gate must recognize as game intents — its user texts are the ideal rpg
+# domain rows. Logged decisions add real-play variety.
+rpg_logged = list(dict.fromkeys(
     json.loads(l)["state"] for l in open("/root/mtlm/logs/rpg-decisions.jsonl")
     if json.loads(l).get("state")))
+rpg_expert = []
+try:
+    rpg_expert = list(dict.fromkeys(
+        json.loads(l)["user"] for l in open("/root/mtlm/data/rpg_expert_train.jsonl")
+        if json.loads(l).get("user")))
+except FileNotFoundError:
+    print("warn: no rpg_expert_train.jsonl — sync from rbm4 pooled spec", file=sys.stderr)
+rpg = rpg_logged + [u for u in rpg_expert if u not in rpg_logged]
 random.shuffle(rpg)
 
 sources = {
@@ -54,7 +66,7 @@ sources = {
     "chat":        chat_rows[:200],
     "it_helpdesk": hd[:350],
     "fleet_gate":  fg,           # all real rows (~90)
-    "rpg":         rpg,          # all unique logged (~64)
+    "rpg":         rpg[:220],    # logged + expert phrasings
 }
 allrows = []
 for dom, texts in sources.items():
