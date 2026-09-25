@@ -104,11 +104,20 @@ still works for manual expert selection, but native mode is the product API.
 
 v0.1 gate head (`out/moe_gate.head`, trained on rbm4 — `tools/build_gate_spec.py`
 assembled 981 domain-labeled rows from the real corpora): **95.4% held-out
-expert selection, ECE 0.035**. Live demo on rbm4 routes helpdesk/tools/chat
-requests correctly in ~22ms end-to-end; wrong-gate cases degrade to
-`escalate` on the fallback head — a wrong gate delegates instead of
-misrouting. Weak lane is `rpg` (64 real rows) — thin domains need label
-volume, same rule as everywhere else.
+expert selection, ECE 0.035** (0.965 with harvested rows + serving-prompt
+training). Live demo on rbm4 routes helpdesk/tools/chat requests correctly
+in ~22ms end-to-end; wrong-gate cases degrade to `escalate` on the fallback
+head — a wrong gate delegates instead of misrouting. Weak lane is `rpg`
+(64 real rows) — thin domains need label volume, same rule as everywhere else.
+
+**Per-head features** (`mhd2` flags, anvil ≥ 6089a71): each head declares
+the hidden-state tap it was trained on — `last-token`, `max`, or `mean`
+over the last user turn at a chosen layer — and mixed configs coexist on
+one instance. The shipped mix: gate + default tools head on last-token,
+`fleet_gate` on max@-3, `it_helpdesk`/`rpg` on mean@-3/@-4. Sweep verdicts:
+**mean pooling wins short synthetic rows, max wins long prose, last-token
+holds on canonical short commands** — pooling is a per-head choice, never
+a server flag.
 
 **The label flywheel runs daily** (`mtlm-gate-flywheel.timer` on rbm21):
 `ANVIL_LOG` records every decision on rbm4; `tools/harvest_gate.py`
