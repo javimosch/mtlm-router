@@ -15,11 +15,17 @@ valuable labels once judged.
     --review /root/mtlm/data/gate_review.jsonl \
     --seen /root/mtlm/data/gate_seen.txt --min-conf 0.90
 
-Idempotent: --seen tracks normalized state hashes across runs, so the log
-can be re-read from byte 0 every time. Review rows are written fresh each
-run (they shrink as auto-accepted domains thicken).
+Idempotent: --seen tracks hashes of RESOLVED states (auto-accepted or
+judged). Review rows are deliberately NOT marked seen — the review file
+is rewritten each run as a persistent queue: a row stays in review until
+it is judged (its key added to --seen) or a future accept qualifies it.
+
+Rows logged without domain fields (older builds) are replayed against
+--router (e.g. http://rbm4:8401) to recover gate/expert predictions —
+real states are too valuable to drop just because the log predates the
+logging patch.
 """
-import argparse, hashlib, json, sys
+import argparse, hashlib, json, subprocess, sys
 
 GATE_SYS = ("You are a request dispatcher. Classify each request into the "
             "specialist domain that should handle it: tools (general assistant "
@@ -39,6 +45,8 @@ def main():
     ap.add_argument("--review", required=True)
     ap.add_argument("--seen", required=True)
     ap.add_argument("--min-conf", type=float, default=0.90)
+    ap.add_argument("--router", default="",
+                    help="router URL to replay domain-less rows against")
     a = ap.parse_args()
 
     try:
@@ -53,26 +61,52 @@ def main():
         print(f"no decisions log at {a.decisions}", file=sys.stderr)
         return 0
 
+    def replay(state):
+        try:
+            p = subprocess.run(
+                ["curl", "-s", "-m", "15", "-X", "POST",
+                 a.router + "/v1/route",
+                 "-H", "content-type: application/json",
+                 "-d", json.dumps({"state": state})],
+                capture_output=True, text=True, timeout=20)
+            return json.loads(p.stdout) if p.stdout.strip() else None
+        except Exception:
+            return None
+
     for line in lines:
         try:
             r = json.loads(line)
         except Exception:
             continue
-        if r.get("ep") != "route" or not r.get("domain") or not r.get("state"):
+        if r.get("ep") != "route" or not r.get("state"):
             continue
         k = key(r["state"])
         if k in seen:
             continue
-        seen.add(k)
-        dom, gc = r["domain"], float(r.get("gate_conf") or 0)
-        if r.get("action") != "delegate" and gc >= a.min_conf:
+        if r.get("domain"):
+            dom, gc = r["domain"], float(r.get("gate_conf") or 0)
+            action, route, reason = (r.get("action"), r.get("route"),
+                                     r.get("reason"))
+        elif a.router:
+            rep = replay(r["state"])
+            if not rep:
+                continue
+            dom, gc = rep.get("domain"), float(rep.get("gate_confidence") or 0)
+            action, route, reason = (rep.get("action"), rep.get("route"),
+                                     rep.get("reason"))
+        else:
+            continue
+        if not dom:
+            continue
+        if action != "delegate" and gc >= a.min_conf:
+            seen.add(k)
             accepted.append({"system": GATE_SYS, "user": r["state"],
                              "expect_tool": dom, "src": "harvest",
                              "conf": round(gc, 4)})
         else:
             review.append({"state": r["state"], "domain": dom,
-                           "gate_conf": gc, "action": r.get("action"),
-                           "route": r.get("route"), "reason": r.get("reason")})
+                           "gate_conf": gc, "action": action,
+                           "route": route, "reason": reason})
 
     if accepted:
         with open(a.out, "a") as f:

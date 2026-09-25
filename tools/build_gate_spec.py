@@ -67,19 +67,32 @@ random.shuffle(allrows)
 n_hold = max(1, int(len(allrows) * 0.15))
 hold, train = allrows[:n_hold], allrows[n_hold:]
 
-# harvested live-traffic rows (harvest_gate.py): spec-format but auto-labeled
-# by the router's own agreement — train only, never holdout, or the eval
-# would grade the gate against its own labels.
+# harvested live-traffic rows (harvest_gate.py / judged_review.py):
+# spec-format but auto-labeled or human-judged — train only, never holdout,
+# or the eval would grade the gate against non-blind labels. Dedup against
+# the corpus AND itself: retries log the same state twice.
+import hashlib
+def skey(t):
+    return hashlib.sha1(" ".join(t.lower().split()).encode()).hexdigest()
+corpus_keys = {skey(r["user"]) for r in allrows}
 try:
     hv = [json.loads(l) for l in open("/root/mtlm/data/gate_harvest.jsonl")]
 except FileNotFoundError:
     hv = []
+merged = 0
 for r in hv:
-    if r.get("expect_tool") and r.get("user"):
-        train.append({"system": GATE_SYS, "user": r["user"],
-                      "expect_tool": r["expect_tool"]})
+    if not (r.get("expect_tool") and r.get("user")):
+        continue
+    k = skey(r["user"])
+    if k in corpus_keys:
+        continue
+    corpus_keys.add(k)
+    train.append({"system": GATE_SYS, "user": r["user"],
+                  "expect_tool": r["expect_tool"]})
+    merged += 1
 if hv:
-    print(f"harvest: {len(hv)} live-labeled rows merged into train", file=sys.stderr)
+    print(f"harvest: {merged}/{len(hv)} live-labeled rows merged into train",
+          file=sys.stderr)
 with open("/root/mtlm/data/moe_gate_train.jsonl", "w") as f:
     for r in train: f.write(json.dumps(r) + "\n")
 with open("/root/mtlm/data/moe_gate_holdout.jsonl", "w") as f:
