@@ -1,0 +1,16 @@
+{
+  "title": "mtlm-router — une couche de décision typée qui sait quand dire non",
+  "description": "Routeur auto-hébergé de 7M paramètres qui transforme les requêtes en langage naturel en décisions de routage typées et calibrées en ~15ms sur CPU. Conçu en Europe, on-prem, coût fixe — pensé pour les workflows de PME : tri d'emails, dispatch de tickets, actions ops typées.",
+  "lang": "fr",
+  "root": "/mtlm-router/fr",
+  "nav_how": "Fonctionnement",
+  "nav_moe": "Experts",
+  "nav_numbers": "Chiffres",
+  "alt_lang_url": "/mtlm-router",
+  "alt_lang_label": "EN",
+  "alt_lang_title": "English version",
+  "github": "https://github.com/javimosch/mtlm-router",
+  "machin": "https://github.com/javimosch/machin",
+  "article": "https://dev.to/javimosch/a-7m-parameter-model-that-knows-when-to-say-no-4phn",
+  "nav_pricing": "Tarifs"
+}

@@ -1,0 +1,484 @@
+{{>layout "layout.html"}}
+<div class="text-center mb-16 pt-8">
+  <p class="mono text-cyan-400 text-sm mb-4 tracking-widest">COUCHE DE DÉCISION TYPÉE · AUTO-HÉBERGÉ · CONÇU EN EUROPE</p>
+  <h1 class="text-5xl md:text-6xl font-bold mb-6 gradient-text">Un routeur qui sait<br>quand dire non.</h1>
+  <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-4">
+    mtlm-router transforme des requêtes en langage naturel en décisions de routage
+    typées et calibrées — on-prem, sur CPU, en ~15 millisecondes. Quand une requête
+    ne correspond à aucune route connue, il répond
+    <span class="text-cyan-300 mono">escalate</span> au lieu de deviner.
+  </p>
+  <p class="text-gray-500 max-w-2xl mx-auto mb-10 text-sm">
+    Les APIs de décision américaines facturent au token et gardent vos requêtes.
+    mtlm-router est une appliance de 7,5 Mo qui tourne sur le serveur que vous
+    possédez déjà — coût fixe, les données restent à l'intérieur.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4 mb-12">
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">7,2M</div>
+      <div class="text-xs text-gray-500">paramètres</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">~15ms</div>
+      <div class="text-xs text-gray-500">inférence CPU</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">8Mo</div>
+      <div class="text-xs text-gray-500">modèle int8</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">0</div>
+      <div class="text-xs text-gray-500">GPU · cloud · dépendances</div>
+    </div>
+  </div>
+  <a href="#try" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow inline-block">
+    Voir la décision
+  </a>
+</div>
+
+<div id="try" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Tapez votre propre demande. Regardez-le décider.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-6">
+    En direct sur le routeur hébergé, voies métier uniquement (helpdesk IT, outils généraux, chat). Une demande hors sujet doit <span class="text-cyan-300">s'abstenir</span>, pas deviner.
+  </p>
+  <div class="max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-5">
+    <form id="pg-form" class="flex gap-2">
+      <input id="pg-input" type="text" maxlength="300" placeholder="ex. débloque le compte de carol, elle n'arrive plus à se connecter" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600" autocomplete="off">
+      <button type="submit" class="hero-gradient text-white px-5 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">Décider</button>
+    </form>
+    <div class="flex flex-wrap gap-2 mt-3" id="pg-chips">
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">status of ticket INC4821</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">remind me to call the dentist tomorrow</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">provision a staging VM for the new intern</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">what's the weather in Lyon</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">attack the goblin with my sword</button>
+    </div>
+    <div id="pg-out" class="mt-4 hidden">
+      <div class="grid sm:grid-cols-4 gap-3 text-center">
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">route</div><div id="pg-route" class="mono text-cyan-300 text-lg"></div></div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">confiance</div><div id="pg-conf" class="mono text-lg"></div></div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">action</div><div id="pg-action" class="mono text-lg"></div></div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">voie · latence</div><div id="pg-meta" class="mono text-lg"></div></div>
+      </div>
+      <p id="pg-note" class="text-gray-500 text-xs mt-3 text-center"></p>
+      <pre id="pg-raw" class="mono text-xs text-gray-500 mt-3 overflow-x-auto bg-gray-950 rounded-lg p-3 hidden"></pre>
+    </div>
+    <p id="pg-err" class="text-red-400 text-sm mt-3 hidden"></p>
+  </div>
+  <p class="text-gray-600 text-xs text-center mt-4">Le même <span class="mono">POST /v1/route</span> que vos agents appelleraient. Quelques essais par visiteur ; prenez un portefeuille pour plus.</p>
+</div>
+
+<div id="how" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Un appel. Trois réponses typées.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Une seule requête renvoie une route validée, une confiance calibrée et une
+    proposition de remplissage d'outil — ou un
+    <span class="mono text-cyan-300">escalate</span> propre quand il ne sait pas.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ curl -s localhost:8080/assess -d '{"req":"salut, c'est la troisième fois que mon VPN coupe aujourd'hui"}'</span>
+
+<span class="text-gray-500">{</span>
+  <span class="text-blue-300">"route"</span>:       <span class="text-green-300">"create_ticket"</span>,
+  <span class="text-blue-300">"confidence"</span>:  <span class="text-yellow-300">0.87</span>,
+  <span class="text-blue-300">"noul"</span>:        <span class="text-yellow-300">0.91</span>   <span class="text-gray-600">// "novel / unhandled / loss" — cadran d'abstention</span>,
+  <span class="text-blue-300">"candidate"</span>:   <span class="text-green-300">"open_ticket"</span>,
+  <span class="text-blue-300">"score"</span>:       <span class="text-yellow-300">0.83</span>,
+  <span class="text-blue-300">"action"</span>:      <span class="text-green-300">"tool_fill"</span>,
+  <span class="text-blue-300">"fill"</span>: <span class="text-gray-500">{</span> <span class="text-blue-300">"subject"</span>: <span class="text-green-300">"VPN drops repeatedly"</span>, <span class="text-blue-300">"priority"</span>: <span class="text-green-300">"high"</span> <span class="text-gray-500">}</span>
+<span class="text-gray-500">}</span></code></pre>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6 mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Il ne discute pas</h3>
+      <p class="text-gray-400 text-sm">C'est un routeur, pas un chatbot. Il émet des décisions lisibles par machine que votre agent, helpdesk ou répartiteur peut exécuter directement.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Il ne devine pas</h3>
+      <p class="text-gray-400 text-sm">Les requêtes hors périmètre tombent sur la route calibrée <span class="mono">escalate</span>. Un petit modèle ne devrait pas faire semblant de savoir — celui-ci ne le fait pas.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Il ne débat pas</h3>
+      <p class="text-gray-400 text-sm">Pas de température, pas d'échantillonnage, pas de dérive de prompt. Un softmax déterministe sur vos routes — même requête, même réponse, à chaque fois.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Pensé pour les workflows de PME, pas pour les datacenters.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Les requêtes qui mangent le temps d'une PME sont des décisions, pas des
+    dissertations — trier la boîte mail, dispatcher le ticket, router le devis.
+    C'est exactement le travail d'un routeur.
+  </p>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Tri emails &amp; tickets</h3>
+      <p class="text-gray-400 text-sm">Devis, commandes, litiges, demandes urgentes — classés, priorisés et poussés vers la bonne file ou l'ERP. Plus de copier-coller, plus d'emails perdus.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Commandes ops typées</h3>
+      <p class="text-gray-400 text-sm">« Redémarre le spouleur sur srv2 », « marque la commande 4412 pour revue » — le langage naturel devient une action typée que votre automatisation exécute, ou un escalate quand il ne faut pas.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Relais conformité</h3>
+      <p class="text-gray-400 text-sm">Confiance faible ou requête risquée : escalade vers un humain plutôt qu'exécution. Piste d'audit incluse — chaque décision est journalisée avec sa confiance.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Une instance, plusieurs clients</h3>
+      <p class="text-gray-400 text-sm">Intégrateurs : déployez le même tronc chez chaque client et livrez une tête par client — un fichier ~7 Ko entraîné sur son vocabulaire en quelques heures, pas un modèle sur mesure.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Porte d'entrée pour la grosse IA</h3>
+      <p class="text-gray-400 text-sm">Placez-le en shadow devant votre LLM hébergé pour mesurer ce qu'il aurait pu traiter localement — puis ne coupez la facture API que là où les données le disent.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Pas besoin d'équipe ML</h3>
+      <p class="text-gray-400 text-sm">Une archive, un binaire, un endpoint. Si votre stack sait faire un POST JSON, elle sait router. RGPD natif : rien ne quitte jamais votre réseau.</p>
+    </div>
+  </div>
+</div>
+
+<div id="moe" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Mixture of experts — un tronc, plusieurs cerveaux.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-4">
+    Le tronc 7M figé est le cerveau partagé. La connaissance métier vit dans des
+    <span class="mono text-cyan-300">têtes de ~7 Ko</span> que vous livrez, échangez et auditez
+    comme des fichiers de config. Une tête gate choisit l'expert ; l'expert choisit la route.
+  </p>
+  <p class="text-gray-500 text-center max-w-2xl mx-auto mb-8 text-sm">
+    Chaque tête déclare son propre prélèvement de features — <span class="mono">last-token</span>, <span class="mono">mean@-3</span>,
+    <span class="mono">max@-3</span> — pour qu'une seule instance serve la recette de pooling qui a
+    réellement gagné l'éval de chaque domaine. Les clients qui connaissent leur domaine peuvent
+    aussi <span class="mono">épingler</span> leur expert et sauter le gate entièrement.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-500">                 ┌─────────────────────────────────────┐</span>
+  request  <span class="text-cyan-300">──▶</span>  <span class="text-gray-500">│</span>  tronc mtlm-router — modèle 7M figé  <span class="text-gray-500">│</span>
+  tokens         <span class="text-gray-500">└──────────────┬──────────────────────┘</span>
+                 <span class="text-gray-500">   </span>hidden state du prefill <span class="text-gray-500">(1 × d_model)</span>
+            <span class="text-gray-500">┌────────────┐ ┌─────────────┐</span>
+            <span class="text-gray-500">│</span> <span class="text-yellow-300">gate.head</span>  <span class="text-gray-500">│ │</span> <span class="text-cyan-300">expert.head</span> <span class="text-gray-500">│</span>   <span class="text-gray-600">← par domaine, ~7 Ko</span>
+            <span class="text-gray-500">│</span> choisit le <span class="text-yellow-300">domaine</span> <span class="text-gray-500">│ │</span> choisit la <span class="text-cyan-300">route</span> <span class="text-gray-500">│</span>
+            <span class="text-gray-500">└────┬───────┘ └─────┬───────┘</span>
+       <span class="text-yellow-300">it_helpdesk</span> <span class="text-gray-600">───┘</span>        <span class="text-cyan-300">reset_password</span> <span class="text-gray-600">───┘</span>  <span class="text-gray-500">+ confiance calibrée</span></code></pre>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6 mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-yellow-300 mb-2">Livrez des cerveaux, pas des modèles</h3>
+      <p class="text-gray-400 text-sm">Un déploiement client = le tronc figé + quelques fichiers de têtes de quelques Ko. Onboardez un nouveau domaine en entraînant une tête sur ~1 000 lignes labellisées — des heures, pas des semaines.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-yellow-300 mb-2">Pooling par tête</h3>
+      <p class="text-gray-400 text-sm">Les gains de pooling ne sont pas uniformes — mean@-3 gagne sur les experts synthétiques courts, max@-3 sur le trafic en prose longue, last-token garde le gate. Les flags <span class="mono">mhd2</span> portent chaque recette ; le serveur obéit.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-yellow-300 mb-2">Épinglez votre lane</h3>
+      <p class="text-gray-400 text-sm"><span class="mono break-all">{"state":"attack the goblin","expert":"rpg"}</span> — un client qui connaît son domaine saute le gate et les veto OOD. La propre classe <span class="mono">escalate</span> de son expert reste le chemin d'abstention.</p>
+    </div>
+  </div>
+</div>
+
+<div id="numbers" class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Chiffres — holdout, calibrés, honnêtes.</h2>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-800 text-gray-500 text-left">
+          <th class="px-6 py-3 font-medium">Métrique</th>
+          <th class="px-6 py-3 font-medium">Tête</th>
+          <th class="px-6 py-3 font-medium">Résultat</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Précision de routage</td>
+          <td class="px-6 py-3 mono text-gray-500">tête router, 706 requêtes disjointes</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">97,6%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Calibration NOUL</td>
+          <td class="px-6 py-3 mono text-gray-500">cadran d'abstention, température ajustée</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">98,9%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Précision du score</td>
+          <td class="px-6 py-3 mono text-gray-500">scoring de candidats tool-fill</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">97,9%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Accord d'action</td>
+          <td class="px-6 py-3 mono text-gray-500">vs politique composite</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">100%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Précision du gate</td>
+          <td class="px-6 py-3 mono text-gray-500">tête moe_gate, 172 requêtes disjointes, 5 domaines</td>
+          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">95,4% <span class="text-gray-500">· ECE 0.035</span></td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Expert rpg poolé</td>
+          <td class="px-6 py-3 mono text-gray-500">tap mean@-4 vs last-token, 246 lignes</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">81,3% → 95,1%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Expert fleet poolé</td>
+          <td class="px-6 py-3 mono text-gray-500">tap max@-3 sur issues en prose longue</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">48% → 63%</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Éval gate en live</td>
+          <td class="px-6 py-3 mono text-gray-500">matrice canary réelle, pas holdout — agrégat toutes lanes</td>
+          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">81,6% <span class="text-gray-500">· tools 62/63, lane rpg fine (6/30)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-gray-500 text-center max-w-2xl mx-auto mt-4 text-sm">
+    Les holdouts laissent passer des candidats que le trafic canary réel rejette — on publie les deux.
+    L'écart entre 95,4% et 81,6% est exactement ce à quoi servent les contraintes par domaine et le flywheel.
+  </p>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Il s'entraîne sur son propre trafic.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Chaque décision <span class="mono text-cyan-300">/v1/route</span> est journalisée. Un flywheel
+    quotidien moissonne le log, range les lignes incertaines dans une file de revue
+    persistante, fusionne les verdicts jugés dans le corpus d'entraînement et déduplique
+    avant ré-entraînement. Le gate s'étoffe sur des requêtes
+    <span class="mono">réelles</span> — jamais sur ses propres prédictions confiantes.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code>decisions.jsonl <span class="text-cyan-300">──▶</span> harvest <span class="text-cyan-300">──▶</span> file de revue <span class="text-cyan-300">──▶</span> verdict <span class="text-cyan-300">──▶</span> corpus train <span class="text-cyan-300">──▶</span> nouvelle tête
+                 <span class="text-gray-600">(replay des lignes sans domaine · seen = résolu seulement · dédup à la fusion)</span></code></pre>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Regardez-le jouer.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Emberdeep est une démo fonctionnelle : un agent joue à un dungeon-crawler de 10 salles
+    via le routeur — <span class="mono">attack the goblin</span> → <span class="mono text-cyan-300">attack @ 0.99</span>,
+    <span class="mono">whats the weather</span> → <span class="mono text-cyan-300">escalate → delegate</span>.
+    Un watcher live affiche intention → route → conséquence, à ~150ms par décision sur CPU.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">» intent: "loot the body"     [router] loot @ 1.00 (142ms)</span>
+<span class="text-gray-600">  Vous arrachez une clé de fer à la ceinture du gobelin.</span>
+<span class="text-gray-600">» intent: "hit it again"      [router] rest @ 0.61 (138ms)  — la coréférence reste dure</span></code></pre>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Les alternatives, honnêtement comparées.</h2>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden overflow-x-auto">
+    <table class="w-full text-sm min-w-[640px]">
+      <thead>
+        <tr class="border-b border-gray-800 text-gray-500 text-left">
+          <th class="px-6 py-3 font-medium"></th>
+          <th class="px-6 py-3 font-medium">Tourne chez vous</th>
+          <th class="px-6 py-3 font-medium">Modèle de coût</th>
+          <th class="px-6 py-3 font-medium">Sortie typée</th>
+          <th class="px-6 py-3 font-medium">Sait s'abstenir</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3 font-semibold">mtlm-router</td>
+          <td class="px-6 py-3 text-cyan-300">CPU, ~15ms, air-gap OK</td>
+          <td class="px-6 py-3">Fixe — une appliance</td>
+          <td class="px-6 py-3">route + confiance + fill</td>
+          <td class="px-6 py-3 text-cyan-300">escalate, calibré</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Jev (TypeSafe)</td>
+          <td class="px-6 py-3 text-gray-500">Non — API US uniquement</td>
+          <td class="px-6 py-3">0,042 $/M tokens entrée</td>
+          <td class="px-6 py-3">noul / choice / score</td>
+          <td class="px-6 py-3">Probabilités calibrées</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">LLM de chat + parsing de prompt</td>
+          <td class="px-6 py-3 text-gray-500">Seulement si auto-hébergé (GPU)</td>
+          <td class="px-6 py-3">Au token, entrée et sortie</td>
+          <td class="px-6 py-3">Texte libre à parser</td>
+          <td class="px-6 py-3 text-gray-500">Hallucine quand même une réponse</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Règles écrites à la main</td>
+          <td class="px-6 py-3 text-cyan-300">Oui</td>
+          <td class="px-6 py-3">Fixe</td>
+          <td class="px-6 py-3">Ce que vous codez</td>
+          <td class="px-6 py-3 text-gray-500">Seulement les cas prévus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">De zéro au routage en quelques jours.</h2>
+  <div class="grid md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">1</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Posez l'appliance</span> — décompressez, lancez un binaire, POSTez sur <span class="mono">/v1/route</span>.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">2</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Entraînez votre tête</span> — ~1 000 exemples labellisés de vos requêtes → un fichier ~7 Ko, en quelques heures.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">3</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Roulez en shadow</span> — journalisez les décisions sur trafic réel ; le flywheel range ce dont il n'est pas sûr.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">4</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Promouvez sur preuve</span> — passez en autoritatif seulement quand les chiffres live le disent, pas le holdout.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Limites honnêtes.</h2>
+  <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">C'est un routeur, pas un raisonneur</h3>
+      <p class="text-gray-400 text-sm">Il ne résume pas, n'explique pas, ne compose pas. Besoin de génération de texte ? Routez vers un plus gros modèle — c'est exactement le rôle de <span class="mono">escalate</span>.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">Des lanes fines existent</h3>
+      <p class="text-gray-400 text-sm">La lane gate rpg n'a que 64 lignes d'entraînement — le canary live lui donne 6/30. Deux sorties : épingler l'expert directement, ou laisser le flywheel étoffer la lane. Le manifeste livre les comptes par domaine pour que vous voyiez les lanes faibles en premier.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">La calibration vieillit</h3>
+      <p class="text-gray-400 text-sm">La température a été ajustée sur le mix de requêtes du jour. Le trafic dérive ; réajustez depuis les lignes de production labellisées avant de faire confiance aux confidences en aval.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">Vérifiez avant d'autoriser</h3>
+      <p class="text-gray-400 text-sm">Lancez-le d'abord en routeur shadow. Ne le promouvez en autoritatif qu'après que le trafic réel a prouvé le gate + la tête sur <em>votre</em> mix de requêtes.</p>
+    </div>
+  </div>
+</div>
+
+<div id="audit" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Audit de routage gratuit sur vos propres demandes.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-6">
+    Laissez votre email. Nous répondons avec un court questionnaire (vos routes, 30 demandes d'exemple) ; 48 h plus tard vous recevez un rapport : précision sur <em>votre</em> vocabulaire, calibration, ce qui serait escaladé. Sans engagement.
+  </p>
+  <form id="lead-form" class="max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-5 grid gap-3">
+    <input name="email" type="email" required placeholder="vous@entreprise.fr" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="company" type="text" placeholder="Entreprise / intégrateur (optionnel)" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="use_case" type="text" placeholder="Que voudriez-vous router ? ex. emails helpdesk, dispatch de tickets (optionnel)" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+    <input type="hidden" name="lang" value="fr">
+    <button type="submit" class="hero-gradient text-white px-5 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">Demander l'audit</button>
+    <p id="lead-msg" class="text-gray-400 text-sm text-center"></p>
+    <p class="text-gray-600 text-xs text-center">Stocké dans notre backend européen, utilisé uniquement pour vous envoyer l'audit. Pas de newsletter.</p>
+  </form>
+</div>
+
+<div id="pricing" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Trois façons de l'utiliser. L'une est gratuite.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Hébergez l'appliance gratuitement, payez à la décision sur l'API hébergée, ou confiez-nous l'entraînement de la tête pour vos routes.
+    Même tronc, mêmes réponses typées, mêmes chiffres honnêtes.
+  </p>
+  <div class="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col">
+      <div class="mono text-cyan-300 text-sm mb-2">APPLIANCE</div>
+      <div class="text-3xl font-bold mb-1">Gratuit</div>
+      <p class="text-gray-500 text-sm mb-4">Apache-2.0, pour toujours.</p>
+      <p class="text-gray-400 text-sm flex-1">L'archive de 7,5 Mo : moteur, modèle int8, têtes outils/helpdesk, unité systemd. Tourne sur n'importe quelle machine x86-64, sans GPU ni Python. Vos données ne quittent jamais votre réseau.</p>
+      <a href="{{.github}}/releases" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Télécharger l'appliance</a>
+    </div>
+    <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6 flex flex-col accent-glow">
+      <div class="mono text-cyan-300 text-sm mb-2">API HÉBERGÉE</div>
+      <div class="text-3xl font-bold mb-1">0,01 € <span class="text-lg text-gray-400 font-normal">/ 20 décisions</span></div>
+      <p class="text-gray-500 text-sm mb-4">Paiement à la décision, portefeuille prépayé, sans abonnement.</p>
+      <p class="text-gray-400 text-sm flex-1">Le même <span class="mono">/v1/route</span> sur <span class="mono">api.mtlm-router.intrane.fr</span>, facturé via <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> (EUR, recharges Stripe). Les nouveaux portefeuilles démarrent avec un crédit offert : les premières décisions ne coûtent rien. Reçu signé à chaque débit.</p>
+      <a href="https://api.mtlm-router.intrane.fr/llms.txt" target="_blank" rel="noopener" class="mt-5 inline-block text-center hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Créer un portefeuille et appeler</a>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col">
+      <div class="mono text-cyan-300 text-sm mb-2">TÊTE SUR MESURE</div>
+      <div class="text-3xl font-bold mb-1">149 € <span class="text-lg text-gray-400 font-normal">/ domaine, une fois</span></div>
+      <p class="text-gray-500 text-sm mb-4">Vos routes, entraînées et calibrées, sous 3 jours ouvrés.</p>
+      <p class="text-gray-400 text-sm flex-1">Envoyez-nous votre table de routes (noms + quelques formulations d'exemple). Vous recevez une <span class="mono">.head</span> de ~7 Ko pour l'appliance ou l'API hébergée, un rapport d'évaluation (précision holdout, calibration) et un ré-entraînement offert après une semaine de trafic en ombre.</p>
+      <a href="mailto:javi@intrane.fr?subject=mtlm-router%20t%C3%AAte%20sur%20mesure&body=Routes%20(nom%3A%20formulations%20d'exemple)%3A%0A%0A" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Envoyer vos routes</a>
+    </div>
+  </div>
+  <p class="text-gray-600 text-xs text-center mt-6">Prix en EUR hors TVA. Les décisions de l'API hébergée sont servies depuis une infrastructure européenne ; le trafic hébergé n'est journalisé que pour la calibration et ne sert jamais à entraîner les têtes d'autres clients.</p>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Une archive. Tourne partout.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Toute la stack — moteur, tokenizer, modèle int8, têtes, admin — tient dans une
+    <span class="mono text-cyan-300">appliance de ~7,5 Mo</span>. Pas de pip install, pas de
+    registre de modèles, pas de driver GPU.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-appliance.tar.gz && cd appliance</span>
+<span class="text-gray-600">$ ./anvil-serve model.bin 8080 &amp;</span>
+<span class="text-gray-600">$ curl localhost:8080/assess -d '{"req":"réinitialise mon mot de passe"}'</span>
+<span class="text-green-300">{"route":"reset_password","confidence":0.99,"action":"tool_fill",...}</span></code></pre>
+  </div>
+</div>
+
+<div class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">Assez petit pour être fiable. Assez typé pour être utile.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    Source pure Machin licence AGPL/MIT, conçue en Europe, avec la discipline des
+    chiffres honnêtes intégrée — holdout et éval live publiés côte à côte.
+    Lisez le doc produit, auditez les évals, livrez votre première tête.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">
+      github.com/javimosch/mtlm-router
+    </a>
+    <a href="{{.article}}" target="_blank" rel="noopener" class="bg-gray-800 border border-gray-700 text-gray-200 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-700 transition-colors">
+      Lire l'histoire
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var f=document.getElementById('pg-form'),i=document.getElementById('pg-input'),o=document.getElementById('pg-out'),e=document.getElementById('pg-err');
+  if(!f)return;
+  var L=document.documentElement.lang==='fr';
+  function txt(id,v){document.getElementById(id).textContent=v;}
+  function run(s){
+    e.classList.add('hidden');o.classList.add('hidden');
+    var t0=Date.now();
+    fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({state:s})})
+    .then(function(r){return r.json().then(function(j){return [r.status,j]})})
+    .then(function(x){var st=x[0],d=x[1];
+      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');return;}
+      var c=Math.round((d.confidence||0)*100);
+      txt('pg-route',d.route||'?');txt('pg-conf',c+'%');
+      var a=d.action||'?';txt('pg-action',a);
+      txt('pg-meta',(d.domain||'-')+' · '+(Date.now()-t0)+'ms');
+      var ac=document.getElementById('pg-action');ac.className='mono text-lg '+(a==='tool_call'?'text-green-300':a==='delegate'?'text-amber-300':'text-gray-200');
+      var note=L?{tool_call:'Assez sûr pour exécuter : votre plateforme appelle l’outil.',delegate:'Abstention ('+(d.reason||'')+') : escalade vers un humain ou un gros modèle.',generate:'Conversation : pas d’action, une réponse.'}:{tool_call:'Confident enough to execute: your platform calls the tool.',delegate:'Abstained ('+(d.reason||'')+'): hand it to a human or a big model.',generate:'Conversation: no action, just an answer.'};
+      txt('pg-note',note[a]||'');
+      var raw=document.getElementById('pg-raw');raw.textContent=JSON.stringify(d);raw.classList.remove('hidden');
+      o.classList.remove('hidden');
+      if(window.vigie&&vigie.track)vigie.track('playground',{action:a,domain:d.domain||'',route:d.route||''});
+    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');});
+  }
+  f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
+  Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
+  // lead form
+  var lf=document.getElementById('lead-form');
+  if(lf){lf.addEventListener('submit',function(ev){ev.preventDefault();
+    var msg=document.getElementById('lead-msg'),fd=new FormData(lf),fields={};fd.forEach(function(v,k){fields[k]=v;});
+    msg.textContent=L?'Envoi…':'Sending…';
+    fetch('https://bkn.intrane.fr/v1/hooks/forms',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({form:'mtlm-leads',fields:fields})})
+    .then(function(r){return r.json()}).then(function(d){
+      if(d&&d.ok){msg.textContent=L?'Merci — nous revenons vers vous sous 48 h avec votre rapport.':'Thanks — you will hear from us within 48 h with your report.';lf.reset();if(window.vigie&&vigie.track)vigie.track('lead',{form:'mtlm-leads'});}
+      else{msg.textContent=(d&&d.error)||(L?'Échec de l’envoi.':'Could not send.');}
+    }).catch(function(){msg.textContent=L?'Échec de l’envoi — écrivez à javi@intrane.fr':'Could not send — email javi@intrane.fr';});
+  });}
+})();
+</script>

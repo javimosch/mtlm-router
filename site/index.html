@@ -1,0 +1,478 @@
+{{>layout "layout.html"}}
+<div class="text-center mb-16 pt-8">
+  <p class="mono text-cyan-400 text-sm mb-4 tracking-widest">TYPED DECISION LAYER · SELF-HOSTED · MADE IN EUROPE</p>
+  <h1 class="text-5xl md:text-6xl font-bold mb-6 gradient-text">A router that knows<br>when to say no.</h1>
+  <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-4">
+    mtlm-router turns natural-language requests into typed, calibrated routing decisions —
+    on-prem, on CPU, in ~15 milliseconds. When a request doesn't fit a known route,
+    it says <span class="text-cyan-300 mono">escalate</span> instead of guessing.
+  </p>
+  <p class="text-gray-500 max-w-2xl mx-auto mb-10 text-sm">
+    US decision APIs bill you per token and keep your prompts. mtlm-router is a 7.5MB
+    appliance that runs on the server you already own — flat cost, data stays inside.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4 mb-12">
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">7.2M</div>
+      <div class="text-xs text-gray-500">parameters</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">~15ms</div>
+      <div class="text-xs text-gray-500">CPU inference</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">8MB</div>
+      <div class="text-xs text-gray-500">int8 model</div>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
+      <div class="stat-num text-2xl font-bold text-cyan-300">0</div>
+      <div class="text-xs text-gray-500">GPU · cloud · deps</div>
+    </div>
+  </div>
+  <a href="#try" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow inline-block">
+    See it decide
+  </a>
+</div>
+
+<div id="try" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Type your own request. Watch it decide.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-6">
+    Live against the hosted router, business-only lanes (IT helpdesk, general tools, chat). Off-topic input should <span class="text-cyan-300">abstain</span>, not guess.
+  </p>
+  <div class="max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-5">
+    <form id="pg-form" class="flex gap-2">
+      <input id="pg-input" type="text" maxlength="300" placeholder="e.g. unlock carol's account, she can't log in" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600" autocomplete="off">
+      <button type="submit" class="hero-gradient text-white px-5 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">Decide</button>
+    </form>
+    <div class="flex flex-wrap gap-2 mt-3" id="pg-chips">
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">status of ticket INC4821</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">remind me to call the dentist tomorrow</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">provision a staging VM for the new intern</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">what's the weather in Lyon</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">attack the goblin with my sword</button>
+    </div>
+    <div id="pg-out" class="mt-4 hidden">
+      <div class="grid sm:grid-cols-4 gap-3 text-center">
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">route</div><div id="pg-route" class="mono text-cyan-300 text-lg"></div></div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">confidence</div><div id="pg-conf" class="mono text-lg"></div></div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">action</div><div id="pg-action" class="mono text-lg"></div></div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">lane · latency</div><div id="pg-meta" class="mono text-lg"></div></div>
+      </div>
+      <p id="pg-note" class="text-gray-500 text-xs mt-3 text-center"></p>
+      <pre id="pg-raw" class="mono text-xs text-gray-500 mt-3 overflow-x-auto bg-gray-950 rounded-lg p-3 hidden"></pre>
+    </div>
+    <p id="pg-err" class="text-red-400 text-sm mt-3 hidden"></p>
+  </div>
+  <p class="text-gray-600 text-xs text-center mt-4">The same <span class="mono">POST /v1/route</span> your agents would call. A few tries per visitor; grab a wallet for more.</p>
+</div>
+
+<div id="how" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">One call. Three typed answers.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    A single request returns a validated route, a calibrated confidence, and a
+    tool-fill proposal — or a clean <span class="mono text-cyan-300">escalate</span> if it doesn't know.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ curl -s localhost:8080/assess -d '{"req":"hi team, this is the third time my VPN drops today"}'</span>
+
+<span class="text-gray-500">{</span>
+  <span class="text-blue-300">"route"</span>:       <span class="text-green-300">"create_ticket"</span>,
+  <span class="text-blue-300">"confidence"</span>:  <span class="text-yellow-300">0.87</span>,
+  <span class="text-blue-300">"noul"</span>:        <span class="text-yellow-300">0.91</span>   <span class="text-gray-600">// "novel / unhandled / loss" — abstention dial</span>,
+  <span class="text-blue-300">"candidate"</span>:   <span class="text-green-300">"open_ticket"</span>,
+  <span class="text-blue-300">"score"</span>:       <span class="text-yellow-300">0.83</span>,
+  <span class="text-blue-300">"action"</span>:      <span class="text-green-300">"tool_fill"</span>,
+  <span class="text-blue-300">"fill"</span>: <span class="text-gray-500">{</span> <span class="text-blue-300">"subject"</span>: <span class="text-green-300">"VPN drops repeatedly"</span>, <span class="text-blue-300">"priority"</span>: <span class="text-green-300">"high"</span> <span class="text-gray-500">}</span>
+<span class="text-gray-500">}</span></code></pre>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6 mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">It doesn't chat</h3>
+      <p class="text-gray-400 text-sm">It's a router, not a chatbot. It emits machine-readable decisions your agent, helpdesk, or dispatcher can act on directly.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">It doesn't guess</h3>
+      <p class="text-gray-400 text-sm">Out-of-scope requests hit the calibrated <span class="mono">escalate</span> route. Small models shouldn't pretend to know things — this one doesn't.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">It doesn't argue</h3>
+      <p class="text-gray-400 text-sm">No temperature, no sampling, no prompt drift. Deterministic softmax over your routes — the same request gets the same answer, every time.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Built for SME workflows, not datacenters.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    The requests that eat SME time are decisions, not essays — sort the inbox,
+    dispatch the ticket, route the quote. That's exactly what a router is for.
+  </p>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Email &amp; ticket triage</h3>
+      <p class="text-gray-400 text-sm">Quotes, orders, disputes, urgent asks — classified, prioritized, and pushed to the right queue or ERP. No copy-paste, no lost emails.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Ops commands, typed</h3>
+      <p class="text-gray-400 text-sm">"Restart the spooler on srv2", "flag order 4412 for review" — natural language becomes a typed action your automation can execute, or an escalate when it shouldn't.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Compliance hand-off</h3>
+      <p class="text-gray-400 text-sm">Low confidence or risky requests escalate to a human instead of executing. Audit trail included — every decision is logged with its confidence.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">One instance, many clients</h3>
+      <p class="text-gray-400 text-sm">Integrators: deploy the same trunk at every customer and ship a per-client head — a ~7KB file trained on their vocabulary in hours, not a custom model.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">Front door for bigger AI</h3>
+      <p class="text-gray-400 text-sm">Shadow it in front of your hosted LLM to learn what it could have handled locally — then cut the API bill only where the data says so.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-cyan-300 mb-2">No ML team required</h3>
+      <p class="text-gray-400 text-sm">One tarball, one binary, one endpoint. If your stack can POST JSON, it can route. GDPR-native: nothing leaves your network, ever.</p>
+    </div>
+  </div>
+</div>
+
+<div id="moe" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Mixture of experts — one trunk, many brains.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-4">
+    The frozen 7M trunk is the shared brain. Domain knowledge lives in
+    <span class="mono text-cyan-300">~7KB heads</span> you can ship, swap, and audit like config files.
+    A gate head picks the expert; the expert picks the route.
+  </p>
+  <p class="text-gray-500 text-center max-w-2xl mx-auto mb-8 text-sm">
+    Each head declares its own feature tap — <span class="mono">last-token</span>, <span class="mono">mean@-3</span>,
+    <span class="mono">max@-3</span> — so a single instance serves the pooling recipe that actually
+    won each domain's eval. Known-domain clients can also <span class="mono">pin</span> their expert and skip
+    the gate entirely.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-500">                 ┌─────────────────────────────────────┐</span>
+  request  <span class="text-cyan-300">──▶</span>  <span class="text-gray-500">│</span>  mtlm-router trunk — frozen 7M model  <span class="text-gray-500">│</span>
+  tokens         <span class="text-gray-500">└──────────────┬──────────────────────┘</span>
+                 <span class="text-gray-500">   </span>prefill hidden state <span class="text-gray-500">(1 × d_model)</span>
+            <span class="text-gray-500">┌────────────┐ ┌─────────────┐</span>
+            <span class="text-gray-500">│</span> <span class="text-yellow-300">gate.head</span>  <span class="text-gray-500">│ │</span> <span class="text-cyan-300">expert.head</span> <span class="text-gray-500">│</span>   <span class="text-gray-600">← per-domain, ~7KB</span>
+            <span class="text-gray-500">│</span> pick a <span class="text-yellow-300">domain</span> <span class="text-gray-500">│ │</span> pick a <span class="text-cyan-300">route</span>   <span class="text-gray-500">│</span>
+            <span class="text-gray-500">└────┬───────┘ └─────┬───────┘</span>
+       <span class="text-yellow-300">it_helpdesk</span> <span class="text-gray-600">───┘</span>        <span class="text-cyan-300">reset_password</span> <span class="text-gray-600">───┘</span>  <span class="text-gray-500">+ calibrated conf</span></code></pre>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6 mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-yellow-300 mb-2">Ship brains, not models</h3>
+      <p class="text-gray-400 text-sm">A customer deployment = the frozen trunk + a handful of kilobyte head files. Onboard a new domain by training a head on ~1k labeled rows — hours, not weeks.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-yellow-300 mb-2">Per-head pooling</h3>
+      <p class="text-gray-400 text-sm">Pooling wins aren't uniform — mean@-3 takes the synthetic experts, max@-3 takes long-prose traffic, last-token keeps the gate. <span class="mono">mhd2</span> flags carry each recipe; the server just obeys.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
+      <h3 class="text-lg font-bold text-yellow-300 mb-2">Pin your lane</h3>
+      <p class="text-gray-400 text-sm"><span class="mono break-all">{"state":"attack the goblin","expert":"rpg"}</span> — a client that knows its domain skips the gate and the OOD vetoes. Its expert's own <span class="mono">escalate</span> class is still the abstention path.</p>
+    </div>
+  </div>
+</div>
+
+<div id="numbers" class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Numbers — held-out, calibrated, honest.</h2>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-800 text-gray-500 text-left">
+          <th class="px-6 py-3 font-medium">Metric</th>
+          <th class="px-6 py-3 font-medium">Head</th>
+          <th class="px-6 py-3 font-medium">Result</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Route accuracy</td>
+          <td class="px-6 py-3 mono text-gray-500">router head, 706 disjoint requests</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">97.6%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">NOUL calibration</td>
+          <td class="px-6 py-3 mono text-gray-500">abstention dial, temperature-fitted</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">98.9%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Score accuracy</td>
+          <td class="px-6 py-3 mono text-gray-500">tool-fill candidate scoring</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">97.9%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Action agreement</td>
+          <td class="px-6 py-3 mono text-gray-500">vs composite policy</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">100%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Gate accuracy</td>
+          <td class="px-6 py-3 mono text-gray-500">moe_gate head, 172 disjoint requests, 5 domains</td>
+          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">95.4% <span class="text-gray-500">· ECE 0.035</span></td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Pooled rpg expert</td>
+          <td class="px-6 py-3 mono text-gray-500">mean@-4 tap vs last-token, 246 rows</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">81.3% → 95.1%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Pooled fleet expert</td>
+          <td class="px-6 py-3 mono text-gray-500">max@-3 tap on long-prose issues</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">48% → 63%</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Live gate eval</td>
+          <td class="px-6 py-3 mono text-gray-500">real canary matrix, not holdout — aggregate across lanes</td>
+          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">81.6% <span class="text-gray-500">· tools 62/63, rpg lane thin (6/30)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-gray-500 text-center max-w-2xl mx-auto mt-4 text-sm">
+    Held-out sets pass candidates that real canary traffic rejects — both published here.
+    The gap between 95.4% and 81.6% is what per-domain constraints and the flywheel are for.
+  </p>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">It trains on its own traffic.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Every <span class="mono text-cyan-300">/v1/route</span> decision is logged. A daily flywheel harvests
+    the log, files uncertain rows into a persistent review queue, merges judged verdicts into
+    the train-only corpus, and dedupes before retraining. The gate thickens from
+    <span class="mono">real</span> requests — never from its own confident predictions.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code>decisions.jsonl <span class="text-cyan-300">──▶</span> harvest <span class="text-cyan-300">──▶</span> review queue <span class="text-cyan-300">──▶</span> judge <span class="text-cyan-300">──▶</span> train corpus <span class="text-cyan-300">──▶</span> new head
+                 <span class="text-gray-600">(replay domain-less rows · seen = resolved only · dedupe at merge)</span></code></pre>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Watch it play.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Emberdeep is a working demo: an agent plays a 10-room dungeon crawler through the router —
+    <span class="mono">attack the goblin</span> → <span class="mono text-cyan-300">attack @ 0.99</span>,
+    <span class="mono">whats the weather</span> → <span class="mono text-cyan-300">escalate → delegate</span>.
+    A live watcher shows intent → route → consequence, at ~150ms per decision on CPU.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">» intent: "loot the body"     [router] loot @ 1.00 (142ms)</span>
+<span class="text-gray-600">  You pry an iron key from the goblin's belt.</span>
+<span class="text-gray-600">» intent: "hit it again"      [router] rest @ 0.61 (138ms)  — coreference is still hard</span></code></pre>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">The alternatives, honestly compared.</h2>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden overflow-x-auto">
+    <table class="w-full text-sm min-w-[640px]">
+      <thead>
+        <tr class="border-b border-gray-800 text-gray-500 text-left">
+          <th class="px-6 py-3 font-medium"></th>
+          <th class="px-6 py-3 font-medium">Runs on your hardware</th>
+          <th class="px-6 py-3 font-medium">Cost model</th>
+          <th class="px-6 py-3 font-medium">Typed output</th>
+          <th class="px-6 py-3 font-medium">Knows when to abstain</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3 font-semibold">mtlm-router</td>
+          <td class="px-6 py-3 text-cyan-300">CPU, ~15ms, air-gap OK</td>
+          <td class="px-6 py-3">Flat — one appliance</td>
+          <td class="px-6 py-3">route + confidence + fill</td>
+          <td class="px-6 py-3 text-cyan-300">escalate, calibrated</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Jev (TypeSafe)</td>
+          <td class="px-6 py-3 text-gray-500">No — US API only</td>
+          <td class="px-6 py-3">$0.042/M input tokens</td>
+          <td class="px-6 py-3">noul / choice / score</td>
+          <td class="px-6 py-3">Calibrated probabilities</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Chat LLM + prompt parsing</td>
+          <td class="px-6 py-3 text-gray-500">Only if self-hosted (GPU)</td>
+          <td class="px-6 py-3">Per-token, in and out</td>
+          <td class="px-6 py-3">Free text you must parse</td>
+          <td class="px-6 py-3 text-gray-500">Hallucinates an answer anyway</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Hand-written rules</td>
+          <td class="px-6 py-3 text-cyan-300">Yes</td>
+          <td class="px-6 py-3">Flat</td>
+          <td class="px-6 py-3">Whatever you code</td>
+          <td class="px-6 py-3 text-gray-500">Only the cases you foresaw</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">From zero to routed in days.</h2>
+  <div class="grid md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">1</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Drop the appliance</span> — untar, run one binary, POST requests to <span class="mono">/v1/route</span>.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">2</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Train your head</span> — ~1k labeled examples of your requests → a ~7KB file, in hours.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">3</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Run it in shadow</span> — log decisions against real traffic; the flywheel files what it's unsure about.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div class="mono text-cyan-300 text-lg mb-2">4</div>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Promote with evidence</span> — go authoritative only when the live-eval numbers say so, not the holdout.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Honest limits.</h2>
+  <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">It's a router, not a reasoner</h3>
+      <p class="text-gray-400 text-sm">It can't summarize, explain, or compose. If you need text generation, route to a bigger model — that's exactly what <span class="mono">escalate</span> is for.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">Thin lanes exist</h3>
+      <p class="text-gray-400 text-sm">The rpg gate lane trained on 64 rows — live canary scores it 6/30. Two escapes: pin the expert directly, or let the flywheel thicken the lane. The manifest ships per-domain row counts so you see weak lanes first.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">Calibration ages</h3>
+      <p class="text-gray-400 text-sm">Temperature was fit on today's request mix. Traffic drifts; refit from labeled production rows before trusting the confidences downstream.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="text-lg font-bold text-gray-200 mb-2">Verify before authority</h3>
+      <p class="text-gray-400 text-sm">Run it as a shadow router first. Promote to authoritative only after real traffic proves the gate + head on <em>your</em> request mix.</p>
+    </div>
+  </div>
+</div>
+
+<div id="audit" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Free route audit on your own requests.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-6">
+    Leave your email. We reply with a short questionnaire (your routes, 30 example requests); 48 hours later you get a report: accuracy on <em>your</em> vocabulary, calibration, what would escalate. No commitment.
+  </p>
+  <form id="lead-form" class="max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-5 grid gap-3">
+    <input name="email" type="email" required placeholder="you@company.com" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="company" type="text" placeholder="Company / integrator (optional)" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="use_case" type="text" placeholder="What would you route? e.g. helpdesk emails, ticket dispatch (optional)" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+    <input type="hidden" name="lang" value="en">
+    <button type="submit" class="hero-gradient text-white px-5 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">Request the audit</button>
+    <p id="lead-msg" class="text-gray-400 text-sm text-center"></p>
+    <p class="text-gray-600 text-xs text-center">Stored in our EU backend, used only to send you the audit. No newsletter.</p>
+  </form>
+</div>
+
+<div id="pricing" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Three ways to run it. One of them is free.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    Self-host the appliance for nothing, pay per decision on the hosted API, or have us train the head for your routes.
+    Same trunk, same typed answers, same honest numbers.
+  </p>
+  <div class="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mt-8">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col">
+      <div class="mono text-cyan-300 text-sm mb-2">APPLIANCE</div>
+      <div class="text-3xl font-bold mb-1">Free</div>
+      <p class="text-gray-500 text-sm mb-4">Apache-2.0, forever.</p>
+      <p class="text-gray-400 text-sm flex-1">The 7.5MB tarball: engine, int8 model, tools/helpdesk heads, systemd unit. Runs on any x86-64 box, no GPU, no Python. Your data never leaves your network.</p>
+      <a href="{{.github}}/releases" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Download the appliance</a>
+    </div>
+    <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6 flex flex-col accent-glow">
+      <div class="mono text-cyan-300 text-sm mb-2">HOSTED API</div>
+      <div class="text-3xl font-bold mb-1">€0.01 <span class="text-lg text-gray-400 font-normal">/ 20 decisions</span></div>
+      <p class="text-gray-500 text-sm mb-4">Pay per decision, prepaid wallet, no subscription.</p>
+      <p class="text-gray-400 text-sm flex-1">The same <span class="mono">/v1/route</span> on <span class="mono">api.mtlm-router.intrane.fr</span>, metered by <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> (EUR, Stripe top-ups). New wallets start with free credit, so the first decisions cost nothing. Signed receipt on every charge.</p>
+      <a href="https://api.mtlm-router.intrane.fr/llms.txt" target="_blank" rel="noopener" class="mt-5 inline-block text-center hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Get a wallet and call it</a>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col">
+      <div class="mono text-cyan-300 text-sm mb-2">CUSTOM HEAD</div>
+      <div class="text-3xl font-bold mb-1">€149 <span class="text-lg text-gray-400 font-normal">/ domain, one-off</span></div>
+      <p class="text-gray-500 text-sm mb-4">Your routes, trained and calibrated, in 3 business days.</p>
+      <p class="text-gray-400 text-sm flex-1">Send us your route table (names plus a few example phrasings each). You get a ~7KB <span class="mono">.head</span> for the appliance or the hosted API, an eval report with holdout accuracy and calibration, and one free re-train after a week of shadow traffic.</p>
+      <a href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head&body=Routes%20(name%3A%20example%20phrasings)%3A%0A%0A" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Send your routes</a>
+    </div>
+  </div>
+  <p class="text-gray-600 text-xs text-center mt-6">Prices in EUR excl. VAT. Hosted API decisions are served from EU infrastructure; hosted traffic is logged for calibration only and never used to train other customers' heads.</p>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">One tarball. Runs anywhere.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    The whole stack — engine, tokenizer, int8 model, heads, admin — ships as a
+    <span class="mono text-cyan-300">~7.5MB appliance</span>. No pip install, no model registry, no GPU driver.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-appliance.tar.gz && cd appliance</span>
+<span class="text-gray-600">$ ./anvil-serve model.bin 8080 &amp;</span>
+<span class="text-gray-600">$ curl localhost:8080/assess -d '{"req":"reset my password"}'</span>
+<span class="text-green-300">{"route":"reset_password","confidence":0.99,"action":"tool_fill",...}</span></code></pre>
+  </div>
+</div>
+
+<div class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">Small enough to trust. Typed enough to use.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    AGPL/MIT-clean pure-Machin source, built in Europe, with the honest-numbers
+    discipline baked in — holdout and live-eval published side by side.
+    Read the product doc, audit the evals, ship your first head.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">
+      github.com/javimosch/mtlm-router
+    </a>
+    <a href="{{.article}}" target="_blank" rel="noopener" class="bg-gray-800 border border-gray-700 text-gray-200 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-700 transition-colors">
+      Read the story
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var f=document.getElementById('pg-form'),i=document.getElementById('pg-input'),o=document.getElementById('pg-out'),e=document.getElementById('pg-err');
+  if(!f)return;
+  var L=document.documentElement.lang==='fr';
+  function txt(id,v){document.getElementById(id).textContent=v;}
+  function run(s){
+    e.classList.add('hidden');o.classList.add('hidden');
+    var t0=Date.now();
+    fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({state:s})})
+    .then(function(r){return r.json().then(function(j){return [r.status,j]})})
+    .then(function(x){var st=x[0],d=x[1];
+      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');return;}
+      var c=Math.round((d.confidence||0)*100);
+      txt('pg-route',d.route||'?');txt('pg-conf',c+'%');
+      var a=d.action||'?';txt('pg-action',a);
+      txt('pg-meta',(d.domain||'-')+' · '+(Date.now()-t0)+'ms');
+      var ac=document.getElementById('pg-action');ac.className='mono text-lg '+(a==='tool_call'?'text-green-300':a==='delegate'?'text-amber-300':'text-gray-200');
+      var note=L?{tool_call:'Assez sûr pour exécuter : votre plateforme appelle l’outil.',delegate:'Abstention ('+(d.reason||'')+') : escalade vers un humain ou un gros modèle.',generate:'Conversation : pas d’action, une réponse.'}:{tool_call:'Confident enough to execute: your platform calls the tool.',delegate:'Abstained ('+(d.reason||'')+'): hand it to a human or a big model.',generate:'Conversation: no action, just an answer.'};
+      txt('pg-note',note[a]||'');
+      var raw=document.getElementById('pg-raw');raw.textContent=JSON.stringify(d);raw.classList.remove('hidden');
+      o.classList.remove('hidden');
+      if(window.vigie&&vigie.track)vigie.track('playground',{action:a,domain:d.domain||'',route:d.route||''});
+    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');});
+  }
+  f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
+  Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
+  // lead form
+  var lf=document.getElementById('lead-form');
+  if(lf){lf.addEventListener('submit',function(ev){ev.preventDefault();
+    var msg=document.getElementById('lead-msg'),fd=new FormData(lf),fields={};fd.forEach(function(v,k){fields[k]=v;});
+    msg.textContent=L?'Envoi…':'Sending…';
+    fetch('https://bkn.intrane.fr/v1/hooks/forms',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({form:'mtlm-leads',fields:fields})})
+    .then(function(r){return r.json()}).then(function(d){
+      if(d&&d.ok){msg.textContent=L?'Merci — nous revenons vers vous sous 48 h avec votre rapport.':'Thanks — you will hear from us within 48 h with your report.';lf.reset();if(window.vigie&&vigie.track)vigie.track('lead',{form:'mtlm-leads'});}
+      else{msg.textContent=(d&&d.error)||(L?'Échec de l’envoi.':'Could not send.');}
+    }).catch(function(){msg.textContent=L?'Échec de l’envoi — écrivez à javi@intrane.fr':'Could not send — email javi@intrane.fr';});
+  });}
+})();
+</script>

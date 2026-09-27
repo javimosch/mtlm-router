@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="{{.lang}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.title}}</title>
+  <meta name="description" content="{{.description}}">
+  <meta name="theme-color" content="#f2efe6">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23121110'/><circle cx='16' cy='10.5' r='4.2' fill='%2322c55e'/><circle cx='16' cy='21.5' r='4.2' fill='%23ffb020'/></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    /* "Signal box" theme: the page markup keeps its Tailwind classes; the palette is
+       remapped here, so gray-950 is now paper and gray-200 is ink, and the old
+       cyan/blue/violet accents become enamel blue, signal green and amber. */
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            white: '#121110',
+            gray: { 50:'#121110', 100:'#161512', 200:'#1f1d19', 300:'#2e2b25', 400:'#46423a', 500:'#5b574d', 600:'#777266', 700:'#cbc4b2', 800:'#ddd7c8', 900:'#fbfaf5', 950:'#f2efe6' },
+            cyan:   { 300:'#1f4fa8', 400:'#1f4fa8', 600:'#1f4fa8', 700:'#8fa8d6', 800:'#b9c8e6' },
+            blue:   { 300:'#6b3aa0' },
+            yellow: { 300:'#8a5a00' },
+            amber:  { 300:'#9a5b00' },
+            green:  { 300:'#157f3b' },
+            red:    { 400:'#c3342b' }
+          },
+          fontFamily: {
+            sans: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper:#f2efe6; --card:#fbfaf5; --ink:#121110; --board:#141311; --board2:#1d1b18; --flap:#ffc02e; --go:#22c55e; --wait:#ffb020; --stop:#ef4444; --blue:#1f4fa8; }
+    body { font-family: "Instrument Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: var(--paper); }
+    h1, h2, h3, h4, h5, h6 { font-family: "Instrument Sans", system-ui, sans-serif; letter-spacing: -0.025em; }
+    h1 { letter-spacing: -0.04em; }
+    code, pre, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+    ::selection { background: var(--flap); color: var(--ink); }
+
+    /* headline accent: an enamel-blue phrase with a signal-yellow underline, not a gradient */
+    .gradient-text { color: var(--blue); background: none; -webkit-text-fill-color: currentColor;
+      text-decoration: underline; text-decoration-color: var(--flap); text-decoration-thickness: .12em; text-underline-offset: .12em; }
+    nav .gradient-text { text-decoration: none; color: var(--ink); }
+    .hero-gradient { background: var(--ink); color: var(--flap) !important; box-shadow: none; }
+    .hero-gradient:hover { opacity: 1 !important; background: #2a2823; }
+    .accent-glow { box-shadow: 0 10px 24px -14px rgba(18,17,16,.55); }
+    .card-hover { transition: transform .35s cubic-bezier(.32,.72,0,1), border-color .25s, box-shadow .35s; }
+    .card-hover:hover { transform: translateY(-3px); border-color: var(--ink); box-shadow: 0 22px 40px -30px rgba(18,17,16,.5); }
+    .stat-num { font-variant-numeric: tabular-nums; }
+
+    /* the signal-lamp brand mark */
+    .lamp { display:inline-flex; flex-direction:column; gap:3px; padding:5px 6px; border-radius:6px; background:var(--ink); margin-right:10px; vertical-align:middle }
+    .lamp i { width:7px; height:7px; border-radius:50%; display:block }
+    .lamp i:first-child { background:var(--go); box-shadow:0 0 6px rgba(34,197,94,.8) }
+    .lamp i:last-child { background:var(--wait); opacity:.45 }
+
+    /* every code block becomes a departure board */
+    div:has(> pre:not(#pg-raw)) { background: var(--board) !important; border-color: var(--board) !important; }
+    pre:not(#pg-raw) { color: #e9e4d6 !important; }
+    pre .text-gray-300, pre .text-gray-200, pre .text-gray-100 { color: #e9e4d6 !important; }
+    pre .text-gray-400, pre .text-gray-500 { color: #a39d8f !important; }
+    pre .text-gray-600 { color: #857f72 !important; }
+    pre .text-cyan-300, pre .text-cyan-400 { color: var(--flap) !important; }
+    pre .text-blue-300 { color: #b7a6ff !important; }
+    pre .text-yellow-300, pre .text-amber-300 { color: #ffd479 !important; }
+    pre .text-green-300 { color: #6ee7a0 !important; }
+    pre .text-red-400 { color: #ff8f86 !important; }
+
+    /* the live demo: result cells as split-flap tiles */
+    #pg-out .grid > div { background: var(--board) !important; border-color: var(--board) !important; position: relative; overflow: hidden; }
+    #pg-out .grid > div::after { content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(0,0,0,.55); box-shadow:0 1px 0 rgba(255,255,255,.04) }
+    #pg-out .grid > div > div:first-child { color: #a39d8f !important; text-transform: uppercase; letter-spacing: .12em; font-size: 10px; font-family: "JetBrains Mono", monospace; }
+    #pg-out .grid > div > div:last-child { color: var(--flap) !important; font-weight: 700; letter-spacing: .02em; }
+    #pg-out #pg-action.text-green-300 { color: #6ee7a0 !important; }
+    #pg-out #pg-action.text-amber-300 { color: #ffb020 !important; }
+    #pg-out .grid > div > div:last-child { animation: flap .45s cubic-bezier(.32,.72,0,1); }
+    @keyframes flap { from { transform: translateY(-40%) rotateX(70deg); opacity: 0 } to { transform: none; opacity: 1 } }
+    #pg-raw { background: var(--board) !important; color: #a39d8f !important; }
+    #pg-input:focus, #lead-form input:focus, #lead-form textarea:focus, #lead-form select:focus { outline: none; border-color: var(--blue) !important; box-shadow: 0 0 0 3px rgba(31,79,168,.15); }
+    .pg-chip { transition: border-color .2s, background .2s; }
+    .pg-chip:hover { border-color: var(--ink) !important; }
+
+    /* tables read like a timetable */
+    table thead th, table thead td { font-family: "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; }
+    @media (prefers-reduced-motion: reduce) { #pg-out .grid > div > div:last-child { animation: none } .card-hover { transition: none } }
+  </style>
+  <script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script>
+</head>
+<body class="bg-gray-950 text-gray-200 min-h-screen">
+  <nav class="bg-gray-950/85 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="{{.root}}" class="text-xl font-bold gradient-text flex items-center"><span class="lamp" aria-hidden="true"><i></i><i></i></span>mtlm-router</a>
+          <span class="ml-3 text-xs text-gray-500 mono hidden sm:inline">7M params · pure MFL · CPU</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="#how" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_how}}</a>
+          <a href="#moe" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_moe}}</a>
+          <a href="#numbers" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_numbers}}</a>
+          <a href="#pricing" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_pricing}}</a>
+          <a href="{{.alt_lang_url}}" class="text-cyan-400 hover:text-cyan-300 text-sm mono border border-cyan-800 rounded px-2 py-1" title="{{.alt_lang_title}}">{{.alt_lang_label}}</a>
+          <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity accent-glow">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    {{.content}}
+  </main>
+  <footer class="bg-gray-900 border-t border-gray-800 mt-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-gray-500 text-sm">mtlm-router — trained, compiled and served in <a href="{{.machin}}" class="text-cyan-400 hover:underline">machin/MFL</a>. No GPU, no cloud, no dependencies.</p>
+      <p class="text-gray-600 text-xs mono">MIT · javimosch</p>
+    </div>
+  </footer>
+</body>
+</html>
