@@ -160,6 +160,15 @@ route through the pinned rpg expert at ~1.0 confidence, off-domain requests
 `escalate` instead of executing nonsense. `demo.sh` plays a full winning
 quest and verifies the outcome.
 
+## Hosted API and pricing
+
+- **Appliance**: free, Apache-2.0 (this repo's releases).
+- **Hosted API**: `https://api.mtlm-router.intrane.fr` — the same `/v1/route`, pay per decision through
+  [peage](https://peage.intrane.fr) (EUR wallet, Stripe top-ups, free starter credit): 1 cent buys 20 decisions.
+  `curl -s https://api.mtlm-router.intrane.fr/llms.txt` has the three-line onboarding.
+- **Custom head**: your route table, trained and calibrated on the frozen trunk, one-off per domain —
+  see [mtlm-router.intrane.fr/#pricing](https://mtlm-router.intrane.fr/#pricing).
+
 ## License
 
 Apache-2.0 — see [LICENSE](LICENSE).
