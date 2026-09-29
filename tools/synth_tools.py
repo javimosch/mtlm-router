@@ -9,6 +9,11 @@ or plain English. Tool results use role "tool" (rendered "Tool result: ..." by a
 """
 import json, random, sys
 
+TOOLS8 = "--tools8" in sys.argv          # tools8 corpus: tools7 + navigation / real-prose / value-relay deltas
+sys.argv = [a for a in sys.argv if a != "--tools8"]
+TOOLS9 = "--tools9" in sys.argv          # tools9 corpus: tools8 + deictic/coreference follow-up deltas
+sys.argv = [a for a in sys.argv if a != "--tools9"]
+TOOLS8 = TOOLS8 or TOOLS9
 EVAL_MODE = len(sys.argv) > 1 and sys.argv[1] == "--eval"
 N = int(sys.argv[1]) if len(sys.argv) > 1 and not EVAL_MODE else 30000
 random.seed(int(sys.argv[2]) if len(sys.argv) > 2 and not EVAL_MODE else 1)
@@ -498,10 +503,181 @@ if EVAL_MODE:
     print(json.dumps({"probes": en, "chat": n_chat, "out": "data/eval_exact.jsonl"}))
     sys.exit(0)
 
-counts = {"tool": 0, "chat": 0, "mixed": 0, "followup": 0}
-with open("data/tools.jsonl", "w") as f:
+# ---- tools8 deltas (docs-tools8-spec.md) ------------------------------------------------------
+# Delta 1: navigation/command rows. The generic route table has no "move" route, so these are
+# chat-shaped: the reply RESTATES the direction (value relay), and contrastive pairs ("not
+# north - south") force the hidden state to separate directions instead of collapsing them
+# into one attractor. Woven into ordinary conversations, never isolated strings.
+NAV_VERBS = ["go", "head", "move", "walk", "run", "turn", "climb", "step"]
+NAV_DIRS = ["north", "south", "east", "west", "up", "down", "left", "right", "back", "forward"]
+NAV_OBJS = ["the door", "the stairs", "the hall", "the bridge", "the gate", "the river", "the tower", "the path"]
+NAV_OPP = {"north": "south", "south": "north", "east": "west", "west": "east", "up": "down", "down": "up", "left": "right", "right": "left", "back": "forward", "forward": "back"}
+def nav_turn():
+    v = pick(NAV_VERBS); d = pick(NAV_DIRS); r = random.random()
+    if r < 0.45:
+        q = pick([f"{v} {d}", f"{v} {d}!", f"{v} {d} now", f"please {v} {d}", f"{d}", f"{d}, quick", f"let's {v} {d}", f"we should {v} {d}"])
+        a = pick([f"Going {d}.", f"Heading {d}.", f"Okay, {d} it is.", f"Moving {d}.", f"Alright, I turn {d}."])
+    elif r < 0.65:
+        o = pick(NAV_OBJS)
+        q = pick([f"{v} to {o}", f"{v} through {o}", f"{v} towards {o}", f"{v} {d} to {o}", f"take {o}", f"{v} past {o} and then {d}"])
+        a = pick([f"Heading to {o}.", f"Okay, through {o}.", f"Going {d} towards {o}.", f"Taking {o}."])
+    elif r < 0.85:
+        d2 = NAV_OPP[d]
+        q = pick([f"no, the other {d}", f"not {d} - {d2}", f"{d}? no, {d2}", f"I said {d2}, not {d}", f"{d2}, not {d}!", f"wait, {d2}"])
+        a = pick([f"Got it, {d2} instead of {d}.", f"Okay: {d2}, not {d}.", f"Changing to {d2}.", f"Understood, {d2}."])
+    else:
+        q = pick([f"which way is {d}?", f"can we go {d}?", f"is {d} the right way?", f"what is {d} of here?", f"how far {d}?"])
+        a = pick([f"I cannot see the map, but if you want to go {d}, say so and I will note it.", f"{d.capitalize()} is possible if the way is open.", f"I do not know what lies {d}; tell me what you see."])
+    return q, a
+def conv_nav():
+    m = [{"role": "system", "content": SYSTEM}]
+    n = random.randint(1, 3)
+    for _ in range(n):
+        q, a = nav_turn(); m += [{"role": "user", "content": q}, {"role": "assistant", "content": a}]
+    r = random.random()
+    if r < 0.4:
+        text, name, args = pick(GENS)(); res = result(name, args)
+        m += [{"role": "user", "content": nat_maybe(text)}, {"role": "assistant", "content": tc(name, args)}, {"role": "tool", "content": res}, {"role": "assistant", "content": followup(name, args, res)}]
+    elif r < 0.6:
+        q, a = chat_turn(); m += [{"role": "user", "content": q}, {"role": "assistant", "content": a}]
+    return m
+
+# Delta 2: domain-generic real prose (GitHub-issue / README shaped, invented projects). Labeled
+# escalate or chat so the trunk learns "this is real prose" without corrupting tool routes; a
+# minority carry ONE intent sentence that maps to a real route (contrastive near-duplicates).
+PROJ = ["flarekit", "quillbase", "hexmesh", "tidecache", "orbit-cli", "lumenweb", "pebbledb", "sprocket", "vantaui", "kestrel-rt", "moss-ml", "zephyr-mq"]
+DOMAINS = ["a game engine", "a document database", "a command-line tool", "a web framework", "a mobile app", "a scientific library", "a message queue", "an image editor", "a build system", "a chart library"]
+PLAT = ["Ubuntu 22.04", "macOS 14", "Windows 11", "Debian 12", "Fedora 40", "Alpine 3.19"]
+LANGS_P = ["Python 3.11", "Node 20", "Go 1.22", "Rust 1.78", "Java 21", "C++17"]
+def issue_text():
+    p = pick(PROJ); dom = pick(DOMAINS); ver = f"{num(0,3)}.{num(0,12)}.{num(0,9)}"
+    title = pick([f"{p} crashes on startup after upgrading to {ver}", f"[bug] {p}: config file ignored when path has spaces", f"{p} {ver}: memory grows without bound in the sync loop", f"feature request: dark mode for the {p} dashboard", f"{p} returns 500 on empty payload", f"docs: {p} install instructions outdated for {pick(PLAT)}", f"{p} hangs when the {pick(['cache','index','socket','worker'])} is full"])
+    body = pick([f"Since {ver} the {pick(['worker','scheduler','parser','renderer'])} in {p} ({dom}) stops after a few minutes. Nothing in the logs except a final 'exit 137'. Rolling back to the previous version fixes it.",
+                 f"Steps to reproduce: 1. install {p} {ver} 2. run `{p} init` in a folder with a space in its name 3. run `{p} build`. Expected: build succeeds. Actual: 'config not found' even though the file is right there.",
+                 f"We use {p} as {dom} in production. After roughly {num(2,40)}k requests the resident memory climbs from {num(50,300)} MB to over {num(2,9)} GB and the process gets killed. No leaks show up under the profiler.",
+                 f"It would be great if {p} could offer a dark theme. Half our team works at night and the white dashboard is painful. Happy to open a PR if you point me at the theme files.",
+                 f"Posting an empty JSON body to /v1/items returns a 500 with a stack trace instead of a 400. Version {ver}, {pick(LANGS_P)}, {pick(PLAT)}."])
+    env = pick([f"Environment: {p} {ver}, {pick(LANGS_P)}, {pick(PLAT)}.", f"env: {pick(PLAT)} / {pick(LANGS_P)} / {p}@{ver}", ""])
+    return f"{title}\n\n{body}\n{env}".strip()
+def readme_text():
+    p = pick(PROJ); dom = pick(DOMAINS)
+    return pick([f"# {p}\n\n{p} is {dom} written in {pick(LANGS_P).split()[0]}. Install with `pip install {p}` or download a release binary. Run `{p} --help` to list commands. Configuration lives in `{p}.toml` next to your project; every key has a sane default.",
+                 f"## Getting started with {p}\n\n1. Clone the repository. 2. Run `make setup`. 3. Start the dev server with `{p} serve`. The server listens on port {num(3000,9000)} and reloads on file changes. See CONTRIBUTING.md before opening a pull request.",
+                 f"{p} ({dom}) is licensed under Apache-2.0. It has no runtime dependencies and ships as a single {num(2,40)} MB binary for Linux, macOS and Windows. Benchmarks against the two most common alternatives are in docs/BENCHMARKS.md."])
+def conv_prose():
+    t = issue_text() if random.random() < 0.7 else readme_text()
+    m = [{"role": "system", "content": SYSTEM}]
+    r = random.random()
+    if r < 0.5:
+        m += [{"role": "user", "content": t}, {"role": "assistant", "content": tc("escalate", {"request": t[:120], "reason": pick(["needs a human", "out of scope for a dispatcher", "bug report, not a request I can act on"])})}]
+    elif r < 0.75:
+        m += [{"role": "user", "content": t}, {"role": "assistant", "content": pick(["This looks like a bug report. I cannot fix code, but I can pass it on to a bigger assistant or save it as a note if you want.", "That reads like project documentation. What would you like me to do with it?", "I see an issue description. Do you want me to email it to someone, save it as a note, or hand it over?"])}]
+    else:  # same prose + ONE intent sentence -> a real route (contrastive with the two branches above)
+        k = random.random()
+        if k < 0.35:
+            to = pick(EMAILS); q = t + "\n\n" + pick([f"Send this to {to}.", f"Email the above to {to} with subject 'issue'.", f"Forward this report to {to}."])
+            a = {"to": to, "subject": pick(["issue", "bug report", "Issue report"]), "body": t[:200]}; name = "send_email"
+        elif k < 0.65:
+            q = t + "\n\n" + pick(["Save this as a note.", "Note this down please.", "Keep this as a note for later."]); a = {"text": t[:200]}; name = "save_note"
+        elif k < 0.85:
+            fn = pick(["issue.md", "report.txt", "bug.md"]); q = t + "\n\n" + pick([f"Write this into {fn}.", f"Save the text above to {fn}."]); a = {"path": fn, "content": t[:200]}; name = "write_file"
+        else:
+            l = pick(LANGS); q = t + "\n\n" + pick([f"Translate the title to {l}.", f"How do you say the first line in {l}?"]); a = {"text": t.split("\n")[0], "to": l}; name = "translate"
+        res = result(name, a)
+        m += [{"role": "user", "content": q}, {"role": "assistant", "content": tc(name, a)}, {"role": "tool", "content": res}, {"role": "assistant", "content": followup(name, a, res)}]
+    return m
+
+# Delta 3: value relay. Multi-clause arguments with punctuation, embedded numbers, long ticket
+# bodies and accented phrases - no new routes, just harder copying.
+ACCENTED = ["où est la gare ?", "je voudrais un café, s'il vous plaît", "¿dónde está el baño?", "¡feliz cumpleaños!", "grüß Gott, wie geht's?", "à bientôt", "buongiorno, come stai?", "obrigado, até amanhã"]
+def g_value_relay():
+    k = random.random()
+    if k < 0.3:
+        to = pick(EMAILS); subj = pick(["Invoice 4471", "Re: meeting at 3pm", "Order #%d" % num(1000, 9999), "Q3 numbers"]); body = pick([f"Hi, the total for order #{num(1000,9999)} is {num(10,999)}.{num(10,99)} euros; please confirm by {pick(['Friday','the 14th','tomorrow'])}.", "Quick note: the deploy is at 10:30, not 10:00 - don't be late!", f"Can you send {num(2,9)} copies of the 'blue' brochure? Thanks, {pick(NAMES)}"])
+        return pick([f"email {to} with subject '{subj}' and this message: {body}", f"send an email to {to}, subject \"{subj}\", body: {body}", f"write to {to} about {subj}: {body}"]), "send_email", {"to": to, "subject": subj, "body": body}
+    if k < 0.5:
+        p = pick(ACCENTED); l = pick(LANGS); return pick([f"translate '{p}' to {l}", f"what is \"{p}\" in {l}?", f"say {p} in {l}"]), "translate", {"text": p, "to": l}
+    if k < 0.7:
+        txt = pick([f"call {pick(NAMES)} about invoice {num(100,999)} (ask for the 12% discount)", f"buy {num(2,6)} kg of apples, 1 loaf of bread and 'the good' coffee", f"renew the domain before the {num(1,28)}th; it costs about {num(8,40)} euros"]); when = pick(["tomorrow at 9:15", "in 45 minutes", "next Tuesday at noon", "tonight at 21:30"])
+        return pick([f"remind me to {txt} {when}", f"set a reminder for {when}: {txt}", f"{when}, remind me: {txt}"]), "set_reminder", {"text": txt, "when": when}
+    if k < 0.85:
+        txt = pick([f"meeting notes: ship v{num(1,9)}.{num(0,9)} on Friday, {pick(NAMES)} owns the changelog, budget is {num(1,9)}k", f"idea: 'tiny models, big tools' - a 7 MB router that says no", f"recipe: 250 g flour, 3 eggs, 1/2 l milk; rest 30 min"])
+        return pick([f"take a note: {txt}", f"note: {txt}", f"write this down - {txt}"]), "save_note", {"text": txt}
+    req = pick([f"our {pick(PROJ)} deployment has been down since {num(1,12)}:{num(10,59):02d}; customers in {pick(CITIES)} and {pick(CITIES)} report 502s, the on-call phone is not answering and the status page still says green. We need someone with production access to roll back release {num(1,9)}.{num(0,20)} and restart the {pick(['queue','database','ingress'])}.",
+                f"I was charged twice for order #{num(1000,9999)} ({num(20,900)}.{num(10,99)} euros each) on {pick(['Monday','the 3rd','March 12'])}; the second charge shows a different merchant name. Please refund the duplicate and confirm by email."])
+    return pick([f"{req}", f"urgent: {req}", f"please help: {req}"]), "escalate", {"request": req[:220], "reason": pick(["needs a human with production access", "billing dispute, needs an operator"])}
+def conv_relay():
+    text, name, args = g_value_relay(); res = result(name, args)
+    return [{"role": "system", "content": SYSTEM}, {"role": "user", "content": text}, {"role": "assistant", "content": tc(name, args)}, {"role": "tool", "content": res}, {"role": "assistant", "content": followup(name, args, res)}]
+
+# ---- tools9 delta: deictic / coreference follow-ups ---------------------------------------------
+# Live misses on m7router5s384: "yes do that" -> escalate @0.96 (want chat); the rpg head maps
+# "hit it again" -> rest. The corpus had no anaphoric follow-ups, so the trunk never learned that
+# "it"/"that"/"again" refer to the previous turn's action and its arguments. Three shapes:
+# repeat (same call again), slot-swap ("and in Lyon?", "same for tomorrow"), and deictic acks
+# that must NOT re-fire a tool.
+def conv_ctxref():
+    g = pick([x for x in GENS if x not in (g_escalate, g_garbage)])
+    text, name, args = g()
+    res = result(name, args)
+    m = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": nat_maybe(text)},
+         {"role": "assistant", "content": tc(name, args)}, {"role": "tool", "content": res},
+         {"role": "assistant", "content": followup(name, args, res)}]
+    r = random.random()
+    a2 = None
+    if r < 0.45:                      # repeat: same tool call verbatim
+        q = pick(["do it again", "once more", "again please", "same thing again", "do that again",
+                  "one more time", "repeat that", "go again", "another one"])
+        a2 = args
+    elif r < 0.8:                     # slot swap: same tool, one argument changed
+        if name == "get_weather":
+            c2 = lc(pick(CITIES)); a2 = {"city": c2}
+            q = pick([f"and in {c2}?", f"what about {c2}?", f"and {c2}?", f"same for {c2}", f"how about {c2}?"])
+        elif name == "get_time":
+            tz2 = pick(TZ); a2 = {"timezone": tz2}
+            q = pick([f"and in {tz2}?", f"what about {tz2}?", f"same for {tz2}", f"how about {tz2}?"])
+        elif name == "send_email":
+            to2 = pick(EMAILS); a2 = dict(args); a2["to"] = to2
+            q = pick([f"send it to {to2} too", f"forward that to {to2}", f"same email to {to2}", f"also to {to2}"])
+        elif name == "web_search":
+            t2 = pick(TOPICS); a2 = {"query": t2}
+            q = pick([f"now search for {t2}", f"and {t2}?", f"what about {t2}?", f"same for {t2}"])
+        elif name == "translate":
+            l2 = pick(LANGS); a2 = dict(args); a2["to"] = l2
+            q = pick([f"and in {l2}?", f"now in {l2}", f"translate that to {l2} too", f"same in {l2}"])
+        elif name == "set_reminder":
+            w2 = pick(["tomorrow at 9:00", "in an hour", "next Monday at noon", "tonight at 20:00"])
+            a2 = dict(args); a2["when"] = w2
+            q = pick([f"same but {w2}", f"move it to {w2}", f"change that to {w2}", f"actually make it {w2}"])
+        elif name == "convert_units":
+            v2 = num(1, 500); a2 = dict(args); a2["value"] = v2
+            q = pick([f"and {v2}?", f"what about {v2}?", f"now {v2}", f"same for {v2}"])
+        elif name == "calculator":
+            e2 = f"{num(1,99)} {pick(['+','-','*','/'])} {num(1,99)}"; a2 = {"expression": e2}
+            q = pick([f"and {e2}?", f"now {e2}", f"what about {e2}?", f"same for {e2}"])
+    if a2 is not None:
+        res2 = result(name, a2)
+        m += [{"role": "user", "content": q}, {"role": "assistant", "content": tc(name, a2)},
+              {"role": "tool", "content": res2}, {"role": "assistant", "content": followup(name, a2, res2)}]
+    else:                             # deictic ack: refers to context but fires NO tool
+        q = pick(["yes do that", "yes please", "go ahead", "sounds good", "ok thanks", "perfect, thanks",
+                  "great, that's all", "thanks, that worked", "nice one", "cool, thanks"])
+        a = pick(["Done already — anything else?", "Happy to help. Anything else?", "All set.",
+                  "Glad it worked!", "You're welcome!", "Great — let me know if you need more."])
+        m += [{"role": "user", "content": q}, {"role": "assistant", "content": a}]
+    return m
+
+counts = {"tool": 0, "chat": 0, "mixed": 0, "followup": 0, "nav": 0, "prose": 0, "relay": 0, "ctxref": 0}
+OUT = "data/tools9.jsonl" if TOOLS9 else ("data/tools8.jsonl" if TOOLS8 else "data/tools.jsonl")
+with open(OUT, "w") as f:
     for _ in range(N):
-        r = random.random(); kind = "tool" if r < 0.40 else ("followup" if r < 0.50 else ("chat" if r < 0.87 else "mixed"))
+        r = random.random()
+        if TOOLS9:
+            kind = "tool" if r < 0.36 else ("followup" if r < 0.44 else ("chat" if r < 0.72 else ("mixed" if r < 0.82 else ("nav" if r < 0.86 else ("prose" if r < 0.94 else ("relay" if r < 0.96 else "ctxref"))))))
+        elif TOOLS8:
+            kind = "tool" if r < 0.38 else ("followup" if r < 0.47 else ("chat" if r < 0.81 else ("mixed" if r < 0.91 else ("nav" if r < 0.94 else ("prose" if r < 0.98 else "relay")))))
+        else:
+            kind = "tool" if r < 0.40 else ("followup" if r < 0.50 else ("chat" if r < 0.87 else "mixed"))
         counts[kind] += 1
-        f.write(json.dumps({"messages": {"tool": conv_tool, "chat": conv_chat, "mixed": conv_mixed, "followup": conv_followup}[kind]()}) + "\n")
-print(json.dumps({"conversations": N, "kinds": counts, "tools": [g()[1] for g in GENS]}))
+        f.write(json.dumps({"messages": {"tool": conv_tool, "chat": conv_chat, "mixed": conv_mixed, "followup": conv_followup, "nav": conv_nav, "prose": conv_prose, "relay": conv_relay, "ctxref": conv_ctxref}[kind]()}) + "\n")
+print(json.dumps({"conversations": N, "out": OUT, "kinds": counts, "tools": [g()[1] for g in GENS]}))
