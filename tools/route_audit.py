@@ -150,10 +150,16 @@ Self-contained typed-decision appliance (pure Machin/MFL, ~8MB, CPU-only).
     curl localhost:8097/v1/route -H 'content-type: application/json' \\
       -d '{{"state":"your request","expert":"{name}"}}'
 
-The `{name}` head was trained on your labeled request sample. Unfamiliar
-requests return `action":"delegate"` instead of guessing — wire that lane to a
-human or a larger model. `audit-report.html` shows the before/after on your
-own requests.
+The `{name}` head was trained on your labeled request sample. Nonsense and
+off-domain requests return `"action":"delegate"` instead of guessing — wire
+that lane to a human or a larger model. `audit-report.html` shows the
+before/after on your own requests.
+
+Two honest limits of a draft head: it was trained on the sample itself
+(proof of mechanism, not production accuracy — a real head wants ~1k labeled
+rows), and business-adjacent requests outside your routes need `escalate`
+labels in the training sample — e.g. label "whats the weather" as escalate if
+you want it refused rather than force-fit into a business route.
 """)
     if report_html and os.path.exists(report_html):
         shutil.copy(report_html, os.path.join(root, "audit-report.html"))
