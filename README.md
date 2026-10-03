@@ -37,7 +37,7 @@ Live trace:
 The weak routes aren't model failures — they're overlapping labels citizens
 pick wrong in the form itself. That's a route-table design problem, which is
 exactly the kind of thing a pilot fixes. [The honest breakdown is in the
-proposal report](https://hart.intrane.fr/a/javimosch/mtlm-router-simpliciti-proposal).
+proposal report](https://hart.intrane.fr/a/javimosch/mtlm-router-realdata-report).
 
 ## The input is just your labeled inbox
 
