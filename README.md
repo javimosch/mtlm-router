@@ -1,173 +1,173 @@
 # mtlm-router
 
-**A 7M-parameter typed decision layer, trained end-to-end in pure
-[machin/MFL](https://github.com/javimosch/machin), made in Europe.** It sits in
-front of your tools and assistants and turns natural-language requests into
-typed, calibrated routing decisions — in ~15ms on CPU, fully self-hosted —
-and knows when to say "not my job".
+**Route natural-language requests to the right lane — on your own hardware,
+with an honest "I don't know".**
 
-Built for SME and on-prem workflows: email/ticket triage, typed ops actions,
-compliance-safe escalation — flat cost, data never leaves your network.
+Every company has an inbox nobody wants to read: support tickets, citizen
+complaints, ops requests, shared mailboxes. Someone reads each line, decides
+*what kind* it is, and sends it to the right team or tool. mtlm-router is the
+component that makes that decision — typed, confidence-scored, and safe
+enough to abstain instead of guessing wrong.
 
-- **Model**: [javimosch/mtlm-7m-router3s384](https://huggingface.co/javimosch/mtlm-7m-router3s384)
-  ([Hugging Face](https://huggingface.co/javimosch/mtlm-7m-router3s384) ·
-  [ModelScope](https://www.modelscope.ai/models/javimosch/mtlm-7m-router3s384)) —
-  weights, tokenizer, decision heads. [Model card](docs/MODEL-CARD.md) (EN/中文).
-- **Runtime**: [machin-anvil](https://github.com/javimosch/machin-anvil) —
-  pure-MFL OpenAI-compatible server with the typed decision endpoints.
-- **This repo**: training/eval tooling, the self-serve customer-head
-  pipeline, the gate flywheel, and the dispatcher contract.
-- **Landing**: [mtlm-router.intrane.fr](https://mtlm-router.intrane.fr) (EN/FR).
+It's a **7M-parameter decision layer**, trained end-to-end in pure
+[machin/MFL](https://github.com/javimosch/machin), made in Europe. ~15 ms per
+decision on CPU, fully self-hosted — data never leaves your network.
+
+## Proof on real production data
+
+Trained a draft head on an **anonymized export of a real municipal
+citizen-request inbox** (6,402 labeled requests, 15 routes):
+
+| | |
+|---|---|
+| Holdout accuracy | **76.9%** |
+| Confident-wrong (≥90% conf) | **~0%** — it abstains instead of misrouting |
+| Head size | 18.7 KB |
+| Latency | ~180 ms on plain CPU |
+
+Live trace:
+
+```text
+» "mon bac jaune n'a pas été ramassé"    → dotation_bacs @ 0.89   — routed
+» "dépôt sauvage rue des lilas"           → abstains @ 0.53        — human reviews
+» "what's the weather in lyon"            → delegate               — off-domain, refuses to guess
+» "attack the dragon"                     → escalate @ 0.98        — absurd input, safely out
+```
+
+The weak routes aren't model failures — they're overlapping labels citizens
+pick wrong in the form itself. That's a route-table design problem, which is
+exactly the kind of thing a pilot fixes. [The honest breakdown is in the
+proposal report](https://hart.intrane.fr/a/javimosch/mtlm-router-simpliciti-proposal).
+
+## The input is just your labeled inbox
+
+No ML engineering required. One line per historical request:
+
+```text
+depot_illicite :: il y a un dépôt sauvage de gravats rue des lilas
+dotation_bacs  :: je voudrais obtenir un bac pour le compost
+collecte_om    :: mon bac jaune n'a pas été ramassé ce matin
+```
+
+`route :: request text` — or JSONL `{"user": ..., "expect_tool": "route"}`.
+~1,000 rows per frequent route is enough for a first draft; ambiguous and
+refused requests belong in too (they teach abstention). No PII needed —
+hash identifiers if you want grouping.
+
+```bash
+python3 tools/head_studio.py --config your_routes.json \
+    --hf /path/to/hf-bundle --name helpdesk --outdir out/
+```
+
+One command produces a calibrated ~7–20 KB `.head` you swap into the
+appliance. Per-client routing vocabulary = a file, not a fine-tune.
 
 ## The one-call API
 
 ```bash
 curl localhost:8097/v1/route \
   -H 'content-type: application/json' \
-  -d '{"state":"remind me to call the dentist tomorrow at 6pm","execute":true}'
+  -d '{"state":"remind me to call the dentist tomorrow at 6pm"}'
 ```
 
 ```json
 {"action":"tool_call","route":"set_reminder","confidence":0.9999,
- "p_yes":1.8e-06,"tier":"3","reason":"ok",
+ "p_yes":1.8e-06,"reason":"ok",
  "call":{"name":"set_reminder","arguments":{"text":"call the dentist","when":"tomorrow at 6pm"}}}
 ```
 
-`/v1/route` scores the request with the route head, the escalation head,
-and the complexity head in **one forward pass**, applies the safety gates
-(low confidence → delegate, `escalate` → delegate, head↔generation
-disagreement → delegate), and optionally executes the call. Lower-level
-primitives (`/v1/decide`, `/v1/noul`, `/v1/score`, `/v1/assess`,
-`/v1/chat/completions`) remain available. See [PRODUCT.md](PRODUCT.md).
+`action` is one of `tool_call` / `chat` / `delegate` — the safety gates are
+built in (low confidence, `escalate`, head↔generation disagreement all
+delegate rather than misroute). See [PRODUCT.md](PRODUCT.md) for the full
+endpoint surface.
 
-## Mixture of experts — one trunk, many brains
+## Mixture of experts — one trunk, many heads
 
-The frozen 7M trunk is shared. Domain knowledge lives in ~7 KB `.head`
-files; a gate head picks the domain, the domain expert picks the route:
+A frozen 7M trunk; domain knowledge lives in kilobyte `.head` files:
 
 ```bash
 ANVIL_GATE=moe_gate.head \
-ANVIL_EXPERTS="it_helpdesk:helpdesk.head,fleet_gate:fit.head,rpg:rpg.head" \
+ANVIL_EXPERTS="it_helpdesk:helpdesk.head,fleet_gate:fit.head,mairie:geored.head" \
 ./anvil-serve model.bin 8401
 ```
 
-- **Per-head pooling** — `mhd2` heads declare their own feature tap
-  (`last-token` / `mean@-k` / `max@-k`). One instance serves a last-token
-  gate, a mean@-3 helpdesk, and a mean@-4 rpg expert side by side —
-  because the eval said those recipes win different lanes, and it was right.
-- **Expert pin** — `{"state":"attack the goblin","expert":"rpg"}` skips the
-  gate and the OOD vetoes entirely; the expert's own `escalate` class is the
-  abstention path. For known-domain clients; the gate stays for mixed
-  front-door traffic. Unknown pin → 400, no silent fallback.
-- **Tenants** — `ANVIL_TENANTS="k1:helpdesk.head"` binds a Bearer key to its
-  own head — per-customer routing vocabularies on one trunk.
+- **Per-head pooling** — each head declares its own feature tap
+  (`last-token` / `mean@-k` / `max@-k`); the eval picks the recipe, the
+  server obeys.
+- **Expert pin** — `{"state":..., "expert":"mairie"}` skips the gate for
+  known-domain traffic; the head's own `escalate` class is the abstention path.
+- **Tenants** — `ANVIL_TENANTS="key:head"` binds API keys to their own
+  heads — multi-customer on one trunk.
 
 ## Numbers — held-out *and* live
 
 | metric | value |
 |---|---|
 | route accuracy | **97.6%** (ECE 0.012) |
-| gate accuracy (holdout) | **95.4%** (ECE 0.035, 5 domains) |
-| gate accuracy (live canary) | **81.6%** aggregate — tools lane 62/63 |
-| rpg expert, last-token → mean@-4 | 81.3% → **95.1%** |
-| fleet expert, last-token → max@-3 | 48% → **63%** |
-| escalate (noul) | **98.9%** |
-| latency | ~15ms / decision, 6-core LXC, no GPU |
+| gate accuracy (holdout) | **95.4%** (5 domains) |
+| gate accuracy (live canary) | **98.0%** aggregate — verified per-domain before swap |
+| real-corpus domain head | **76.9%** (~0% conf-wrong) |
+| latency | ~15 ms / decision, no GPU |
 | size | 7.2M params, 8.06 MB int8 |
 
-We publish both holdout and live-eval numbers because they disagree: two
-gate retrain candidates passed holdout and were rejected by the live
-canary matrix for regressing the dominant tools lane. `tools/eval_gate_live.py`
-exists so the next retrain is judged lane by lane, not in aggregate.
+We publish holdout and live-eval side by side because they disagree —
+candidates pass holdout and still regress a dominant lane live.
+`tools/eval_gate_live.py` judges per lane, not in aggregate.
 
 ## The flywheel — it trains on its own traffic
 
-Every `/v1/route` decision is logged (`decisions.jsonl`). The flywheel turns
-that log into corpus:
-
-```
-shadow_feed → decisions.jsonl → harvest_gate → gate_review → judge_review
-                                                    ↘ train-only corpus → new head
-```
-
-- `tools/shadow_feed.py` — streams real traffic (GitHub issues, ticket
-  dumps) through the router, context-capped to the 384-token window
-- `tools/harvest_gate.py` — replays domain-less rows, files uncertain ones
-  into a persistent review queue; `seen` = resolved only
-- `tools/judge_review.py` — applies verdict rules → labeled train rows
-- `tools/build_gate_spec.py` — merges corpus + harvest, deduped, train-only
-  (holdout never sees harvested rows)
-
-A daily timer runs the whole loop — the gate thickens on real requests,
+Every `/v1/route` decision is logged (`decisions.jsonl`). The flywheel
+harvests uncertain real requests into a review queue → labeled rows →
+new head. A daily timer runs the loop; the gate thickens on real traffic,
 never on its own confident predictions.
 
 ## Appliance — the whole product in 7.5 MB
 
 ```bash
-# https://github.com/javimosch/mtlm-router/releases (v0.1.1)
-tar xzf mtlm-router-m7router3s384-linux-amd64.tar.gz
-cd mtlm-router-m7router3s384-linux-amd64
-./start.sh        # /v1/route on :8097 — or install mtlm-router.service
+# https://github.com/javimosch/mtlm-router/releases
+tar xzf mtlm-router-*.tar.gz && cd mtlm-router-* && ./start.sh
+# /v1/route on :8097 — or install mtlm-router.service
 ```
 
-Static binary + int8 model + tokenizer + heads + launcher — no
-dependencies, no GPU, no cloud. `package_appliance.sh --gate --experts`
-bundles a full MoE config; `manifest.json` carries sha256s of every
-artifact plus the eval it shipped with — the honesty contract is a file.
-Auth and multi-tenancy are env vars (`ANVIL_KEYS`, `ANVIL_TENANTS`).
+Static binary + int8 model + tokenizer + heads + launcher. No deps, no GPU,
+no cloud. `manifest.json` ships sha256s and the eval it was verified with —
+the honesty contract is a file.
 
-## Customer heads — self-serve
+## Who this is for
 
-A customer's tool vocabulary is a JSON config of example phrases, not a
-fine-tune. One command produces a ~7 KB swappable `.head`:
+- **SME / integrator**: a shared mailbox or ticket queue that should route
+  itself — your client's vocabulary, their on-prem box, flat cost.
+- **Ops / platform**: typed ops actions (`set_reminder`, `unlock_account`)
+  behind an API that escalates risky or ambiguous requests instead of
+  firing them.
+- **Compliance-sensitive**: EU-hosted, air-gap capable, no LLM calls, no
+  per-request cost, no data egress.
 
-```bash
-python3 tools/head_studio.py --config tools/demo_helpdesk.json \
-    --hf /path/to/hf-bundle --name helpdesk --outdir out/
-# serve:  ANVIL_HEAD=out/helpdesk.head ./anvil-serve model.bin 8097
-```
+## Links
 
-Validates route names, synthesizes train/eval specs (leakage-filtered),
-trains on the frozen trunk, reports accuracy/ECE/confusion, writes the
-artifact + manifest. Integrators: one trunk per client, one head per
-vocabulary — per-client customization as a file swap.
+- **Landing**: [mtlm-router.intrane.fr](https://mtlm-router.intrane.fr) (EN/FR)
+- **Model**: [javimosch/mtlm-7m-router3s384](https://huggingface.co/javimosch/mtlm-7m-router3s384)
+  · [Model card](docs/MODEL-CARD.md)
+- **Runtime**: [machin-anvil](https://github.com/javimosch/machin-anvil)
+- **Hosted API**: `https://api.mtlm-router.intrane.fr` —
+  [onboarding](https://api.mtlm-router.intrane.fr/llms.txt), pay-per-decision
+- **Demo**: [machin-game-mtlm-rpg-poc](https://github.com/javimosch/machin-game-mtlm-rpg-poc)
+  (an agent plays a dungeon through the router)
 
 ## Layout
 
 - `tools/head_studio.py` — self-serve head pipeline (config → `.head`)
-- `tools/gen_routespec.py` — route config → labeled spec
-- `tools/train_head.py` — spec → `.head` (linear head on frozen trunk)
-- `tools/head_probe.py` — layer/pooling sweep + `mhd2` emit (`--emit-layer`,
-  `--emit-pool`, `--emit-temp`, `--serve-system` to match anvil's prompt)
+- `tools/head_probe.py` — layer/pooling sweep + `mhd2` emit
+- `tools/gen_routespec.py`, `tools/train_head.py` — spec → `.head`
+- `tools/route_audit.py` — lead requests → audit report + appliance package
 - `tools/synth_tools.py` — trunk training corpus generator
-- `tools/eval_*.py`, `*_probes.json` — acceptance evals (agreement,
-  natural, edge, exact) + `eval_gate_live.py` per-domain live canary
-- `tools/harvest_gate.py`, `tools/judge_review.py`,
-  `tools/build_gate_spec.py`, `tools/shadow_feed.py` — the flywheel
-- `tools/calibrate.py`, `tools/refit_temp.py`, `tools/health_check.py` —
-  ops tooling (confidence histograms, temperature refit on your labeled
-  traffic, prod smoke)
-- `tools/probe_gate.py` — probe-suite regression gate for CI
+- `tools/eval_gate_live.py`, `tools/probe_gate.py` — per-domain canary + CI gate
+- `tools/harvest_gate.py`, `tools/judge_review.py`, `tools/build_gate_spec.py`,
+  `tools/shadow_feed.py` — the flywheel
+- `tools/calibrate.py`, `tools/refit_temp.py`, `tools/health_check.py` — ops
 - `tools/package_appliance.sh` — build the self-hosted tarball
-- `tools/router_demo.py`, `tools/jev_demo.py` — reference dispatchers
-- `docs/MODEL-CARD.md` — bilingual (EN/中文) model card
-
-## See it play
-
-[machin-game-mtlm-rpg-poc](https://github.com/javimosch/machin-game-mtlm-rpg-poc)
-— an agent plays a 10-room dungeon crawler through the live router: intents
-route through the pinned rpg expert at ~1.0 confidence, off-domain requests
-`escalate` instead of executing nonsense. `demo.sh` plays a full winning
-quest and verifies the outcome.
-
-## Hosted API and pricing
-
-- **Appliance**: free, Apache-2.0 (this repo's releases).
-- **Hosted API**: `https://api.mtlm-router.intrane.fr` — the same `/v1/route`, pay per decision through
-  [peage](https://peage.intrane.fr) (EUR wallet, Stripe top-ups, free starter credit): 1 cent buys 20 decisions.
-  `curl -s https://api.mtlm-router.intrane.fr/llms.txt` has the three-line onboarding.
-- **Custom head**: your route table, trained and calibrated on the frozen trunk, one-off per domain —
-  see [mtlm-router.intrane.fr/#pricing](https://mtlm-router.intrane.fr/#pricing).
+- `docs/MODEL-CARD.md` — bilingual model card
+- `data/geored/` — real-corpus extraction notes + provenance (production-derived)
 
 ## License
 
