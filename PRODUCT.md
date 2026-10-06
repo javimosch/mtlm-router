@@ -148,6 +148,23 @@ harvested rows into the next `moe_gate.head`.
   heads shine on well-defined structured decisions.
 - Chat quality is TinyStories-grade — this is a dispatcher, not a chatbot.
 
+## Field results on real corpora (2026-10)
+
+- **Municipal requests (geored12, real production export, 6,402 rows, 15
+  routes): 79.0% holdout** with ~0 confident misroutes — the strongest
+  evidence that a per-client head works when the data matches the trunk's
+  distribution.
+- **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
+  not production-grade — used as the second domain in the MoE demo.
+- **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
+  Subject-only vs body: same. TF-IDF concat: no rescue. Conclusion: head
+  quality is data-dependent and must be *measured* on the client's export —
+  the pilot (export → holdout number) is the product.
+- **Generative routing (fine-tuned trunk, Jev path): not yet.** A 150-step
+  fine-tune learned the tool_call format but collapsed to one class at 7M
+  scale on an imbalanced 15-way task. Heads remain the product; a balanced
+  retry is staged (`ft_retry.sh` on rbm21).
+
 ## Appliance
 
 ```
