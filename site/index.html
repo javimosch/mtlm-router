@@ -408,14 +408,16 @@
 <div class="mb-20">
   <h2 class="text-3xl font-bold mb-3 text-center">One tarball. Runs anywhere.</h2>
   <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
-    The whole stack — engine, tokenizer, int8 model, heads, admin — ships as a
-    <span class="mono text-cyan-300">~7.5MB appliance</span>. No pip install, no model registry, no GPU driver.
+    The whole stack — server binary, tokenizer, int8 model, heads — ships in one
+    <span class="mono text-cyan-300">fully self-contained ~7.8MB tarball</span>.
+    Untar, run <span class="mono">./start.sh</span>, done. No anvil install, no pip, no model
+    download, no license server — nothing leaves the machine.
   </p>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
-    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-appliance.tar.gz && cd appliance</span>
-<span class="text-gray-600">$ ./anvil-serve model.bin 8080 &amp;</span>
-<span class="text-gray-600">$ curl localhost:8080/assess -d '{"req":"reset my password"}'</span>
-<span class="text-green-300">{"route":"reset_password","confidence":0.99,"action":"tool_fill",...}</span></code></pre>
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-mairie-linux-amd64.tar.gz &amp;&amp; cd mtlm-router-mairie</span>
+<span class="text-gray-600">$ ./start.sh &amp;</span>
+<span class="text-gray-600">$ curl localhost:8097/v1/route -d '{"messages":[{"role":"user","content":"..."}]}'</span>
+<span class="text-green-300">{"route":"depot_illicite","confidence":0.92,"action":"tool_call",...}</span></code></pre>
   </div>
 </div>
 
