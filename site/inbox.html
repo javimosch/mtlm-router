@@ -1,0 +1,81 @@
+{{>layout "layout.html"}}
+
+<div class="pt-10 pb-16">
+  <p class="mono text-cyan-400 text-sm mb-4 tracking-widest">SME INBOX · SELF-HOSTED · MADE IN EUROPE</p>
+  <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+    Every incoming email,<br>
+    <span class="gradient-text">sorted or safely set aside.</span>
+  </h1>
+  <p class="text-xl text-gray-400 max-w-3xl">
+    mtlm-router turns a shared mailbox into typed decisions: devis, commande,
+    litige, facture, spam-adjacent — each mail gets a route and a confidence,
+    or an honest <span class="text-amber-400">delegate</span> when the right answer isn't clear.
+    On-prem, on CPU, flat cost.
+  </p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-6 mb-20">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">~15ms</div>
+    <div class="text-sm font-semibold mb-1">per decision</div>
+    <div class="text-xs text-gray-500">CPU-only, no GPU, no API round-trip to a hosted model.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">0€</div>
+    <div class="text-sm font-semibold mb-1">per-mail inference cost</div>
+    <div class="text-xs text-gray-500">A frozen trunk + a kilobyte-scale head per client. No per-request billing, ever.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">GDPR</div>
+    <div class="text-sm font-semibold mb-1">by architecture</div>
+    <div class="text-xs text-gray-500">Mail content never leaves the client's network. Nothing to DPA.</div>
+  </div>
+</div>
+
+<div class="mb-20" id="what-it-does">
+  <h2 class="text-3xl font-bold mb-8 text-center">How it fits an integrator's stack</h2>
+  <div class="max-w-3xl mx-auto space-y-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">1 · Plug the mailbox</h3>
+      <p class="text-gray-400 text-sm">A small connector reads maildir / mbox / IMAP and posts each message to <span class="mono">/v1/route</span>. Output: sorted folders plus a <span class="mono">decisions.jsonl</span> audit trail — who was routed where, at what confidence.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">2 · Train the client's head</h3>
+      <p class="text-gray-400 text-sm">Export a few hundred labeled mails from the client's archive, train a head in under an hour on CPU. The trunk never changes — the head file is the client's, portable, versionable.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-amber-300">3 · Let it abstain</h3>
+      <p class="text-gray-400 text-sm">Below the confidence threshold the mail lands in a review queue instead of the wrong folder. Wrong-folder mail costs more than unsorted mail — the engine is built to know the difference.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Why not just prompt an LLM?</h2>
+  <div class="max-w-3xl mx-auto grid md:grid-cols-3 gap-6">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-sm text-cyan-300">Cost shape</h3>
+      <p class="text-gray-400 text-sm">An LLM call per mail is a meter running forever. This is a 7.8MB appliance on a VM — the hundredth mailbox costs the same as the first.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-sm text-cyan-300">Calibrated no</h3>
+      <p class="text-gray-400 text-sm">A prompt improvises a label. This returns a typed decision with a confidence trained against a holdout — abstention is a first-class output, not a hope.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-sm text-cyan-300">Data stays</h3>
+      <p class="text-gray-400 text-sm">Client mail never transits a third-party API. For an integrator selling to cautious SMEs, that's the whole sales conversation.</p>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">Bring a mailbox export, leave with a head.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    The path to a pilot is one labeled export away. We train the head, you embed the appliance —
+    under your brand, at your price.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="{{.root}}/" class="border border-cyan-800 text-cyan-300 px-8 py-3 rounded-lg text-lg font-medium hover:border-cyan-500 transition-colors">Technical overview →</a>
+    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">Get in touch</a>
+  </div>
+</div>

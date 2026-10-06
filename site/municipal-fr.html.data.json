@@ -1,0 +1,21 @@
+{
+  "title": "mtlm-router pour collectivités — tri typé des demandes usagers, on-prem",
+  "description": "Moteur auto-hébergé qui route les demandes usagers (collecte, dépôt sauvage, bacs) avec abstention calibrée. 79% en holdout sur un export de production réel, archive de 7,8 Mo, zéro appel cloud.",
+  "lang": "fr",
+  "root": "/mtlm-router",
+  "nav_how": "Ce que ça fait",
+  "nav_moe": "Périmètre",
+  "nav_numbers": "Chiffres",
+  "alt_lang_url": "/mtlm-router/municipal",
+  "alt_lang_label": "EN",
+  "alt_lang_title": "English version",
+  "github": "https://github.com/javimosch/mtlm-router",
+  "machin": "https://github.com/javimosch/machin",
+  "article": "https://dev.to/javimosch/a-7m-parameter-model-that-knows-when-to-say-no-4phn",
+  "nav_pricing": "Éditeurs",
+  "nav_product": "Produit",
+  "nav_municipal": "Collectivités",
+  "nav_inbox": "Boîtes mail",
+  "municipal_slug": "municipal-fr",
+  "inbox_slug": "inbox-fr"
+}

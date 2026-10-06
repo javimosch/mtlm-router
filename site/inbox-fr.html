@@ -1,0 +1,81 @@
+{{>layout "layout.html"}}
+
+<div class="pt-10 pb-16">
+  <p class="mono text-cyan-400 text-sm mb-4 tracking-widest">BOÎTES MAIL PME · AUTO-HÉBERGÉ · CONÇU EN EUROPE</p>
+  <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+    Chaque email entrant,<br>
+    <span class="gradient-text">trié ou mis de côté proprement.</span>
+  </h1>
+  <p class="text-xl text-gray-400 max-w-3xl">
+    mtlm-router transforme une boîte mail partagée en décisions typées : devis,
+    commande, litige, facture — chaque mail reçoit une route et une confiance,
+    ou un <span class="text-amber-400">delegate</span> honnête quand la bonne réponse n'est pas claire.
+    On-prem, sur CPU, coût fixe.
+  </p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-6 mb-20">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">~15ms</div>
+    <div class="text-sm font-semibold mb-1">par décision</div>
+    <div class="text-xs text-gray-500">CPU uniquement, pas de GPU, pas d'appel API vers un modèle hébergé.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">0€</div>
+    <div class="text-sm font-semibold mb-1">d'inférence par mail</div>
+    <div class="text-xs text-gray-500">Un tronc figé + une tête de quelques kilo-octets par client. Jamais de facturation à la requête.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">RGPD</div>
+    <div class="text-sm font-semibold mb-1">par architecture</div>
+    <div class="text-xs text-gray-500">Le contenu des mails ne quitte jamais le réseau du client. Rien à contractualiser.</div>
+  </div>
+</div>
+
+<div class="mb-20" id="what-it-does">
+  <h2 class="text-3xl font-bold mb-8 text-center">Comment ça s'intègre chez un intégrateur</h2>
+  <div class="max-w-3xl mx-auto space-y-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">1 · Branchez la boîte mail</h3>
+      <p class="text-gray-400 text-sm">Un petit connecteur lit maildir / mbox / IMAP et poste chaque message vers <span class="mono">/v1/route</span>. Sortie : dossiers triés + un journal <span class="mono">decisions.jsonl</span> — qui a été routé où, à quelle confiance.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">2 · Entraînez la tête du client</h3>
+      <p class="text-gray-400 text-sm">Exportez quelques centaines de mails labellisés de l'archive client, entraînez une tête en moins d'une heure sur CPU. Le tronc ne change jamais — le fichier tête appartient au client, portable et versionnable.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-amber-300">3 · Laissez-le s'abstenir</h3>
+      <p class="text-gray-400 text-sm">Sous le seuil de confiance, le mail part en file de relecture au lieu du mauvais dossier. Un mail mal rangé coûte plus cher qu'un mail non trié — le moteur est fait pour connaître la différence.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Pourquoi pas juste un prompt LLM ?</h2>
+  <div class="max-w-3xl mx-auto grid md:grid-cols-3 gap-6">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-sm text-cyan-300">Forme du coût</h3>
+      <p class="text-gray-400 text-sm">Un appel LLM par mail, c'est un compteur qui tourne indéfiniment. Ici : une appliance de 7,8 Mo sur une VM — la centième boîte coûte autant que la première.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-sm text-cyan-300">Un non calibré</h3>
+      <p class="text-gray-400 text-sm">Un prompt improvise une étiquette. Ici : une décision typée avec une confiance entraînée sur un holdout — l'abstention est une sortie de première classe.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-sm text-cyan-300">Les données restent</h3>
+      <p class="text-gray-400 text-sm">Les mails clients ne transitent jamais par une API tierce. Pour un intégrateur qui vend à des PME prudentes, c'est toute la conversation commerciale.</p>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">Apportez un export de boîte, repartez avec une tête.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    Le pilote est à un export labellisé près. Nous entraînons la tête, vous embarquez l'appliance —
+    sous votre marque, à votre prix.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="{{.root}}/fr" class="border border-cyan-800 text-cyan-300 px-8 py-3 rounded-lg text-lg font-medium hover:border-cyan-500 transition-colors">Vue technique →</a>
+    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">Nous contacter</a>
+  </div>
+</div>

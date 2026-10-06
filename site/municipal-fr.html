@@ -1,0 +1,103 @@
+{{>layout "layout.html"}}
+
+<div class="pt-10 pb-16">
+  <p class="mono text-cyan-400 text-sm mb-4 tracking-widest">DEMANDES USAGERS · AUTO-HÉBERGÉ · CONÇU EN EUROPE</p>
+  <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+    Triez les demandes déchets automatiquement.<br>
+    <span class="gradient-text">Escaladez tout le reste.</span>
+  </h1>
+  <p class="text-xl text-gray-400 max-w-3xl">
+    mtlm-router lit chaque demande usager entrante et renvoie une route typée —
+    collecte OM, dépôt illicite, dotation de bacs, déchèterie… — ou un
+    <span class="text-amber-400">escalate</span> calibré quand il n'est pas sûr. On-prem, sur CPU,
+    en ~200ms. Rien ne quitte le réseau de la collectivité.
+  </p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-6 mb-20">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">79%</div>
+    <div class="text-sm font-semibold mb-1">de précision en holdout</div>
+    <div class="text-xs text-gray-500">Mesuré sur un export de production réel : 6 402 demandes labellisées, 15 routes.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">~0</div>
+    <div class="text-sm font-semibold mb-1">mauvais routage confiant</div>
+    <div class="text-xs text-gray-500">Ce qu'il ne sait pas, il l'escalade — jamais d'envoi silencieux vers le mauvais service.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">7,8 Mo</div>
+    <div class="text-sm font-semibold mb-1">le produit entier</div>
+    <div class="text-xs text-gray-500">Une archive autonome. On extrait, on lance, ça route. Pas de cloud, pas de GPU, pas de coût par requête.</div>
+  </div>
+</div>
+
+<div class="mb-20" id="what-it-does">
+  <h2 class="text-3xl font-bold mb-8 text-center">Ce que la collectivité y gagne</h2>
+  <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">Routage automatique</h3>
+      <p class="text-gray-400 text-sm">Les demandes claires partent directement au bon service — collecte, dépôt sauvage, colonnes d'apport, compostage, positionnement de bacs. La moitié évidente de la file se vide toute seule.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-amber-300">Abstention sécurisée</h3>
+      <p class="text-gray-400 text-sm">Les demandes ambiguës ou hors périmètre (état civil, passeports, factures) sont escaladées vers un humain au lieu d'être devinées. Un signalement mal routé, c'est une réclamation — le système refuse plutôt que d'improviser.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">Entraîné sur vos données</h3>
+      <p class="text-gray-400 text-sm">Chaque collectivité a sa propre tête — un fichier de ~19 Ko entraîné sur <em>son</em> export labellisé, en quelques heures. Votre vocabulaire, vos routes, vos cas limites.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">Souverain par conception</h3>
+      <p class="text-gray-400 text-sm">Tourne sur une VM dans votre réseau. Le texte des demandes usagers ne transite jamais par un LLM hébergé. Coût fixe — zéro facturation d'inférence par requête.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Périmètre honnête</h2>
+  <div class="max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-8">
+    <ul class="space-y-3 text-gray-400 text-sm">
+      <li><span class="text-green-400 mono">✓</span> Les demandes transcrites par un agent ou issues d'une liste à choix sont routées automatiquement avec haute confiance.</li>
+      <li><span class="text-green-400 mono">✓</span> Les demandes hors périmètre proches (boîte aux lettres vandalisée, passeports, horaires d'équipement) escaladent avec confiance.</li>
+      <li><span class="text-amber-400 mono">!</span> Le langage citoyen libre tend à s'abstenir plutôt qu'à router — le système enlève le trafic facile, pas les cas difficiles.</li>
+      <li><span class="text-amber-400 mono">!</span> Des étiquettes source qui se recouvrent (collecte OM vs sélective) plafonnent la précision — c'est un problème de taxonomie, pas de modèle.</li>
+    </ul>
+    <p class="text-gray-500 text-xs mt-6">Nous publions les chiffres holdout et éval live côte à côte. Si un déploiement ne tient pas sur votre trafic réel, nous le disons.</p>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Pour les éditeurs de logiciels</h2>
+  <div class="max-w-3xl mx-auto text-center">
+    <p class="text-gray-400 mb-6">
+      Les apps de signalement vendent déjà du « tri IA » — la plupart appellent un LLM hébergé
+      pour chaque signalement citoyen. mtlm-router est le moteur à embarquer à la place :
+      un classifieur typé, abstenant, en marque blanche, déployable chez le client
+      et vendable sous votre propre tarification.
+    </p>
+    <p class="text-gray-400 mb-8">
+      Embarquez-le derrière votre portail usager : un POST vers
+      <span class="mono text-cyan-300">/v1/route</span>, une décision JSON en retour.
+      Votre app garde l'UI ; le nôtre rend la décision.
+    </p>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-2xl mx-auto text-left">
+      <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ curl localhost:8097/v1/route \
+    -d '{"messages":[{"role":"user","content":"Depot illicite rue des Lilas"}]}'</span>
+<span class="text-green-300">{"route":"depot_illicite","confidence":0.92,"action":"tool_call"}</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">Essayez-le sur vos propres demandes.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    L'appliance de démo tient dans une archive de 7,8 Mo — un poste de dev la fait tourner
+    en moins d'une minute. Envoyez-nous un export labellisé : les deux premières
+    têtes entraînées sur vos routes sont offertes.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="{{.root}}/fr" class="border border-cyan-800 text-cyan-300 px-8 py-3 rounded-lg text-lg font-medium hover:border-cyan-500 transition-colors">Vue technique →</a>
+    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">Nous contacter</a>
+  </div>
+</div>

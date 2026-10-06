@@ -1,0 +1,100 @@
+{{>layout "layout.html"}}
+
+<div class="pt-10 pb-16">
+  <p class="mono text-cyan-400 text-sm mb-4 tracking-widest">MUNICIPAL REQUESTS · SELF-HOSTED · MADE IN EUROPE</p>
+  <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+    Auto-sort the waste requests.<br>
+    <span class="gradient-text">Escalate everything else.</span>
+  </h1>
+  <p class="text-xl text-gray-400 max-w-3xl">
+    mtlm-router reads each incoming citizen request and returns a typed route —
+    collecte OM, dépôt illicite, dotation de bacs, déchèterie… — or a calibrated
+    <span class="text-amber-400">escalate</span> when it isn't sure. On-prem, on CPU, in ~200ms.
+    Nothing leaves the collectivité's network.
+  </p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-6 mb-20">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">79%</div>
+    <div class="text-sm font-semibold mb-1">holdout accuracy</div>
+    <div class="text-xs text-gray-500">Measured on a real production export: 6,402 labeled municipal requests, 15 routes.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">~0</div>
+    <div class="text-sm font-semibold mb-1">confident misroutes</div>
+    <div class="text-xs text-gray-500">What it doesn't know, it escalates — it never silently sends a request to the wrong service.</div>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="mono text-3xl text-cyan-300 mb-2">7.8MB</div>
+    <div class="text-sm font-semibold mb-1">the whole product</div>
+    <div class="text-xs text-gray-500">One self-contained tarball. Untar, run, route. No cloud, no GPU, no per-request cost.</div>
+  </div>
+</div>
+
+<div class="mb-20" id="what-it-does">
+  <h2 class="text-3xl font-bold mb-8 text-center">What a collectivité gets</h2>
+  <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">Automatic routing</h3>
+      <p class="text-gray-400 text-sm">Clear requests go straight to the right service — collecte, dépôt sauvage, colonnes d'apport, compostage, positionnement de bacs. The obvious half of the queue empties itself.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-amber-300">Safe abstention</h3>
+      <p class="text-gray-400 text-sm">Ambiguous, off-topic or out-of-scope requests (état civil, passeports, factures) are escalated to a human instead of being guessed. A misrouted signalement is a citizen complaint — the system refuses rather than improvises.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">Trained on your data</h3>
+      <p class="text-gray-400 text-sm">Each collectivité gets its own head — a ~19KB file trained on <em>their</em> labeled export, in hours. Your vocabulary, your routes, your edge cases.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <h3 class="font-bold mb-2 text-cyan-300">Sovereign by design</h3>
+      <p class="text-gray-400 text-sm">Runs on a VM inside your network. Citizen request text never transits a hosted LLM. Flat cost — no inference billing per request.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">Honest scope</h2>
+  <div class="max-w-3xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-8">
+    <ul class="space-y-3 text-gray-400 text-sm">
+      <li><span class="text-green-400 mono">✓</span> Agent-transcribed or picklist-shaped requests route automatically at high confidence.</li>
+      <li><span class="text-green-400 mono">✓</span> Near-domain out-of-scope requests (mailbox vandalism, passports, facility hours) escalate confidently.</li>
+      <li><span class="text-amber-400 mono">!</span> Free-form citizen phrasing tends to abstain rather than route — the system removes the clear traffic, not the hard cases.</li>
+      <li><span class="text-amber-400 mono">!</span> Overlapping source labels (collecte OM vs sélective) cap accuracy — that is a taxonomy problem, fixable with a cleaner label set.</li>
+    </ul>
+    <p class="text-gray-500 text-xs mt-6">We publish holdout and live-eval numbers side by side. If a deployment doesn't hold up on your real traffic, we say so.</p>
+  </div>
+</div>
+
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-8 text-center">For software vendors</h2>
+  <div class="max-w-3xl mx-auto text-center">
+    <p class="text-gray-400 mb-6">
+      Signalement apps already market "IA triage" — most of it is a hosted LLM call per citizen report.
+      mtlm-router is the engine you embed instead: a typed, abstaining classifier you can
+      white-label, deploy at a client's site, and sell under your own pricing model.
+    </p>
+    <p class="text-gray-400 mb-8">
+      Embed it behind your portail usager: one POST to <span class="mono text-cyan-300">/v1/route</span>,
+      one JSON decision back. Your app keeps the UI; ours makes the call.
+    </p>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-2xl mx-auto text-left">
+      <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ curl localhost:8097/v1/route \
+    -d '{"messages":[{"role":"user","content":"Depot illicite rue des Lilas"}]}'</span>
+<span class="text-green-300">{"route":"depot_illicite","confidence":0.92,"action":"tool_call"}</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">Try it on your own requests.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    The demo appliance is a 7.8MB tarball — a dev poste can run it in under a minute.
+    Send us a labeled export and we train a head on your routes; the first two trainings are on us.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a href="{{.root}}/" class="border border-cyan-800 text-cyan-300 px-8 py-3 rounded-lg text-lg font-medium hover:border-cyan-500 transition-colors">Technical overview →</a>
+    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">Get in touch</a>
+  </div>
+</div>

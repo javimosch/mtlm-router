@@ -102,10 +102,9 @@
           <span class="ml-3 text-xs text-gray-500 mono hidden sm:inline">7M params · pure MFL · CPU</span>
         </div>
         <div class="flex items-center space-x-4">
-          <a href="#how" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_how}}</a>
-          <a href="#moe" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_moe}}</a>
-          <a href="#numbers" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_numbers}}</a>
-          <a href="#pricing" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_pricing}}</a>
+          <a href="{{.root}}/" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_product}}</a>
+          <a href="{{.root}}/{{.municipal_slug}}" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_municipal}}</a>
+          <a href="{{.root}}/{{.inbox_slug}}" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_inbox}}</a>
           <a href="{{.alt_lang_url}}" class="text-cyan-400 hover:text-cyan-300 text-sm mono border border-cyan-800 rounded px-2 py-1" title="{{.alt_lang_title}}">{{.alt_lang_label}}</a>
           <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity accent-glow">
             GitHub
