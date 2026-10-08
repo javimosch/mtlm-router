@@ -15,7 +15,7 @@ func dir_of(p) (d) {
 }
 
 func fail(code, msg) () {
-	println("{\"error\":{\"message\":\"" + msg + "\",\"type\":\"invalid_argument\",\"recoverable\":false}}")
+	println("{\"error\":{\"message\":\"" + msg + "\",\"code\":" + str(code) + ",\"type\":\"invalid_argument\",\"recoverable\":false,\"suggestions\":[\"run help-json for the command catalog\"]}}")
 	exit(code)
 }
 
@@ -38,6 +38,11 @@ func jesc(s) (r) {
 
 func guide() () {
 	g := "{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"spec\":\"cli-guide-spec\","
+	g = g + "\"one_liner\":\"self-hosted typed decision layer — routes text to routes/tools/domains with confidence + abstention\","
+	g = g + "\"model\":{\"trunk\":\"~7M-param llama-compatible, int8, CPU\",\"heads\":\"linear .head classifiers on pooled hidden states, one forward pass\",\"params\":\"~7.2M, ~8MB model.bin\"},"
+	g = g + "\"loop\":[\"agent POSTs /v1/route {state} -> {action,route,confidence,domain}\",\"confidence below floor -> action=delegate (never a silent wrong route)\",\"expert pin selects a domain lane directly, skipping the gate\"],"
+	g = g + "\"concepts\":{\"typed_heads\":\"decide/noul/score/assess primitives\",\"gate\":\"domain dispatch when ANVIL_GATE set\",\"abstention\":\"delegate instead of guessing\",\"per-lane floors\":\"ANVIL_EXPERT_MINCONF tunes each domain\"},"
+	g = g + "\"examples\":[{\"cmd\":\"mtlm-router daemon start\",\"doc\":\"background serve on 127.0.0.1:8097\"},{\"cmd\":\"curl localhost:8097/v1/route -d '{\\\"state\\\":\\\"remind me tomorrow\\\"}'\",\"doc\":\"typed decision\"},{\"cmd\":\"mtlm-router daemon stop\",\"doc\":\"clean POST /_shutdown\"}],"
 	g = g + "\"overview\":\"Self-hosted typed decision layer. This CLI drives the bundled anvil-serve engine: a 7M-param trunk plus small linear .head classifiers scored in one forward pass.\","
 	g = g + "\"commands\":["
 	g = g + "{\"cmd\":\"serve\",\"doc\":\"foreground server. --host 127.0.0.1 (default, loopback-only per cli-daemon-spec) --port 8097\"},"
@@ -95,6 +100,7 @@ func main() {
 			return
 		}
 		if sub == "stop" {
+			if daemon_status(parse_int(port)) == 0 { println("{\"daemon\":\"already-down\",\"port\":" + port + "}")  return }
 			code, body, err := http_request("POST", "http://" + host + ":" + port + "/_shutdown", []string{}, "{}")
 			if err != "" { fail(105, "daemon unreachable: " + err) }
 			println("{\"daemon\":\"stopped\",\"code\":" + str(code) + "}")
