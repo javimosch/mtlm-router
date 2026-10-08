@@ -1,0 +1,120 @@
+// mtlm-router — agent-first CLI wrapper around the anvil-serve appliance
+// binary (cli-output-spec + cli-guide-spec + cli-daemon-spec).
+// stdout = JSON data only; context goes to stderr; exit codes are semantic:
+// 0 ok, 84 unknown command, 85 bad args, 105 daemon/api unreachable.
+
+var VERSION = "0.2.0"
+
+func dir_of(p) (d) {
+	i := len(p) - 1
+	while i >= 0 {
+		if substr(p, i, i + 1) == "/" { return substr(p, 0, i) }
+		i = i - 1
+	}
+	return "."
+}
+
+func fail(code, msg) () {
+	println("{\"error\":{\"message\":\"" + msg + "\",\"type\":\"invalid_argument\",\"recoverable\":false}}")
+	exit(code)
+}
+
+func flag(a, name, def) (v) {
+	v = def
+	i := 2
+	while i < len(a) {
+		if a[i] == name && i + 1 < len(a) { v = a[i + 1] }
+		i = i + 1
+	}
+	return
+}
+
+func jesc(s) (r) {
+	r = s
+	r = replace(r, "\\", "\\\\")
+	r = replace(r, "\"", "\\\"")
+	return
+}
+
+func guide() () {
+	g := "{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"spec\":\"cli-guide-spec\","
+	g = g + "\"overview\":\"Self-hosted typed decision layer. This CLI drives the bundled anvil-serve engine: a 7M-param trunk plus small linear .head classifiers scored in one forward pass.\","
+	g = g + "\"commands\":["
+	g = g + "{\"cmd\":\"serve\",\"doc\":\"foreground server. --host 127.0.0.1 (default, loopback-only per cli-daemon-spec) --port 8097\"},"
+	g = g + "{\"cmd\":\"daemon start|stop|status\",\"doc\":\"background lifecycle — start spawns detached, polls /_health (no fixed sleep); stop POSTs /_shutdown; status probes /_health\"},"
+	g = g + "{\"cmd\":\"guide\",\"doc\":\"this document (JSON)\"},"
+	g = g + "{\"cmd\":\"help-json\",\"doc\":\"machine-readable command catalog\"},"
+	g = g + "{\"cmd\":\"version\",\"doc\":\"version JSON\"}],"
+	g = g + "\"api\":[\"POST /v1/route {state|messages,context[],expert?,min_conf?,execute?} -> {action,route,confidence,domain,expert}\",\"POST /v1/decide|noul|score|assess\",\"POST /v1/chat/completions\",\"GET /v1/whoami\",\"GET /guide\",\"GET /llms.txt\",\"GET /_health\",\"POST /_shutdown\"],"
+	g = g + "\"env\":[\"ANVIL_HEAD|NOUL|SCORE|GATE=<file.head>\",\"ANVIL_EXPERTS=dom:file.head,...\",\"ANVIL_EXPERT_MINCONF=dom:0.5,...\",\"ANVIL_KEYS=k1,k2\",\"ANVIL_TENANTS=k:file.head,...\",\"ANVIL_LOG\",\"ANVIL_BIND (serve overrides with --host)\",\"PORT\"],"
+	g = g + "\"gotchas\":[\"expert pin skips gate+noul/score; the expert's own 'escalate' class is the abstention path\",\"min_conf precedence: request > ANVIL_EXPERT_MINCONF > ANVIL_ROUTE_MINCONF > 0.55\",\"pooled heads reject >384-token prompts with 400\",\"kind-0 'last' taps are the final-layer snapshot only\"],"
+	g = g + "\"files\":[\"anvil-serve (engine binary)\",\"models/model.bin + tokenizer.bin + *.head\",\"start.sh (plain systemd-free launcher)\",\"manifest.json (sha256 + eval per artifact)\"]}"
+	println(g)
+	return
+}
+
+func help_json() () {
+	println("{\"tool\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"commands\":{\"serve\":{\"flags\":[\"--host\",\"--port\"]},\"daemon\":{\"sub\":[\"start\",\"stop\",\"status\"],\"flags\":[\"--host\",\"--port\"]},\"guide\":{},\"help-json\":{},\"version\":{}},\"exit_codes\":{\"0\":\"ok\",\"84\":\"unknown command\",\"85\":\"bad args\",\"105\":\"daemon unreachable\"}}")
+	return
+}
+
+func health_url(port) (u) {
+	u = "http://127.0.0.1:" + str(port) + "/_health"
+	return
+}
+
+func daemon_status(port) (up) {
+	code, body, err := http_get(health_url(port))
+	up = 0
+	if err == "" && code == 200 { up = 1 }
+	return
+}
+
+func main() {
+	a := args()
+	if len(a) < 2 { help_json()  exit(0) }
+	cmd := a[1]
+	dir := dir_of(a[0])
+	if cmd == "guide" { guide()  return }
+	if cmd == "help-json" { help_json()  return }
+	if cmd == "version" { println("{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\"}")  return }
+	if cmd == "serve" {
+		host := flag(a, "--host", "127.0.0.1")
+		port := flag(a, "--port", "8097")
+		write(2, "mtlm-router serve on http://" + host + ":" + port + " (ctrl-c to stop)\n")
+		rc := system("cd " + dir + " && ANVIL_BIND=" + host + " PORT=" + port + " ./start.sh")
+		exit(rc)
+	}
+	if cmd == "daemon" {
+		if len(a) < 3 { fail(85, "daemon needs start|stop|status") }
+		sub := a[2]
+		port := flag(a, "--port", "8097")
+		host := flag(a, "--host", "127.0.0.1")
+		if sub == "status" {
+			if daemon_status(parse_int(port)) == 1 { println("{\"daemon\":\"up\",\"port\":" + port + "}") } else { println("{\"daemon\":\"down\",\"port\":" + port + "}") }
+			return
+		}
+		if sub == "stop" {
+			code, body, err := http_request("POST", "http://" + host + ":" + port + "/_shutdown", []string{}, "{}")
+			if err != "" { fail(105, "daemon unreachable: " + err) }
+			println("{\"daemon\":\"stopped\",\"code\":" + str(code) + "}")
+			return
+		}
+		if sub == "start" {
+			if daemon_status(parse_int(port)) == 1 { println("{\"daemon\":\"already-up\",\"port\":" + port + "}")  return }
+			rc := system("cd " + dir + " && mkdir -p logs && ANVIL_BIND=" + host + " PORT=" + port + " nohup ./start.sh > logs/daemon.log 2>&1 & echo $! > .mtlm-router.pid")
+			if rc != 0 { fail(105, "daemon spawn failed") }
+			tries := 0
+			for tries < 40 {
+				if daemon_status(parse_int(port)) == 1 { break }
+				sleep(250)
+				tries = tries + 1
+			}
+			if daemon_status(parse_int(port)) == 0 { fail(105, "daemon did not come up in 10s — see logs/daemon.log") }
+			println("{\"daemon\":\"up\",\"port\":" + port + ",\"url\":\"http://" + host + ":" + port + "\"}")
+			return
+		}
+		fail(85, "unknown daemon subcommand " + jesc(sub))
+	}
+	fail(84, "unknown command " + jesc(cmd) + " — try help-json")
+}

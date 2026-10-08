@@ -13,10 +13,11 @@
 # The appliance serves /v1/route + all typed endpoints on port 8097 (PORT env).
 set -e
 
-BIN="" MODEL="" TOK="" HEADS="" GATE="" EXPERTS="" EVAL="" NAME="router" OUT=/tmp
+BIN="" MODEL="" TOK="" HEADS="" GATE="" EXPERTS="" EVAL="" CLI="" NAME="router" OUT=/tmp
 while [ $# -gt 0 ]; do
   case "$1" in
     --bin) BIN="$2"; shift 2;; --model) MODEL="$2"; shift 2;;
+    --cli) CLI="$2"; shift 2;;
     --tok) TOK="$2"; shift 2;;  --heads) HEADS="$2"; shift 2;;
     --gate) GATE="$2"; shift 2;; --experts) EXPERTS="$2"; shift 2;;
     --eval) EVAL="$2"; shift 2;;
@@ -30,6 +31,7 @@ done
 PKG="$OUT/mtlm-router-$NAME-linux-amd64"
 rm -rf "$PKG"; mkdir -p "$PKG/models"
 cp "$BIN" "$PKG/anvil-serve"
+if [ -n "$CLI" ]; then cp "$CLI" "$PKG/mtlm-router"; fi
 cp "$MODEL" "$PKG/models/model.bin"
 cp "$TOK" "$PKG/models/tokenizer.bin"
 HENV=""
