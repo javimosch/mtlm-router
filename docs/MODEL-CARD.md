@@ -15,7 +15,7 @@ pipeline_tag: text-generation
 A **7M-parameter dispatcher/router** trained end-to-end in pure
 [machin/MFL](https://github.com/javimosch/machin). It sits in front of your
 tools and assistants and turns each natural-language request into a typed,
-calibrated routing decision — in ~15ms on CPU, fully self-hosted — and knows
+calibrated routing decision — in ~30ms on CPU, fully self-hosted — and knows
 when to say "not my job".
 
 Successor of
@@ -107,7 +107,7 @@ embeddings. ~7.2M params; int8 export is 8.06 MB. The entire serving stack
 
 一个用纯 [machin/MFL](https://github.com/javimosch/machin) 端到端训练的
 **7M 参数调度/路由模型**。它部署在你的工具和助手之前,把每个自然语言请求转化为
-类型化、经过校准的路由决策 —— CPU 上约 15ms,完全自托管 —— 并且懂得什么时候
+类型化、经过校准的路由决策 —— CPU 上约 30ms,完全自托管 —— 并且懂得什么时候
 说"这不是我的活"。
 
 [mtlm-7m-router2s384](https://huggingface.co/javimosch/mtlm-7m-router2s384)

@@ -1,6 +1,6 @@
 {
   "title": "mtlm-router — une couche de décision typée qui sait quand dire non",
-  "description": "Routeur auto-hébergé de 7M paramètres qui transforme les requêtes en langage naturel en décisions de routage typées et calibrées en ~15ms sur CPU. Conçu en Europe, on-prem, coût fixe — pensé pour les workflows de PME : tri d'emails, dispatch de tickets, actions ops typées.",
+  "description": "Routeur auto-hébergé de 7M paramètres qui transforme les requêtes en langage naturel en décisions de routage typées et calibrées en ~30ms sur CPU. Conçu en Europe, on-prem, coût fixe — pensé pour les workflows de PME : tri d'emails, dispatch de tickets, actions ops typées.",
   "lang": "fr",
   "root": "/mtlm-router/fr",
   "nav_how": "Fonctionnement",

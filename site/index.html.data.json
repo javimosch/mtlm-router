@@ -1,6 +1,6 @@
 {
   "title": "mtlm-router — a typed decision layer that knows when to say no",
-  "description": "Self-hosted 7M-parameter router turning natural-language requests into typed, calibrated routing decisions in ~15ms on CPU. European-made, on-prem, flat cost — built for SME workflows: email triage, ticket dispatch, typed ops actions.",
+  "description": "Self-hosted 7M-parameter router turning natural-language requests into typed, calibrated routing decisions in ~30ms on CPU. European-made, on-prem, flat cost — built for SME workflows: email triage, ticket dispatch, typed ops actions.",
   "lang": "en",
   "root": "/mtlm-router",
   "nav_how": "How it works",

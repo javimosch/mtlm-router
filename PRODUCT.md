@@ -2,7 +2,7 @@
 
 **One sentence:** a 7M-parameter model, trained end-to-end in pure machin/MFL,
 that turns natural-language requests into typed, calibrated routing decisions —
-in ~15ms, on CPU, on-prem — and knows when to say "not my job".
+in ~30ms, on CPU, on-prem — and knows when to say "not my job".
 
 ## What it does
 
@@ -46,8 +46,9 @@ emitted weights — corrected 2026-10-08.
 - Score head (mhd3 `mean@-2 + max@-3`): **98.8%** live, errors adjacent-tier
 - Business gate (mhd3 `mean@-2 + max@-3`): **98.7%** live, 149 holdout rows
 - Generative eval (800 probes): tool-name 98.75%, arg-value 95.2%
-- Latency: ~15–30ms per decision on a shared 6-core LXC, no GPU (batched
-  pooled prefill + clamped prefix cache)
+- Latency: 28–47ms p50 per decision measured live on hosted 2026-10-08
+  (route 34.7, decide 28.1, expert lanes ~45, noul/score ~42), no GPU —
+  batched pooled prefill + clamped prefix cache
 - Model: 7.2M params, llama-arch, seq-384, 8.06MB int8 — the whole serving
   stack is MFL
 
@@ -56,7 +57,7 @@ emitted weights — corrected 2026-10-08.
 The dispatcher pattern is abstention-first — a wrong dispatch requires the
 typed head *and* the generative path to be wrong in the same direction:
 
-1. `/v1/assess` → route + confidence + escalate? + complexity, ~15ms
+1. `/v1/assess` → route + confidence + escalate? + complexity, ~30ms
 2. Escalate on: low confidence | `escalate` route | noul yes | head-vs-trunk
    disagreement
 3. Only agreed, confident routes execute

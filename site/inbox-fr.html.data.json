@@ -1,6 +1,6 @@
 {
   "title": "mtlm-router pour boîtes mail PME — tri typé avec abstention sûre",
-  "description": "Moteur auto-hébergé qui trie les boîtes mail partagées en routes typées avec confiance calibrée. ~15ms sur CPU, zéro coût d'inférence par mail, RGPD par architecture.",
+  "description": "Moteur auto-hébergé qui trie les boîtes mail partagées en routes typées avec confiance calibrée. ~30ms sur CPU, zéro coût d'inférence par mail, RGPD par architecture.",
   "lang": "fr",
   "root": "/mtlm-router",
   "nav_how": "Ce que ça fait",

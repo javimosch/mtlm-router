@@ -1,6 +1,6 @@
 {
   "title": "mtlm-router for SME inboxes — typed email triage with safe abstention",
-  "description": "Self-hosted engine that sorts shared mailboxes into typed routes with calibrated confidence. ~15ms CPU decisions, zero per-mail inference cost, GDPR by architecture.",
+  "description": "Self-hosted engine that sorts shared mailboxes into typed routes with calibrated confidence. ~30ms CPU decisions, zero per-mail inference cost, GDPR by architecture.",
   "lang": "en",
   "root": "/mtlm-router",
   "nav_how": "What it does",
