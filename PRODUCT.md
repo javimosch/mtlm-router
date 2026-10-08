@@ -165,7 +165,13 @@ harvested rows into the next `moe_gate.head`.
   14-route head at **90.7% live** (85% automated at 98.1% at conf≥0.8):
   a taxonomy finding, not a model-capacity win. The strongest evidence
   that a per-client head works when the data matches the trunk's
-  distribution.
+  distribution. Under a **conformal abstention gate** (`tools/conformal_eval.py`,
+  split-half calibration on live probability vectors): at error budget
+  α=0.02 the gate auto-answers **97.8% of requests at 0.97% error** —
+  ~13 points more automation than the τ=0.8 confidence floor at a
+  comparable error rate, because a singleton prediction set is a smarter
+  criterion than max-prob≥τ. Pick the error budget, get the guaranteed
+  operating point — no hand-tuned floors.
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**

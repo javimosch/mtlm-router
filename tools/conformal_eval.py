@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""conformal_eval.py — coverage-guaranteed abstention for a served head.
+
+Scores a holdout through the live runtime (/v1/decide gives the full
+probability vector), splits it cal/eval, and reports, per alpha:
+- qhat: the conformal nonconformity threshold (1 - p_true)
+- auto%: rows where the prediction set is a singleton (auto-answerable)
+- err_auto: error rate among auto-answered rows
+- coverage/avgset/empty%: set statistics
+
+The product claim: pick an error budget alpha -> get a guaranteed-max
+operating point, instead of hand-tuning min_conf on a curve. Compare
+against the raw-confidence floor printed below for the same eval split.
+
+Usage:
+  python3 tools/conformal_eval.py --holdout data/geored/geored12_holdout.jsonl \
+      --url http://127.0.0.1:8398 --map collecte_om=collecte,collecte_selective=collecte
+  (--probs scored.json to reuse a cached score pass)
+"""
+import argparse, json, random, sys, urllib.request
+
+import numpy as np
+
+
+def score(url, state):
+    r = urllib.request.urlopen(urllib.request.Request(
+        url + "/v1/decide", data=json.dumps({"state": state}).encode(),
+        headers={"content-type": "application/json"}), timeout=15)
+    return json.loads(r.read())
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--holdout")
+    p.add_argument("--url", default="http://127.0.0.1:8398")
+    p.add_argument("--map", default=None)
+    p.add_argument("--probs", default=None, help="cached [[label, probs], ...] json")
+    p.add_argument("--save-probs", default=None)
+    p.add_argument("--seed", type=int, default=7)
+    a = p.parse_args()
+
+    lmap = dict(kv.split("=") for kv in a.map.split(",")) if a.map else {}
+    if a.probs:
+        scored = json.load(open(a.probs))
+    else:
+        rows = [json.loads(l) for l in open(a.holdout)]
+        scored, skipped = [], 0
+        for r in rows:
+            try:
+                d = score(a.url, r["user"])
+                scored.append([lmap.get(r.get("expect_tool"), r.get("expect_tool")), d["probabilities"]])
+            except urllib.error.HTTPError:
+                skipped += 1
+        print(f"{len(scored)} scored, {skipped} skipped (too-long)", file=sys.stderr)
+        if a.save_probs:
+            json.dump(scored, open(a.save_probs, "w"))
+
+    random.seed(a.seed)
+    random.shuffle(scored)
+    n = len(scored)
+    cal, ev = scored[:n // 2], scored[n // 2:]
+
+    s = sorted(1 - p.get(y, 0.0) for y, p in cal)
+    print(f"== conformal abstention ({len(ev)}-row eval, cal={len(cal)}) ==")
+    print(f"{'alpha':>6} {'qhat':>6} {'auto%':>6} {'err_auto':>9} {'coverage':>9} {'avgset':>7} {'empty%':>7}")
+    for alpha in [0.01, 0.02, 0.05, 0.10, 0.15, 0.20]:
+        k = min(len(s), int(np.ceil((len(s) + 1) * (1 - alpha))))
+        q = s[k - 1]
+        auto = err = cov = ssz = empty = 0
+        for y, pr in ev:
+            S = [k2 for k2, v in pr.items() if v >= 1 - q]
+            if len(S) == 1:
+                auto += 1
+                err += S[0] != y
+            cov += y in S
+            ssz += len(S)
+            empty += len(S) == 0
+        N = len(ev)
+        print(f"{alpha:>6} {q:>6.3f} {auto / N * 100:>6.1f} {err / max(auto, 1) * 100:>9.2f} {cov / N * 100:>9.1f} {ssz / N:>7.2f} {empty / N * 100:>7.1f}")
+
+    print("\n== raw-confidence floor (same eval split) ==")
+    print(f"{'tau':>5} {'auto%':>6} {'err_auto':>9}")
+    for t in [0.9, 0.8, 0.7, 0.55, 0.5, 0.4, 0.3, 0.2]:
+        auto = err = 0
+        for y, pr in ev:
+            k2, v = max(pr.items(), key=lambda kv: kv[1])
+            if v >= t:
+                auto += 1
+                err += k2 != y
+        print(f"{t:>5} {auto / len(ev) * 100:>6.1f} {err / max(auto, 1) * 100:>9.2f}")
+
+
+if __name__ == "__main__":
+    main()
