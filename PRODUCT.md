@@ -171,7 +171,12 @@ harvested rows into the next `moe_gate.head`.
   ~13 points more automation than the τ=0.8 confidence floor at a
   comparable error rate, because a singleton prediction set is a smarter
   criterion than max-prob≥τ. Pick the error budget, get the guaranteed
-  operating point — no hand-tuned floors.
+  operating point — no hand-tuned floors. **Shipped in the runtime:**
+  `ANVIL_EXPERT_QHAT="mairie_c:0.648"` enables the gate per lane —
+  singleton prediction sets answer, anything else delegates with
+  `reason:"conformal_abstain"` and the response exposes `set_size`/`qhat`.
+  Live on the hosted API; empirical figure, formal coverage assumes
+  calibration/production exchangeability — recalibrate per client.
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
