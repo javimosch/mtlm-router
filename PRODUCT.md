@@ -179,8 +179,8 @@ harvested rows into the next `moe_gate.head`.
 ## Appliance
 
 ```
-tar xzf mtlm-router-m7router3s384-linux-amd64.tar.gz   # v0.1.0 release
-cd mtlm-router-m7router3s384-linux-amd64 && ./start.sh  # serves :8097
+tar xzf mtlm-router-v0.2.0-linux-amd64.tar.gz   # v0.2.0 release
+cd mtlm-router-v0.2.0-linux-amd64 && ./start.sh  # serves :8097
 ```
 
 7.5MB total: static MFL binary + int8 model + three heads + systemd unit +
