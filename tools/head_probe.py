@@ -115,6 +115,7 @@ def main():
     ap.add_argument("--emit", default=None, help="write an mhd2 .head trained on ALL rows with --emit-layer/--emit-pool/--emit-l2")
     ap.add_argument("--emit-layer", type=int, default=-2, help="HF hidden_states index (-2 = output of layer n-2 = ANVIL_POOL_LAYER -2)")
     ap.add_argument("--emit-pool", default="max", choices=["max", "mean", "last"])
+    ap.add_argument("--emit-taps", default=None, help="mhd3 multi-tap emit: comma list of pool:hf_layer, e.g. 'max:-4,max:-2'; feature = concat of the taps in order")
     ap.add_argument("--emit-l2", type=float, default=1e-3)
     ap.add_argument("--emit-temp", default="1.0", help="mhd2 temp field: a float, or 'auto' = fit T on holdout logits of a train-only head (NLL grid, as train_head.py); prod heads use calibrated T (0.61-1.04), T=1.0 over-confidences pooled heads")
     ap.add_argument("--maxc", type=int, default=0, help="truncate the user text to N chars (real fleet rows exceed the 384 context; anvil 400s above it)")
@@ -149,6 +150,47 @@ def main():
     print("TOP 12:")
     for r in results: print(json.dumps(r))  # full sweep; sorted best-first
     print(f"majority-class holdout baseline: {np.bincount(yho).max() / len(yho):.3f}")
+    if a.emit and a.emit_taps:
+        # mhd3 multi-tap: magic "mhd3", i32 nr, i32 featdim (= ntaps*dim), f32 temp,
+        # u8 ntaps, then ntaps pairs of (u8 pool_kind, u8 anvil_layer+1), then
+        # W[nr*featdim] f32 (row = class), b[nr] f32, names as (u8 len + bytes).
+        # Feature = concat of pooled taps in listed order; extraction/fit identical
+        # to the mhd2 emit path (all-rows fit, folded standardization, auto temp
+        # calibrated on holdout logits of a train-only head).
+        taps = []
+        for spec in a.emit_taps.split(","):
+            pk, pl = spec.split(":")
+            taps.append((int(pl), pk))
+        X = np.concatenate([F[(pl, pk)] for pl, pk in taps], axis=1); Xall = X; yall = np.concatenate([ytr, yho])
+        mu = Xall.mean(axis=0); sd = feat_sd(Xall); Xs = (Xall - mu) / sd
+        W, b = fit_lr(Xs, yall, len(labels), a.emit_l2)
+        Wr = W / sd[:, None]; br = b - (mu / sd) @ W
+        if a.emit_temp == "auto":
+            Xt, Xh = X[:n], X[n:]; mu_t = Xt.mean(axis=0); sd_t = feat_sd(Xt)
+            Wt, bt = fit_lr((Xt - mu_t) / sd_t, ytr, len(labels), a.emit_l2); Z = ((Xh - mu_t) / sd_t) @ Wt + bt
+            temp, best_nll = 1.0, 1e18
+            for t in np.exp(np.linspace(np.log(0.25), np.log(64.0), 200)):
+                P = softmax(Z / t); nll = -np.log(np.maximum(P[np.arange(len(yho)), yho], 1e-12)).mean()
+                if nll < best_nll: best_nll, temp = nll, float(t)
+            print(json.dumps({"emit_temp": round(temp, 4), "holdout_nll": round(float(best_nll), 4), "holdout_acc_train_only": round(float((Z.argmax(1) == yho).mean()), 4)}))
+        else:
+            temp = float(a.emit_temp)
+        print(json.dumps({"emit_cond": {"W_absmax": float(np.abs(Wr).max()), "b_absmax": float(np.abs(br).max()), "sd_min": float(sd.min())}}))
+        import struct
+        nl = 6  # m7 trunk depth; anvil layer index for the tap
+        with open(a.emit, "wb") as f:
+            f.write(struct.pack("<i", 0x3364686d)); f.write(struct.pack("<i", len(labels))); f.write(struct.pack("<i", X.shape[1]))
+            f.write(struct.pack("<f", temp)); f.write(struct.pack("<B", len(taps)))
+            for pl, pk in taps:
+                if pk == "last": print(json.dumps({"warn": "last-token tap unsupported in mhd3; use max/mean"})) or sys.exit(1)
+                kind = 1 if pk == "max" else 2
+                layer = nl + pl if pl < 0 else pl
+                f.write(struct.pack("<BB", kind, layer + 1))
+            f.write(Wr.T.astype(np.float32).tobytes())
+            f.write(br.astype(np.float32).tobytes())
+            for l in labels: f.write(bytes([len(l)])) ; f.write(l.encode())
+        print(json.dumps({"emitted": a.emit, "format": "mhd3", "taps": taps, "temp": round(temp, 4), "classes": labels, "rows": int(len(yall)), "featdim": int(X.shape[1])}))
+        return
     if a.emit:
         # anvil mhd2: magic "mhd2", i32 nr, i32 dim, f32 temp, u32 flags, W[nr*dim] f32 (row = class), b[nr] f32,
         # then names as (u8 len + bytes). flags = pool_kind | ((pool_layer + 1) << 4), pool_kind 1=max 2=mean 0=last,
