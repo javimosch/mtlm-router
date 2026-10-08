@@ -59,7 +59,33 @@ func guide() () {
 }
 
 func help_json() () {
-	println("{\"tool\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"commands\":{\"serve\":{\"flags\":[\"--host\",\"--port\"]},\"daemon\":{\"sub\":[\"start\",\"stop\",\"status\"],\"flags\":[\"--host\",\"--port\"]},\"guide\":{},\"help-json\":{},\"version\":{}},\"exit_codes\":{\"0\":\"ok\",\"84\":\"unknown command\",\"85\":\"bad args\",\"105\":\"daemon unreachable\"}}")
+	println("{\"tool\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"commands\":{\"serve\":{\"flags\":[\"--host\",\"--port\"]},\"daemon\":{\"sub\":[\"start\",\"stop\",\"status\"],\"flags\":[\"--host\",\"--port\"]},\"feedback\":{\"args\":[\"message\"],\"flags\":[\"-kind\",\"-context\"]},\"guide\":{},\"help-json\":{},\"version\":{}},\"exit_codes\":{\"0\":\"ok\",\"84\":\"unknown command\",\"85\":\"bad args\",\"105\":\"daemon unreachable\"}}")
+	return
+}
+
+// cli-feedback-spec: dual-write one submission to the app endpoint (best-
+// effort) and the central relay (FEEDBACK_RELAY, default feedback.intrane.fr;
+// "off" disables). Never fails the caller — reports stored/relayed.
+func feedback_cmd(a) () {
+	if len(a) < 3 { fail(85, "feedback needs a message: mtlm-router feedback \"...\" [-kind bug]") }
+	kind := flag(a, "-kind", "note")
+	ctx := flag(a, "-context", "")
+	reporter := env("USER")
+	if len(reporter) == 0 { reporter = "agent" }
+	fid := "fb-" + str(now_ms())
+	body := "{\"app\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"kind\":\"" + jesc(kind) + "\",\"message\":\"" + jesc(a[2]) + "\",\"context\":\"" + jesc(ctx) + "\",\"reporter\":\"" + jesc(reporter) + "\",\"id\":\"" + fid + "\"}"
+	stored := 0  relayed := 0
+	base := env("MTLM_ROUTER_URL")
+	if len(base) == 0 { base = "http://127.0.0.1:8097" }
+	c, b, e := http_request("POST", base + "/v1/feedback", []string{"Content-Type: application/json"}, body)
+	if e == "" && c == 200 { stored = 1 }
+	relay := env("FEEDBACK_RELAY")
+	if len(relay) == 0 { relay = "https://feedback.intrane.fr" }
+	if relay != "off" {
+		c2, b2, e2 := http_request("POST", relay + "/v1/feedback", []string{"Content-Type: application/json"}, body)
+		if e2 == "" && c2 == 200 { relayed = 1 }
+	}
+	println("{\"ok\":true,\"data\":{\"id\":\"" + fid + "\",\"stored\":" + str(stored) + ",\"relayed\":" + str(relayed) + "}}")
 	return
 }
 
@@ -83,6 +109,7 @@ func main() {
 	if cmd == "guide" { guide()  return }
 	if cmd == "help-json" { help_json()  return }
 	if cmd == "version" { println("{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\"}")  return }
+	if cmd == "feedback" { feedback_cmd(a)  return }
 	if cmd == "serve" {
 		host := flag(a, "--host", "127.0.0.1")
 		port := flag(a, "--port", "8097")
