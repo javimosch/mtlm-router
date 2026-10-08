@@ -44,6 +44,10 @@
       <input id="pg-input" type="text" maxlength="300" placeholder="e.g. unlock carol's account, she can't log in" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600" autocomplete="off">
       <button type="submit" class="hero-gradient text-white px-5 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">Decide</button>
     </form>
+    <div class="flex gap-2 mt-3 mb-1" id="pg-lanes">
+      <button type="button" class="pg-lane text-xs bg-cyan-900 border border-cyan-700 text-cyan-200 rounded-full px-3 py-1" data-lane="">auto — gate picks the expert</button>
+      <button type="button" class="pg-lane text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1" data-lane="mairie">municipal lane (fr) — trained on a real mairie export</button>
+    </div>
     <div class="flex flex-wrap gap-2 mt-3" id="pg-chips">
       <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">status of ticket INC4821</button>
       <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">remind me to call the dentist tomorrow</button>
@@ -443,11 +447,13 @@
   var f=document.getElementById('pg-form'),i=document.getElementById('pg-input'),o=document.getElementById('pg-out'),e=document.getElementById('pg-err');
   if(!f)return;
   var L=document.documentElement.lang==='fr';
+  var lane='';
   function txt(id,v){document.getElementById(id).textContent=v;}
   function run(s){
     e.classList.add('hidden');o.classList.add('hidden');
     var t0=Date.now();
-    fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({state:s})})
+    var body={state:s};if(lane)body.expert=lane;
+    fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
     .then(function(r){return r.json().then(function(j){return [r.status,j]})})
     .then(function(x){var st=x[0],d=x[1];
       if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');return;}
@@ -464,7 +470,12 @@
     }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');});
   }
   f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
+  var CHIP_SETS={'':['status of ticket INC4821','remind me to call the dentist tomorrow','provision a staging VM for the new intern',"what's the weather in Lyon",'attack the goblin with my sword'],
+    'mairie':['dotation de bacs pour le verre','depot sauvage de gravats chemin des pres','ma poubelle n\u0027a pas ete ramassee','horaires de la dechetterie','demande de passeport']};
+  var chipbox=document.getElementById('pg-chips');
+  function setChips(set){chipbox.innerHTML='';Array.prototype.forEach.call(set,function(t){var b=document.createElement('button');b.type='button';b.className='pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700';b.textContent=t;b.addEventListener('click',function(){i.value=t;run(t);});chipbox.appendChild(b);});}
   Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
+  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
   // lead form
   var lf=document.getElementById('lead-form');
   if(lf){lf.addEventListener('submit',function(ev){ev.preventDefault();
