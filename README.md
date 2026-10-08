@@ -133,6 +133,12 @@ Static binary + int8 model + tokenizer + heads + launcher. No deps, no GPU,
 no cloud. `manifest.json` ships sha256s and the eval it was verified with —
 the honesty contract is a file.
 
+The tarball also ships an agent-first `mtlm-router` CLI — `guide`,
+`daemon start|stop|status`, `feedback`, `update`, `install` — and the server
+self-describes (`/guide`, `/llms.txt`, `/v1/whoami`, `/_health`, `/_shutdown`,
+`/v1/feedback`). 28/28 on [cli-spec-conformance](https://github.com/javimosch/cli-spec-conformance);
+details in PRODUCT.md §Agent-first surface.
+
 ## Who this is for
 
 - **SME / integrator**: a shared mailbox or ticket queue that should route

@@ -183,9 +183,30 @@ tar xzf mtlm-router-v0.2.0-linux-amd64.tar.gz   # v0.2.0 release
 cd mtlm-router-v0.2.0-linux-amd64 && ./start.sh  # serves :8097
 ```
 
-7.5MB total: static MFL binary + int8 model + three heads + systemd unit +
-start.sh. No Python, no GPU, no cloud key. `tools/package_appliance.sh`
+7.5MB total: static MFL binary + int8 model + decide/noul/score mhd3 heads +
+business gate + it_helpdesk/mairie/mairie_c expert lanes + systemd unit +
+start.sh + `mtlm-router` CLI. No Python, no GPU, no cloud key. `tools/package_appliance.sh`
 rebuilds the tarball from any trunk+heads set.
+
+## Agent-first surface (cli-specs, verified)
+
+The appliance ships a `mtlm-router` CLI wrapper and a self-describing server,
+aligned with https://cli-specs.intrane.fr/ — **28/28 on cli-spec-conformance**
+(black-box checks of output, guide and daemon specs).
+
+- `./mtlm-router guide` — embedded operator manual (JSON); `help-json`,
+  `version`, `install`/`uninstall`
+- `./mtlm-router serve|daemon start|stop|status` — loopback default, health-
+  polled `/_health`, stop via `POST /_shutdown` (token-gated off loopback)
+- `./mtlm-router feedback "msg"` — dual-write to the appliance's
+  `POST /v1/feedback` (open, idempotent, rate-limited) and the central relay;
+  `GET /v1/feedback` is admin-gated
+- `./mtlm-router update [--check|--force]` — sha256[:12] content-hash verify,
+  smoke-test, atomic swap with `.bak` rollback; hourly passive nudge on stderr
+- Server endpoints beyond /v1: `GET /guide`, `GET /llms.txt`, `GET /_health`,
+  `GET /v1/whoami` (masked-key tenant identity), `POST /_shutdown`
+- Env knobs: `ANVIL_BIND` (wrapper forces loopback; `start.sh` serves 0.0.0.0),
+  `ANVIL_EXPERT_MINCONF` (per-lane abstention floors), `ANVIL_FEEDBACK_LOG`
 
 ## Stack
 
