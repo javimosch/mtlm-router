@@ -36,6 +36,23 @@ func jesc(s) (r) {
 	return
 }
 
+func unq(s) (o) {
+	o = s
+	if len(s) >= 2 && has_prefix(s, "\"") && has_suffix(s, "\"") { o = substr(s, 1, len(s)-1) }
+	return
+}
+
+func jget_any(obj, paths) (v) {
+	v = ""
+	i := 0
+	while i < len(paths) {
+		r, e := json_get(obj, paths[i])
+		if len(e) == 0 && len(r) > 0 && r != "null" { v = r  return }
+		i = i + 1
+	}
+	return
+}
+
 func guide() () {
 	g := "{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"spec\":\"cli-guide-spec\","
 	g = g + "\"one_liner\":\"self-hosted typed decision layer — routes text to routes/tools/domains with confidence + abstention\","
@@ -59,7 +76,7 @@ func guide() () {
 }
 
 func help_json() () {
-	println("{\"tool\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"commands\":{\"serve\":{\"flags\":[\"--host\",\"--port\"]},\"daemon\":{\"sub\":[\"start\",\"stop\",\"status\"],\"flags\":[\"--host\",\"--port\"]},\"feedback\":{\"args\":[\"message\"],\"flags\":[\"-kind\",\"-context\"]},\"guide\":{},\"help-json\":{},\"version\":{}},\"exit_codes\":{\"0\":\"ok\",\"84\":\"unknown command\",\"85\":\"bad args\",\"105\":\"daemon unreachable\"}}")
+	println("{\"tool\":\"mtlm-router\",\"version\":\"" + VERSION + "\",\"commands\":{\"serve\":{\"flags\":[\"--host\",\"--port\"]},\"daemon\":{\"sub\":[\"start\",\"stop\",\"status\"],\"flags\":[\"--host\",\"--port\"]},\"feedback\":{\"args\":[\"message\"],\"flags\":[\"-kind\",\"-context\"]},\"update\":{\"flags\":[\"--check\",\"--force\"]},\"install\":{},\"uninstall\":{},\"guide\":{},\"help-json\":{},\"version\":{}},\"exit_codes\":{\"0\":\"ok\",\"84\":\"unknown command\",\"85\":\"bad args\",\"105\":\"daemon unreachable\"}}")
 	return
 }
 
@@ -89,6 +106,59 @@ func feedback_cmd(a) () {
 	return
 }
 
+// cli-update-spec: content-hash self-update. version.json on GitHub
+// releases is the /version endpoint; updates swap the mtlm-router binary
+// (verify sha256 -> smoke-test version -> atomic .bak swap).
+func update_cmd(a, selfpath) () {
+	force := 0  checkonly := 0
+	i := 2
+	while i < len(a) {
+		if a[i] == "--force" { force = 1 }
+		if a[i] == "--check" { checkonly = 1 }
+		i = i + 1
+	}
+	lc, lout, lerr := exec("sha256sum " + selfpath + " | cut -c1-12")
+	localv := trim(lout)
+	if len(lerr) > 0 || len(localv) == 0 { fail(100, "cannot hash local binary") }
+	base := env("MTLM_ROUTER_SERVER")
+	if len(base) == 0 { base = "https://github.com/javimosch/mtlm-router/releases/latest/download" }
+	c, body, e := http_get(base + "/version.json")
+	if e != "" || c != 200 { fail(100, "version endpoint unreachable: " + e) }
+	sv := unq(jget_any(body, []string{".version"}))
+	dl := unq(jget_any(body, []string{".download"}))
+	full := unq(jget_any(body, []string{".sha256"}))
+	if len(sv) == 0 || len(dl) == 0 { fail(100, "bad version.json") }
+	if localv == sv && force == 0 {
+		if checkonly == 1 { println("{\"ok\":true,\"up_to_date\":true,\"version\":\"" + localv + "\"}")  return }
+		println("{\"ok\":true,\"updated\":false,\"version\":\"" + localv + "\"}")
+		return
+	}
+	if checkonly == 1 {
+		println("{\"ok\":true,\"up_to_date\":false,\"local\":\"" + localv + "\",\"available\":\"" + sv + "\"}")
+		exit(5)
+	}
+	write(2, "[update] downloading " + dl + "\n")
+	drc, dout, derr := exec("curl -fsSL -o /tmp/mtlm-router.new " + dl)
+	if drc != 0 { fail(100, "download failed") }
+	rc, out, err := exec("sha256sum /tmp/mtlm-router.new | cut -c1-12")
+	got := trim(out)
+	if got != sv { fail(100, "hash mismatch: expected " + sv + " got " + got) }
+	if len(full) == 64 {
+		rc, out, err = exec("sha256sum /tmp/mtlm-router.new | cut -d' ' -f1")
+		if trim(out) != full { fail(100, "full sha256 mismatch") }
+	}
+	system("chmod +x /tmp/mtlm-router.new")
+	sc, sout, serr := exec("/tmp/mtlm-router.new version")
+	if sc != 0 || index(sout, "mtlm-router") < 0 { fail(100, "smoke test failed on downloaded binary") }
+	rc, out, err = exec("mv " + selfpath + " " + selfpath + ".bak && mv /tmp/mtlm-router.new " + selfpath)
+	if rc != 0 {
+		system("mv " + selfpath + ".bak " + selfpath + " 2>/dev/null")
+		fail(100, "swap failed; .bak restored")
+	}
+	println("{\"ok\":true,\"updated\":true,\"from\":\"" + localv + "\",\"to\":\"" + sv + "\"}")
+	return
+}
+
 func health_url(port) (u) {
 	u = "http://127.0.0.1:" + str(port) + "/_health"
 	return
@@ -110,6 +180,18 @@ func main() {
 	if cmd == "help-json" { help_json()  return }
 	if cmd == "version" { println("{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\"}")  return }
 	if cmd == "feedback" { feedback_cmd(a)  return }
+	if cmd == "update" { update_cmd(a, a[0])  return }
+	if cmd == "install" {
+		rc, out, err := exec("mkdir -p $HOME/.local/bin && cp " + a[0] + " $HOME/.local/bin/mtlm-router && chmod +x $HOME/.local/bin/mtlm-router")
+		if rc != 0 { fail(100, "install failed: " + err) }
+		println("{\"ok\":true,\"installed\":\"~/.local/bin/mtlm-router\"}")
+		return
+	}
+	if cmd == "uninstall" {
+		rc, out, err := exec("rm -f $HOME/.local/bin/mtlm-router")
+		println("{\"ok\":true,\"removed\":\"~/.local/bin/mtlm-router\"}")
+		return
+	}
 	if cmd == "serve" {
 		host := flag(a, "--host", "127.0.0.1")
 		port := flag(a, "--port", "8097")
