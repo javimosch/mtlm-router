@@ -106,7 +106,26 @@ func feedback_cmd(a) () {
 	return
 }
 
-// cli-update-spec: content-hash self-update. version.json on GitHub
+// passive nudge (cli-update-spec SHOULD): on server-hitting commands, at
+// most once/hour, best-effort GET /version + compare; stderr only.
+func nudge(dir, selfpath) () {
+	if env("MTLM_ROUTER_NO_NUDGE") == "1" { return }
+	stamp := dir + "/.last-update-check"
+	lc, lout, lerr := exec("echo $(( $(date +%s) - $(stat -c %Y " + stamp + " 2>/dev/null || echo 0) ))")
+	if trim(lout) != "" && parse_int(trim(lout)) < 3600 { return }
+	system("touch " + stamp)
+	lc, lout, lerr = exec("sha256sum " + selfpath + " | cut -c1-12")
+	localv := trim(lout)
+	base := env("MTLM_ROUTER_SERVER")
+	if len(base) == 0 { base = "https://github.com/javimosch/mtlm-router/releases/latest/download" }
+	c, body, e := http_get(base + "/version.json")
+	if e != "" || c != 200 { return }
+	sv := unq(jget_any(body, []string{".version"}))
+	if len(sv) > 0 && sv != localv {
+		write(2, "[update] a newer mtlm-router is available (" + localv + " → " + sv + "). Run: mtlm-router update\n")
+	}
+	return
+}
 // releases is the /version endpoint; updates swap the mtlm-router binary
 // (verify sha256 -> smoke-test version -> atomic .bak swap).
 func update_cmd(a, selfpath) () {
@@ -137,24 +156,33 @@ func update_cmd(a, selfpath) () {
 		println("{\"ok\":true,\"up_to_date\":false,\"local\":\"" + localv + "\",\"available\":\"" + sv + "\"}")
 		exit(5)
 	}
+	lrc, lout2, lerr2 := exec("mkdir /tmp/mtlm-router-update.lock")
+	if lrc != 0 { fail(100, "another update is in progress (lock /tmp/mtlm-router-update.lock)") }
 	write(2, "[update] downloading " + dl + "\n")
 	drc, dout, derr := exec("curl -fsSL -o /tmp/mtlm-router.new " + dl)
-	if drc != 0 { fail(100, "download failed") }
 	rc, out, err := exec("sha256sum /tmp/mtlm-router.new | cut -c1-12")
 	got := trim(out)
-	if got != sv { fail(100, "hash mismatch: expected " + sv + " got " + got) }
-	if len(full) == 64 {
+	msg := ""
+	if drc != 0 { msg = "download failed" }
+	if msg == "" && got != sv { msg = "hash mismatch: expected " + sv + " got " + got }
+	if msg == "" && len(full) == 64 {
 		rc, out, err = exec("sha256sum /tmp/mtlm-router.new | cut -d' ' -f1")
-		if trim(out) != full { fail(100, "full sha256 mismatch") }
+		if trim(out) != full { msg = "full sha256 mismatch" }
 	}
-	system("chmod +x /tmp/mtlm-router.new")
-	sc, sout, serr := exec("/tmp/mtlm-router.new version")
-	if sc != 0 || index(sout, "mtlm-router") < 0 { fail(100, "smoke test failed on downloaded binary") }
-	rc, out, err = exec("mv " + selfpath + " " + selfpath + ".bak && mv /tmp/mtlm-router.new " + selfpath)
-	if rc != 0 {
-		system("mv " + selfpath + ".bak " + selfpath + " 2>/dev/null")
-		fail(100, "swap failed; .bak restored")
+	if msg == "" {
+		system("chmod +x /tmp/mtlm-router.new")
+		sc, sout, serr := exec("/tmp/mtlm-router.new version")
+		if sc != 0 || index(sout, "mtlm-router") < 0 { msg = "smoke test failed on downloaded binary" }
 	}
+	if msg == "" {
+		rc, out, err = exec("mv " + selfpath + " " + selfpath + ".bak && mv /tmp/mtlm-router.new " + selfpath)
+		if rc != 0 {
+			system("mv " + selfpath + ".bak " + selfpath + " 2>/dev/null")
+			msg = "swap failed; .bak restored"
+		}
+	}
+	system("rmdir /tmp/mtlm-router-update.lock")
+	if msg != "" { fail(100, msg) }
 	println("{\"ok\":true,\"updated\":true,\"from\":\"" + localv + "\",\"to\":\"" + sv + "\"}")
 	return
 }
@@ -179,7 +207,8 @@ func main() {
 	if cmd == "guide" { guide()  return }
 	if cmd == "help-json" { help_json()  return }
 	if cmd == "version" { println("{\"name\":\"mtlm-router\",\"version\":\"" + VERSION + "\"}")  return }
-	if cmd == "feedback" { feedback_cmd(a)  return }
+	if cmd == "feedback" { nudge(dir, a[0])  feedback_cmd(a)  return }
+	if cmd == "daemon" || cmd == "serve" { nudge(dir, a[0]) }
 	if cmd == "update" { update_cmd(a, a[0])  return }
 	if cmd == "install" {
 		rc, out, err := exec("mkdir -p $HOME/.local/bin && cp " + a[0] + " $HOME/.local/bin/mtlm-router && chmod +x $HOME/.local/bin/mtlm-router")
