@@ -197,18 +197,18 @@
       <tbody class="text-gray-300">
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Précision de routage</td>
-          <td class="px-6 py-3 mono text-gray-500">tête router, 706 requêtes disjointes</td>
-          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">97,6%</td>
+          <td class="px-6 py-3 mono text-gray-500">tête decide mhd3, holdout 800 lignes, vérifié en live</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">99,5%</td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Calibration NOUL</td>
-          <td class="px-6 py-3 mono text-gray-500">cadran d'abstention, température ajustée</td>
-          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">98,9%</td>
+          <td class="px-6 py-3 mono text-gray-500">cadran d'abstention, température ajustée, sous-échantillon live</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">100%</td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Précision du score</td>
-          <td class="px-6 py-3 mono text-gray-500">scoring de candidats tool-fill</td>
-          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">97,9%</td>
+          <td class="px-6 py-3 mono text-gray-500">niveau de complexité 1–4, sous-échantillon live</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">100%</td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Accord d'action</td>
@@ -217,13 +217,18 @@
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Précision du gate</td>
-          <td class="px-6 py-3 mono text-gray-500">tête moe_gate, 172 requêtes disjointes, 5 domaines</td>
-          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">95,4% <span class="text-gray-500">· ECE 0.035</span></td>
+          <td class="px-6 py-3 mono text-gray-500">gate métier mhd3, 149 lignes holdout en live, 3 domaines</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">100%</td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Expert mairie multi-tap</td>
           <td class="px-6 py-3 mono text-gray-500">mhd3 concat3 (max@-4,-2,-3), 6 402 lignes réelles</td>
           <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">79,0% → 82,5%</td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Mairie, taxonomie fusionnée</td>
+          <td class="px-6 py-3 mono text-gray-500">même tête, paire collecte ambiguë fusionnée — le résultat pilote</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">92,1% <span class="text-gray-500">· 83% auto @ 98,1%</span></td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Expert fleet poolé</td>
@@ -240,7 +245,7 @@
   </div>
   <p class="text-gray-500 text-center max-w-2xl mx-auto mt-4 text-sm">
     Les holdouts laissent passer des candidats que le trafic canary réel rejette — on publie les deux.
-    L'écart entre 95,4% et 81,6% est exactement ce à quoi servent les contraintes par domaine et le flywheel.
+    L'écart entre la précision labo et l'agrégat live est exactement ce à quoi servent les contraintes par domaine et le flywheel.
   </p>
 </div>
 
