@@ -62,6 +62,20 @@ noul p(yes) ≥ 0.5, or head-vs-generation disagreement — a wrong dispatch
 requires the typed head *and* the generative path to be wrong in the same
 direction.
 
+## Full endpoint surface
+
+Typed: `POST /v1/route` (assess→gate→dispatch), `/v1/decide`, `/v1/noul`,
+`/v1/score`, `/v1/assess`; generative `POST /v1/chat/completions`.
+Operator/agent surface (cli-specs aligned, 28/28 on cli-spec-conformance):
+`GET /guide` + `/llms.txt` (self-describing manual), `GET /_health` +
+`POST /_shutdown` (daemon lifecycle, token-gated off loopback),
+`GET /v1/whoami` (masked-key tenant identity), `POST /v1/feedback`
+(open, idempotent) + `GET /v1/feedback` (admin-gated). `/v1/*` requires
+a bearer when `ANVIL_KEYS` is set; docs/health/feedback-submit stay open.
+The appliance tarball ships a `mtlm-router` CLI: `guide`, `daemon
+start|stop|status`, `feedback` (dual-write relay), `update` (content-hash
+self-update), `install`.
+
 ## Swappable customer heads
 
 Per-deployment route tables are ~7 KB `.head` artifacts trained on the
@@ -116,7 +130,7 @@ embeddings. ~7.2M params; int8 export is 8.06 MB. The entire serving stack
 
 ## 工作原理
 
-每个请求得到一个结构化决策,而不是猜测。三个微型线性决策头(`mhd1` 格式)
+每个请求得到一个结构化决策,而不是猜测。三个微型线性决策头(`mhd3` 格式,多抽头)
 直接读取最后一个提示位置的隐状态 —— 单次前向传播,不生成任何 token:
 
 | 决策头 | 回答的问题 | 留出集准确率 |
