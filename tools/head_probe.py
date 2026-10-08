@@ -182,7 +182,9 @@ def main():
             f.write(struct.pack("<i", 0x3364686d)); f.write(struct.pack("<i", len(labels))); f.write(struct.pack("<i", X.shape[1]))
             f.write(struct.pack("<f", temp)); f.write(struct.pack("<B", len(taps)))
             for pl, pk in taps:
-                if pk == "last": print(json.dumps({"warn": "last-token tap unsupported in mhd3; use max/mean"})) or sys.exit(1)
+                if pk == "last":
+                    f.write(struct.pack("<BB", 0, 0))  # kind 0 = last-token snapshot, layer unused
+                    continue
                 kind = 1 if pk == "max" else 2
                 layer = nl + pl if pl < 0 else pl
                 f.write(struct.pack("<BB", kind, layer + 1))
