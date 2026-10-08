@@ -33,15 +33,21 @@ All typed endpoints take an optional `context` array — prior turns,
 alternating user/assistant — so follow-ups like *"and in London?"* route
 against the conversation, not just the last message.
 
-## Numbers (held-out, live-verified — m7router3s384, prod since 2026-09-22)
+## Numbers (held-out, live-verified — m7router3s384)
 
-- Route head: **97.6%** on the stem-diverse holdout, ECE 0.012
-- Head/generative agreement: **100%** (the dispatcher's consistency metric;
-  was 0.9275 on router2 — the corpus fix closed the gap)
-- Noul head: **98.9%** holdout
-- Score head: **97.9%** holdout, errors only ever adjacent-tier
+Leak-free protocol: heads fit on train rows only, evaluated through the
+served runtime (`/v1/decide`, `/v1/route`) on the untouched holdout. Earlier
+"all-rows" live figures (99.5–100%) were inflated by holdout leakage in the
+emitted weights — corrected 2026-10-08.
+
+- Route head (mhd3 `mean@-3 + max@-4`): **98.4%** live on the 800-row holdout,
+  1 confident-wrong (all-rows production fit measures 99.5%, leaked)
+- Noul head (mhd3 `mean@-2 + max@-3`): **99.4%** live, 0 confident-wrong
+- Score head (mhd3 `mean@-2 + max@-3`): **98.8%** live, errors adjacent-tier
+- Business gate (mhd3 `mean@-2 + max@-3`): **98.7%** live, 149 holdout rows
 - Generative eval (800 probes): tool-name 98.75%, arg-value 95.2%
-- Latency: ~15ms per decision on a shared 6-core LXC, no GPU
+- Latency: ~15–30ms per decision on a shared 6-core LXC, no GPU (batched
+  pooled prefill + clamped prefix cache)
 - Model: 7.2M params, llama-arch, seq-384, 8.06MB int8 — the whole serving
   stack is MFL
 
@@ -151,10 +157,14 @@ harvested rows into the next `moe_gate.head`.
 ## Field results on real corpora (2026-10)
 
 - **Municipal requests (geored12, real production export, 6,402 rows, 15
-  routes): 82.5% holdout** with ~0 confident misroutes (mhd3 multi-tap
-  head: concat of max-pooled taps at layers -4/-2/-3, one forward pass;
-  single-tap equivalent 79.0%). The strongest evidence that a per-client
-  head works when the data matches the trunk's distribution.
+  routes): 81.5% live / 82.5% offline, leak-free** (mhd3 multi-tap head:
+  concat of max-pooled taps at layers -4/-2/-3, one forward pass;
+  single-tap equivalent 78.5% live). Merging the ambiguous
+  collecte_om/collecte_selective pair — >50% of residual error — gives a
+  14-route head at **90.7% live** (85% automated at 98.1% at conf≥0.8):
+  a taxonomy finding, not a model-capacity win. The strongest evidence
+  that a per-client head works when the data matches the trunk's
+  distribution.
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
