@@ -26,14 +26,14 @@ same architecture, retrained on an expanded corpus (new phrasing stems +
 ## What it does
 
 Every request gets a structured decision, not a guess. Three tiny linear
-heads (`mhd1` format) read the hidden state at the last prompt position —
-one forward pass, no tokens generated:
+heads (`mhd3` multi-tap format) read pooled hidden states — one forward
+pass, no tokens generated:
 
-| head | question | holdout |
+| head | question | live holdout (leak-free) |
 |---|---|---|
-| decide (16 routes) | which route? | **97.6%**, ECE 0.012 |
-| noul (yes/no) | should this escalate? | **98.9%** |
-| score (ordinal 1–4) | how complex is it? | **97.9%**, adjacent-tier errors only |
+| decide (16 routes) | which route? | **98.4%** |
+| noul (yes/no) | should this escalate? | **99.4%** |
+| score (ordinal 1–4) | how complex is it? | **98.8%**, adjacent-tier errors only |
 
 Generative path (800 probes): tool-name **98.75%**, arg-value **95.2%**,
 call-correctness **93.25%**.
@@ -121,9 +121,9 @@ embeddings. ~7.2M params; int8 export is 8.06 MB. The entire serving stack
 
 | 决策头 | 回答的问题 | 留出集准确率 |
 |---|---|---|
-| decide(16 路由)| 走哪条路由?| **97.6%**,ECE 0.012 |
-| noul(是/否)| 是否应该升级?| **98.9%** |
-| score(1–4 级)| 复杂度多高?| **97.9%**,误差仅在相邻层级 |
+| decide(16 路由)| 走哪条路由?| **98.4%** |
+| noul(是/否)| 是否应该升级?| **99.4%** |
+| score(1–4 级)| 复杂度多高?| **98.8%**,误差仅在相邻层级 |
 
 生成路径(800 探针):工具名 **98.75%**,参数值 **95.2%**,调用正确率 **93.25%**。
 
