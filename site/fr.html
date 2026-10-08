@@ -55,7 +55,7 @@
       <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">remind me to call the dentist tomorrow</button>
       <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">provision a staging VM for the new intern</button>
       <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">what's the weather in Lyon</button>
-      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">attack the goblin with my sword</button>
+      <button type="button" class="pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">réserve une salle de réunion vendredi</button>
     </div>
     <div id="pg-out" class="mt-4 hidden">
       <div class="grid sm:grid-cols-4 gap-3 text-center">
@@ -178,7 +178,7 @@
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
       <h3 class="text-lg font-bold text-yellow-300 mb-2">Épinglez votre lane</h3>
-      <p class="text-gray-400 text-sm"><span class="mono break-all">{"state":"attack the goblin","expert":"rpg"}</span> — un client qui connaît son domaine saute le gate et les veto OOD. La propre classe <span class="mono">escalate</span> de son expert reste le chemin d'abstention.</p>
+      <p class="text-gray-400 text-sm"><span class="mono break-all">{"state":"depot illicite rue des lilas","expert":"mairie"}</span> — un client qui connaît son domaine saute le gate et les veto OOD. La propre classe <span class="mono">escalate</span> de son expert reste le chemin d'abstention. Essayez dans la démo live ci-dessus.</p>
     </div>
   </div>
 </div>
@@ -221,9 +221,9 @@
           <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">95,4% <span class="text-gray-500">· ECE 0.035</span></td>
         </tr>
         <tr class="border-b border-gray-800/50">
-          <td class="px-6 py-3">Expert rpg poolé</td>
-          <td class="px-6 py-3 mono text-gray-500">tap mean@-4 vs last-token, 246 lignes</td>
-          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">81,3% → 95,1%</td>
+          <td class="px-6 py-3">Expert mairie multi-tap</td>
+          <td class="px-6 py-3 mono text-gray-500">mhd3 concat3 (max@-4,-2,-3), 6 402 lignes réelles</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">79,0% → 82,5%</td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Expert fleet poolé</td>
@@ -233,7 +233,7 @@
         <tr>
           <td class="px-6 py-3">Éval gate en live</td>
           <td class="px-6 py-3 mono text-gray-500">matrice canary réelle, pas holdout — agrégat toutes lanes</td>
-          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">81,6% <span class="text-gray-500">· tools 62/63, lane rpg fine (6/30)</span></td>
+          <td class="px-6 py-3 stat-num text-yellow-300 font-semibold">81,6% <span class="text-gray-500">· tools 62/63</span></td>
         </tr>
       </tbody>
     </table>
@@ -260,17 +260,18 @@
 </div>
 
 <div class="mb-20">
-  <h2 class="text-3xl font-bold mb-3 text-center">Regardez-le jouer.</h2>
+  <h2 class="text-3xl font-bold mb-3 text-center">Regardez une vraie lane décider.</h2>
   <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
-    Emberdeep est une démo fonctionnelle : un agent joue à un dungeon-crawler de 10 salles
-    via le routeur — <span class="mono">attack the goblin</span> → <span class="mono text-cyan-300">attack @ 0.99</span>,
-    <span class="mono">whats the weather</span> → <span class="mono text-cyan-300">escalate → delegate</span>.
-    Un watcher live affiche intention → route → conséquence, à ~150ms par décision sur CPU.
+    La lane mairie fait tourner la tête phare — entraînée sur un export de production
+    réel, servie en direct sur la démo publique (pin <span class="mono">expert:"mairie"</span>) :
+    <span class="mono">dépôt illicite. micro onde</span> → <span class="mono text-cyan-300">depot_illicite @ 1.00</span>,
+    <span class="mono">demande de passeport</span> → <span class="mono text-cyan-300">escalate → delegate</span>.
+    ~190ms par décision sur CPU.
   </p>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
-    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">» intent: "loot the body"     [router] loot @ 1.00 (142ms)</span>
-<span class="text-gray-600">  Vous arrachez une clé de fer à la ceinture du gobelin.</span>
-<span class="text-gray-600">» intent: "hit it again"      [router] rest @ 0.61 (138ms)  — la coréférence reste dure</span></code></pre>
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">» "Dépôt illicite. micro onde"          [router] depot_illicite @ 1.00 (186ms)</span>
+<span class="text-gray-600">» "1ere dotation. bac pour le verre"    [router] dotation_bacs  @ 1.00 (174ms)</span>
+<span class="text-gray-600">» "demande de passeport"                [router] escalate       @ 0.42 — délègue, ne devine pas</span></code></pre>
   </div>
 </div>
 
@@ -352,7 +353,7 @@
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
       <h3 class="text-lg font-bold text-gray-200 mb-2">Des lanes fines existent</h3>
-      <p class="text-gray-400 text-sm">La lane gate rpg n'a que 64 lignes d'entraînement — le canary live lui donne 6/30. Deux sorties : épingler l'expert directement, ou laisser le flywheel étoffer la lane. Le manifeste livre les comptes par domaine pour que vous voyiez les lanes faibles en premier.</p>
+      <p class="text-gray-400 text-sm">La paraphrase libre s'abstient — la tête mairie délègue une formulation nouvelle même proche. C'est voulu : étoffer une lane avec des lignes client labellisées via le flywheel, pas baisser la barre. Le manifeste livre les comptes par domaine pour voir les lanes faibles en premier.</p>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
       <h3 class="text-lg font-bold text-gray-200 mb-2">La calibration vieillit</h3>
@@ -476,7 +477,7 @@
     }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');});
   }
   f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
-  var CHIP_SETS={'':['status of ticket INC4821','remind me to call the dentist tomorrow','provision a staging VM for the new intern',"what's the weather in Lyon",'attack the goblin with my sword'],
+  var CHIP_SETS={'':['status of ticket INC4821','remind me to call the dentist tomorrow','provision a staging VM for the new intern',"what's the weather in Lyon",'book a meeting room for friday'],
     'mairie':['Dépôt illicite. micro onde','1ere dotation. demande d un bac pour le verre','defaut collecte. mon bac n est pas collecte','positionnement bacs. demande de deplacement des conteneurs','demande de passeport']};
   var chipbox=document.getElementById('pg-chips');
   function setChips(set){chipbox.innerHTML='';Array.prototype.forEach.call(set,function(t){var b=document.createElement('button');b.type='button';b.className='pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700';b.textContent=t;b.addEventListener('click',function(){i.value=t;run(t);});chipbox.appendChild(b);});}
