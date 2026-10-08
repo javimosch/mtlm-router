@@ -426,6 +426,24 @@
   </div>
 </div>
 
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Agent-operable, not just agent-readable.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    The tarball ships a <span class="mono">mtlm-router</span> CLI built for AI agents:
+    JSON-only stdout, semantic exit codes, an embedded <span class="mono">guide</span>, a
+    health-polled daemon lifecycle, and content-hash self-update. The server self-describes —
+    <span class="mono">/guide</span>, <span class="mono">/llms.txt</span>, <span class="mono">/v1/whoami</span>, <span class="mono">/v1/feedback</span>.
+    <span class="mono text-cyan-300">28/28 on cli-spec-conformance</span> — checked, not claimed.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ ./mtlm-router daemon start        # loopback, polls /_health — never a fixed sleep</span>
+<span class="text-green-300">{"daemon":"up","port":8097,"url":"http://127.0.0.1:8097"}</span>
+<span class="text-gray-600">$ ./mtlm-router guide               # embedded operator manual (JSON)</span>
+<span class="text-gray-600">$ ./mtlm-router update --check      # content-hash self-update → .bak rollback</span>
+<span class="text-gray-600">$ ./mtlm-router daemon stop         # clean POST /_shutdown</span></code></pre>
+  </div>
+</div>
+
 <div class="text-center mb-8">
   <h2 class="text-3xl font-bold mb-4">Small enough to trust. Typed enough to use.</h2>
   <p class="text-gray-400 max-w-2xl mx-auto mb-8">

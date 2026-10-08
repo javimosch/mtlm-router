@@ -432,6 +432,24 @@
   </div>
 </div>
 
+<div class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Pilotable par agent, pas juste lisible.</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-8">
+    L'archive embarque une CLI <span class="mono">mtlm-router</span> pensée pour les agents IA :
+    JSON seul sur stdout, codes de sortie sémantiques, <span class="mono">guide</span> embarqué,
+    cycle de vie du démon sondé via <span class="mono">/_health</span>, et self-update par hash de contenu. Le serveur se décrit lui-même —
+    <span class="mono">/guide</span>, <span class="mono">/llms.txt</span>, <span class="mono">/v1/whoami</span>, <span class="mono">/v1/feedback</span>.
+    <span class="mono text-cyan-300">28/28 sur cli-spec-conformance</span> — vérifié, pas juste affiché.
+  </p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ ./mtlm-router daemon start        # loopback, sonde /_health — jamais de sleep fixe</span>
+<span class="text-green-300">{"daemon":"up","port":8097,"url":"http://127.0.0.1:8097"}</span>
+<span class="text-gray-600">$ ./mtlm-router guide               # manuel opérateur embarqué (JSON)</span>
+<span class="text-gray-600">$ ./mtlm-router update --check      # self-update par hash → retour .bak</span>
+<span class="text-gray-600">$ ./mtlm-router daemon stop         # POST /_shutdown propre</span></code></pre>
+  </div>
+</div>
+
 <div class="text-center mb-8">
   <h2 class="text-3xl font-bold mb-4">Assez petit pour être fiable. Assez typé pour être utile.</h2>
   <p class="text-gray-400 max-w-2xl mx-auto mb-8">
