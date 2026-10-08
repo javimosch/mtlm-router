@@ -151,9 +151,10 @@ harvested rows into the next `moe_gate.head`.
 ## Field results on real corpora (2026-10)
 
 - **Municipal requests (geored12, real production export, 6,402 rows, 15
-  routes): 79.0% holdout** with ~0 confident misroutes — the strongest
-  evidence that a per-client head works when the data matches the trunk's
-  distribution.
+  routes): 82.5% holdout** with ~0 confident misroutes (mhd3 multi-tap
+  head: concat of max-pooled taps at layers -4/-2/-3, one forward pass;
+  single-tap equivalent 79.0%). The strongest evidence that a per-client
+  head works when the data matches the trunk's distribution.
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
