@@ -476,6 +476,7 @@
   function setChips(set){chipbox.innerHTML='';Array.prototype.forEach.call(set,function(t){var b=document.createElement('button');b.type='button';b.className='pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700';b.textContent=t;b.addEventListener('click',function(){i.value=t;run(t);});chipbox.appendChild(b);});}
   Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
   Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
+  if(location.hash.indexOf('mairie')>=0){var lb=document.querySelector('.pg-lane[data-lane="mairie"]');if(lb)lb.click();}
   // lead form
   var lf=document.getElementById('lead-form');
   if(lf){lf.addEventListener('submit',function(ev){ev.preventDefault();
