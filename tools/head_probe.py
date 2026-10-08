@@ -63,6 +63,27 @@ def features(hfdir, rows, batch=16):
             print(f"  features {i + len(chunk)}/{len(rows)}", file=sys.stderr)
     return {k: np.stack(v) for k, v in feats.items()}
 
+DECIDE_SYS = "You are a helpful assistant. You can call tools. When a tool is needed, reply with only the JSON tool call. Otherwise answer in plain English."
+
+def save_feats(path, F, rows):
+    """Cache a feature dict as npz WITH provenance: the set of system prompts
+    the features were extracted under. Offline numbers only transfer to the
+    served runtime when the prompt was decide_sys (the geo_feats incident:
+    92.1% offline / 79.8% live on a head trained under a different prompt)."""
+    keys = np.array([json.dumps(k) for k in F]); meta = np.array([json.dumps(sorted({r[0] for r in rows}))])
+    np.savez(path, keys=keys, sys_prompts=meta, **{"f" + str(i): v for i, v in enumerate(F.values())})
+
+def load_feats(path):
+    """Inverse of save_feats; prints a warning if provenance is missing or the
+    system prompt is not decide_sys."""
+    z = np.load(path, allow_pickle=False)
+    F = {tuple(json.loads(k)): z["f" + str(i)] for i, k in enumerate(z["keys"])}
+    if "sys_prompts" not in z:
+        print(f"WARNING {path}: no system-prompt provenance recorded — offline numbers may not transfer to live", file=sys.stderr)
+    elif json.loads(str(z["sys_prompts"][0])) != [DECIDE_SYS]:
+        print(f"WARNING {path}: features were not extracted under decide_sys", file=sys.stderr)
+    return F
+
 def softmax(z):
     z = z - z.max(axis=1, keepdims=True); e = np.exp(z); return e / e.sum(axis=1, keepdims=True)
 
@@ -117,6 +138,7 @@ def main():
     ap.add_argument("--emit-pool", default="max", choices=["max", "mean", "last"])
     ap.add_argument("--emit-taps", default=None, help="mhd3 multi-tap emit: comma list of pool:hf_layer, e.g. 'max:-4,max:-2'; feature = concat of the taps in order")
     ap.add_argument("--emit-l2", type=float, default=1e-3)
+    ap.add_argument("--emit-train-only", action="store_true", help="fit the emitted head on train rows only. Production heads normally fit all rows (more data, temp still calibrated on holdout); use this for heads you will EVALUATE live — an all-rows fit scores inflated on its own holdout")
     ap.add_argument("--emit-temp", default="1.0", help="mhd2 temp field: a float, or 'auto' = fit T on holdout logits of a train-only head (NLL grid, as train_head.py); prod heads use calibrated T (0.61-1.04), T=1.0 over-confidences pooled heads")
     ap.add_argument("--maxc", type=int, default=0, help="truncate the user text to N chars (real fleet rows exceed the 384 context; anvil 400s above it)")
     ap.add_argument("--serve-system", action="store_true", help="compute features under anvil's FIXED decide_sys prompt (what /v1/decide and /v1/route actually use), not the rows' own system text")
@@ -124,8 +146,7 @@ def main():
     tr = load(a.train) + (load(a.extra) if a.extra else []); ho = load(a.holdout)
     if a.maxc: tr = [(s_, c, u[:a.maxc], y) for s_, c, u, y in tr]; ho = [(s_, c, u[:a.maxc], y) for s_, c, u, y in ho]
     if a.serve_system:
-        DS = "You are a helpful assistant. You can call tools. When a tool is needed, reply with only the JSON tool call. Otherwise answer in plain English."
-        tr = [(DS, c, u, y) for s_, c, u, y in tr]; ho = [(DS, c, u, y) for s_, c, u, y in ho]
+        tr = [(DECIDE_SYS, c, u, y) for s_, c, u, y in tr]; ho = [(DECIDE_SYS, c, u, y) for s_, c, u, y in ho]
     labels = sorted({r[3] for r in tr + ho}); lab = {l: i for i, l in enumerate(labels)}
     ytr = np.array([lab[r[3]] for r in tr]); yho = np.array([lab[r[3]] for r in ho])
     print(json.dumps({"train_rows": len(tr), "holdout_rows": len(ho), "labels": labels,
@@ -161,7 +182,11 @@ def main():
         for spec in a.emit_taps.split(","):
             pk, pl = spec.split(":")
             taps.append((int(pl), pk))
-        X = np.concatenate([F[(pl, pk)] for pl, pk in taps], axis=1); Xall = X; yall = np.concatenate([ytr, yho])
+        X = np.concatenate([F[(pl, pk)] for pl, pk in taps], axis=1)
+        if a.emit_train_only:
+            Xall, yall = X[:n], ytr
+        else:
+            Xall, yall = X, np.concatenate([ytr, yho])
         mu = Xall.mean(axis=0); sd = feat_sd(Xall); Xs = (Xall - mu) / sd
         W, b = fit_lr(Xs, yall, len(labels), a.emit_l2)
         Wr = W / sd[:, None]; br = b - (mu / sd) @ W
@@ -194,7 +219,9 @@ def main():
             f.write(Wr.T.astype(np.float32).tobytes())
             f.write(br.astype(np.float32).tobytes())
             for l in labels: f.write(bytes([len(l)])) ; f.write(l.encode())
-        print(json.dumps({"emitted": a.emit, "format": "mhd3", "taps": taps, "temp": round(temp, 4), "classes": labels, "rows": int(len(yall)), "featdim": int(X.shape[1])}))
+        print(json.dumps({"emitted": a.emit, "format": "mhd3", "taps": taps, "temp": round(temp, 4), "classes": labels, "rows": int(len(yall)), "train_only": bool(a.emit_train_only), "system": "decide_sys" if a.serve_system else "per-row", "featdim": int(X.shape[1])}))
+        if not a.serve_system:
+            print("WARNING: features were extracted under per-row system prompts, not decide_sys — offline numbers may not transfer to the served runtime (geo_feats incident, 2026-10)", file=sys.stderr)
         return
     if a.emit:
         # anvil mhd2: magic "mhd2", i32 nr, i32 dim, f32 temp, u32 flags, W[nr*dim] f32 (row = class), b[nr] f32,
@@ -202,7 +229,11 @@ def main():
         # pool_layer = anvil layer index (tap after that layer) = n_layers + hf_index for hf_index < 0 ... but HF
         # hidden_states[-1] is post-final-norm, so hf_index -2 -> after layer n-2 -> ANVIL_POOL_LAYER -2. Match exactly:
         # anvil pool_layer = n_layers + hf_index (hf_index in -2..-n_layers); "last"/"final" = flags 0 or kind|(0<<4).
-        X = np.concatenate([F[(a.emit_layer, a.emit_pool)]], axis=1); Xall = X; yall = np.concatenate([ytr, yho])
+        X = np.concatenate([F[(a.emit_layer, a.emit_pool)]], axis=1)
+        if a.emit_train_only:
+            Xall, yall = X[:n], ytr
+        else:
+            Xall, yall = X, np.concatenate([ytr, yho])
         mu = Xall.mean(axis=0); sd = feat_sd(Xall); Xs = (Xall - mu) / sd
         W, b = fit_lr(Xs, yall, len(labels), a.emit_l2)
         # fold the standardization into the affine head so anvil applies raw features: z = ((x-mu)/sd) W + b
@@ -232,7 +263,9 @@ def main():
             f.write(Wr.T.astype(np.float32).tobytes())  # [nr][dim] rows = classes
             f.write(br.astype(np.float32).tobytes())
             for l in labels: f.write(bytes([len(l)])) ; f.write(l.encode())
-        print(json.dumps({"emitted": a.emit, "flags": flags, "temp": round(temp, 4), "pool": a.emit_pool, "hf_layer": a.emit_layer, "classes": labels, "rows": int(len(yall))}))
+        print(json.dumps({"emitted": a.emit, "flags": flags, "temp": round(temp, 4), "pool": a.emit_pool, "hf_layer": a.emit_layer, "classes": labels, "rows": int(len(yall)), "train_only": bool(a.emit_train_only), "system": "decide_sys" if a.serve_system else "per-row"}))
+        if not a.serve_system:
+            print("WARNING: features were extracted under per-row system prompts, not decide_sys — offline numbers may not transfer to the served runtime", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
