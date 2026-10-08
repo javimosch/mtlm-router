@@ -183,7 +183,10 @@ def main():
             f.write(struct.pack("<f", temp)); f.write(struct.pack("<B", len(taps)))
             for pl, pk in taps:
                 if pk == "last":
-                    f.write(struct.pack("<BB", 0, 0))  # kind 0 = last-token snapshot, layer unused
+                    if pl != -1:
+                        print(json.dumps({"error": "mhd3 kind-0 last tap is only the final-layer (-1) snapshot; last@"+str(pl)+" is not expressible"}))
+                        sys.exit(1)
+                    f.write(struct.pack("<BB", 0, 0))  # kind 0 = last-token snapshot (final layer)
                     continue
                 kind = 1 if pk == "max" else 2
                 layer = nl + pl if pl < 0 else pl
