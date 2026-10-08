@@ -389,8 +389,8 @@
       <div class="mono text-cyan-300 text-sm mb-2">APPLIANCE</div>
       <div class="text-3xl font-bold mb-1">Free</div>
       <p class="text-gray-500 text-sm mb-4">Apache-2.0, forever.</p>
-      <p class="text-gray-400 text-sm flex-1">The 7.5MB tarball: engine, int8 model, tools/helpdesk heads, systemd unit. Runs on any x86-64 box, no GPU, no Python. Your data never leaves your network.</p>
-      <a href="{{.github}}/releases" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Download the appliance</a>
+      <p class="text-gray-400 text-sm flex-1">The v0.2.0 tarball (~8MB): mhd3 multi-tap engine, int8 model, tools/helpdesk/municipal heads, systemd unit. Runs on any x86-64 box, no GPU, no Python. Your data never leaves your network.</p>
+      <a href="{{.github}}/releases/tag/v0.2.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Download v0.2.0</a>
     </div>
     <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6 flex flex-col accent-glow">
       <div class="mono text-cyan-300 text-sm mb-2">HOSTED API</div>
@@ -419,10 +419,10 @@
     download, no license server — nothing leaves the machine.
   </p>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
-    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-mairie-linux-amd64.tar.gz &amp;&amp; cd mtlm-router-mairie</span>
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-v0.2.0-linux-amd64.tar.gz &amp;&amp; cd mtlm-router-v0.2.0-linux-amd64</span>
 <span class="text-gray-600">$ ./start.sh &amp;</span>
-<span class="text-gray-600">$ curl localhost:8097/v1/route -d '{"messages":[{"role":"user","content":"..."}]}'</span>
-<span class="text-green-300">{"route":"depot_illicite","confidence":0.92,"action":"tool_call",...}</span></code></pre>
+<span class="text-gray-600">$ curl localhost:8097/v1/route -d '{"state":"Dépôt illicite. micro onde","expert":"mairie"}'</span>
+<span class="text-green-300">{"route":"depot_illicite","domain":"mairie","action":"tool_call","confidence":0.999,...}</span></code></pre>
   </div>
 </div>
 
