@@ -37,6 +37,7 @@ def main():
     p.add_argument("--probs", default=None, help="cached [[label, probs], ...] json")
     p.add_argument("--save-probs", default=None)
     p.add_argument("--seed", type=int, default=7)
+    p.add_argument("--mondrian", action="store_true", help="class-conditional per-route qhat report")
     a = p.parse_args()
 
     lmap = dict(kv.split("=") for kv in a.map.split(",")) if a.map else {}
@@ -126,6 +127,36 @@ def main():
             print(f"{alpha:>6} {best[0]:>6.3f} {best[1]:>10.1f} {best[3] * 100:>9.2f} {best[2]:>8.2f}")
         else:
             print(f"{alpha:>6} {'none':>6} {'—':>6} {'—':>8} {'—':>8}")
+
+    if a.mondrian:
+        # Class-conditional (Mondrian) conformal: calibrate qhat PER TRUE LABEL.
+        # Marginal coverage can hide a minority route that never gets auto-
+        # answered; per-class qhat guarantees each route its own error budget.
+        # Set rule at eval: include class c if p_c >= 1 - qhat_c.
+        import collections
+        byc = collections.defaultdict(list)
+        for y, p in cal:
+            byc[y].append(1 - p.get(y, 0.0))
+        print("\n== mondrian (per-class qhat, class-conditional coverage) ==")
+        for alpha in [0.02, 0.05, 0.10]:
+            qc = {}
+            for c, sc in byc.items():
+                sc.sort()
+                k = min(len(sc), int(np.ceil((len(sc) + 1) * (1 - alpha))))
+                qc[c] = sc[k - 1]
+            # eval: singleton if exactly one class passes ITS OWN threshold
+            auto = err = 0
+            per = collections.defaultdict(lambda: [0, 0, 0])  # class -> n, auto, err
+            for y, pr in ev:
+                S = [c for c, v in pr.items() if c in qc and v >= 1 - qc[c]]
+                per[y][0] += 1
+                if len(S) == 1:
+                    auto += 1; per[y][1] += 1
+                    if S[0] != y: err += 1; per[y][2] += 1
+            N = len(ev)
+            worst_cov = min((v[1] / v[0] for v in per.values() if v[0] >= 5), default=0)
+            print(f"alpha={alpha}: auto={auto / N * 100:.1f}% err_auto={err / max(auto, 1) * 100:.2f}% "
+                  f"worst-class auto={worst_cov * 100:.1f}% classes={len(qc)}")
 
     print("\n== raw-confidence floor (same eval split) ==")
     print(f"{'tau':>5} {'auto%':>6} {'err_auto':>9}")

@@ -187,7 +187,12 @@ harvested rows into the next `moe_gate.head`.
   error *among automated answers* per threshold; at α=0.02 the certified
   operating point is 82.2% automated with the bound at 1.11% error —
   "no more than 2% of auto-answered requests are wrong, 95% confidence"
-  is a sentence you can put in a contract.
+  is a sentence you can put in a contract. A `--mondrian` mode also
+  reports class-conditional calibration — per-route qhat so a rare
+  request type gets its own error budget instead of hiding inside the
+  marginal average (on the merged lane: 96.5% auto @ 2.3% err with
+  worst-class automation 66.7% exposed — the fairness check you'd want
+  before trusting a municipal deployment).
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
