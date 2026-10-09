@@ -66,7 +66,11 @@ emitted weights — corrected 2026-10-08.
 - Generative eval (800 probes): tool-name 98.75%, arg-value 95.2%
 - Latency: 28–47ms p50 per decision measured live on hosted 2026-10-08
   (route 34.7, decide 28.1, expert lanes ~45, noul/score ~42), no GPU —
-  batched pooled prefill + clamped prefix cache
+  batched pooled prefill + clamped prefix cache. Throughput on the hosted
+  box (rbm21, `bench/perf.sh`): **p50 38ms, p95 41ms sequential; ~35
+  decisions/sec sustained at 10-way concurrency** — ~3M decisions/day on
+  one instance. `COLIBRI_THREADS` saturates at ~8 (4→26 req/s, 8→34,
+  16→35); higher values oversubscribe on small boxes.
 - Model: 7.2M params, llama-arch, seq-384, 8.06MB int8 — the whole serving
   stack is MFL
 
