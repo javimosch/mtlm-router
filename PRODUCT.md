@@ -211,6 +211,15 @@ harvested rows into the next `moe_gate.head`.
   marginal average (on the merged lane: 96.5% auto @ 2.3% err with
   worst-class automation 66.7% exposed — the fairness check you'd want
   before trusting a municipal deployment).
+- **How much data does a lane need?** Few-shot learning curve on the real
+  municipal corpus (geored12, 16 routes; LR head on frozen-trunk features,
+  633-row holdout, `bench/fewshot/`): 5 ex/class → 49%, 25 → 66%, 50 → 68%,
+  100 → 71%, 200 → 73%, 400 → 77%, full 5.8k → 80%. Two reads: a working
+  lane appears at **~50 labeled examples per route** — not 50,000 — and
+  accuracy keeps climbing with labels, which is exactly why the
+  feedback→labels→recalibration loop matters. (The deployed head's
+  higher figures use the augmented corpus + tuned tap recipe; this curve
+  is the honest floor.)
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
