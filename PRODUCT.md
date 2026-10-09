@@ -53,6 +53,16 @@ emitted weights — corrected 2026-10-08.
 - Noul head (mhd3 `mean@-2 + max@-3`): **99.4%** live, 0 confident-wrong
 - Score head (mhd3 `mean@-2 + max@-3`): **98.8%** live, errors adjacent-tier
 - Business gate (mhd3 `mean@-2 + max@-3`): **98.7%** live, 149 holdout rows
+- **Generic intents — CLINC150** (mhd3 `mean@-2,-3,-4`, 151 classes incl.
+  out-of-scope): **73.8%** holdout accuracy on the full 5,500-row test,
+  **OOS-detection AUROC 0.842**. Conformal on this lane: α=0.15 → 39.9%
+  auto @ 1.8% err; certified selective-risk α=0.02 → 38.0% auto with a
+  95%-confidence bound ≤1.87%. Reference points: public zero-shot numbers
+  on a 200-row subset report ~79–92% for much larger hosted models — this
+  head runs at 7M params on CPU *and* ships the OOS channel those systems
+  don't expose. Generic 151-way routing is the hardest lane we measure;
+  per-domain heads remain the product answer.
+  Head: `data/clinc150_mt3.head`; served live as expert lane `clinc`.
 - Generative eval (800 probes): tool-name 98.75%, arg-value 95.2%
 - Latency: 28–47ms p50 per decision measured live on hosted 2026-10-08
   (route 34.7, decide 28.1, expert lanes ~45, noul/score ~42), no GPU —
