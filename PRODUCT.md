@@ -177,6 +177,11 @@ harvested rows into the next `moe_gate.head`.
   `reason:"conformal_abstain"` and the response exposes `set_size`/`qhat`.
   Live on the hosted API; empirical figure, formal coverage assumes
   calibration/production exchangeability — recalibrate per client.
+  **Drift handling shipped:** `GET|POST /_qhat` updates any lane's
+  threshold live, and `tools/aci_qhat.py` closes the loop — labeled
+  outcomes (feedback verdicts) → ACI step `qhat −= γ·(err_rate−α)` →
+  pushed via `/_qhat`, wired into the daily flywheel. The error budget
+  survives distribution shift without a restart.
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
