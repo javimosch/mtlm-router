@@ -166,7 +166,7 @@
   <div class="grid md:grid-cols-3 gap-6 mt-8">
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
       <h3 class="text-lg font-bold text-yellow-300 mb-2">Ship brains, not models</h3>
-      <p class="text-gray-400 text-sm">A customer deployment = the frozen trunk + a handful of kilobyte head files. Onboard a new domain by training a head on ~1k labeled rows — hours, not weeks.</p>
+      <p class="text-gray-400 text-sm">A customer deployment = the frozen trunk + a handful of kilobyte head files. Onboard a new domain by training a head on ~50 labeled examples per route — a working lane in hours; your full export is what scales it.</p>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
       <h3 class="text-lg font-bold text-yellow-300 mb-2">Per-head pooling</h3>
@@ -220,6 +220,16 @@
           <td class="px-6 py-3">Municipal, merged taxonomy</td>
           <td class="px-6 py-3 mono text-gray-500">same head, ambiguous collecte pair merged — the pilot finding, leak-free live</td>
           <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">90.7% <span class="text-gray-500">· 97.8% auto @ &lt;1% err (conformal α=0.02)</span></td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Generic intents — CLINC150</td>
+          <td class="px-6 py-3 mono text-gray-500">mhd3 mean@-2,-3,-4, 151 classes incl. out-of-scope, 5,500-row holdout</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">73.8% <span class="text-gray-500">· OOS-detection AUROC 0.842</span></td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Data a lane needs</td>
+          <td class="px-6 py-3 mono text-gray-500">few-shot curve, real 16-route municipal corpus, 633-row holdout</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">50 ex/route → 68% <span class="text-gray-500">· full export → 80% (merged: 90.7%)</span></td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Pooled fleet expert</td>
@@ -329,7 +339,7 @@
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
       <div class="mono text-cyan-300 text-lg mb-2">2</div>
-      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Train your head</span> — ~1k labeled examples of your requests → a ~7KB file, in hours.</p>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Train your head</span> — ~50 labeled examples per route get you a working lane; your full export + a calibration run gets you the certified point.</p>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
       <div class="mono text-cyan-300 text-lg mb-2">3</div>

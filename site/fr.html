@@ -170,7 +170,7 @@
   <div class="grid md:grid-cols-3 gap-6 mt-8">
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
       <h3 class="text-lg font-bold text-yellow-300 mb-2">Livrez des cerveaux, pas des modèles</h3>
-      <p class="text-gray-400 text-sm">Un déploiement client = le tronc figé + quelques fichiers de têtes de quelques Ko. Onboardez un nouveau domaine en entraînant une tête sur ~1 000 lignes labellisées — des heures, pas des semaines.</p>
+      <p class="text-gray-400 text-sm">Un déploiement client = le tronc figé + quelques fichiers de têtes de quelques Ko. Onboardez un nouveau domaine en entraînant une tête sur ~50 exemples labellisés par route — une lane fonctionnelle en quelques heures ; votre export complet la fait monter.</p>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 card-hover">
       <h3 class="text-lg font-bold text-yellow-300 mb-2">Pooling par tête</h3>
@@ -224,6 +224,16 @@
           <td class="px-6 py-3">Mairie, taxonomie fusionnée</td>
           <td class="px-6 py-3 mono text-gray-500">même tête, paire collecte ambiguë fusionnée — le résultat pilote, live sans fuite</td>
           <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">90,7% <span class="text-gray-500">· 97,8% auto à &lt;1% err (conforme α=0,02)</span></td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Intents génériques — CLINC150</td>
+          <td class="px-6 py-3 mono text-gray-500">mhd3 mean@-2,-3,-4, 151 classes dont hors-scope, holdout 5 500 lignes</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">73,8% <span class="text-gray-500">· AUROC détection OOS 0,842</span></td>
+        </tr>
+        <tr class="border-b border-gray-800/50">
+          <td class="px-6 py-3">Données nécessaires par lane</td>
+          <td class="px-6 py-3 mono text-gray-500">courbe few-shot, corpus municipal réel 16 routes, holdout 633 lignes</td>
+          <td class="px-6 py-3 stat-num text-cyan-300 font-semibold">50 ex/route → 68% <span class="text-gray-500">· export complet → 80% (fusionné : 90,7%)</span></td>
         </tr>
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3">Expert fleet poolé</td>
@@ -334,7 +344,7 @@
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
       <div class="mono text-cyan-300 text-lg mb-2">2</div>
-      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Entraînez votre tête</span> — ~1 000 exemples labellisés de vos requêtes → un fichier ~7 Ko, en quelques heures.</p>
+      <p class="text-gray-400 text-sm"><span class="text-gray-200 font-medium">Entraînez votre tête</span> — ~50 exemples labellisés par route suffisent pour une lane fonctionnelle ; votre export complet + une calibration donnent le point certifié.</p>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
       <div class="mono text-cyan-300 text-lg mb-2">3</div>
