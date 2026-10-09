@@ -27,7 +27,15 @@ unrepresentable: `choice` is always one of the trained routes.
 | `POST /v1/noul {state}` | should this escalate? (p_yes) |
 | `POST /v1/score {state}` | how complex is it? (grade 1–4) |
 | `POST /v1/assess {state}` | all of the above, one pass |
+| `POST /v1/systemone {state, questions}` | **Jev-compatible typed questions** — `noul`/`choice`/`score` per `docs.typesafe.ai`; teacher-forced mean-logprob candidate scoring on the trunk, no head files needed |
 | `POST /v1/chat/completions` | generative path — fills tool args, answers chat |
+
+`/v1/systemone` is a drop-in for Jev SDK clients and `jev-local`-style
+local servers: point `base_url` at the appliance and the same
+`{state, questions:{qid:{type,instructions,criteria}}}` calls return the
+same `{model, answers, usage}` shape — from a 7M-param trunk that needs
+no GPU, where the OSS jev-local reference bottoms out at 1.5–3B
+instruct models (its own micro-tier eval collapses below ~1B).
 
 All typed endpoints take an optional `context` array — prior turns,
 alternating user/assistant — so follow-ups like *"and in London?"* route
