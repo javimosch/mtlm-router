@@ -78,6 +78,55 @@ def main():
         N = len(ev)
         print(f"{alpha:>6} {q:>6.3f} {auto / N * 100:>6.1f} {err / max(auto, 1) * 100:>9.2f} {cov / N * 100:>9.1f} {ssz / N:>7.2f} {empty / N * 100:>7.1f}")
 
+    # Selective-risk control: bound the error rate AMONG AUTOMATED answers.
+    # For a candidate threshold, the calibration split gives n_auto accepted
+    # rows with k errors; the Clopper-Pearson upper bound says the true error
+    # rate on automated traffic is <= ub at confidence 1-delta. Pick the most
+    # permissive threshold whose bound fits the error budget — finite-sample,
+    # no distribution assumption beyond exchangeable calibration traffic.
+    def cp_upper(k, n, delta=0.05):
+        # P(X<=k | n, p) = delta  ->  solve p via bisection on the binomial cdf
+        from math import comb, exp, lgamma
+        def cdf(k, n, p):
+            # regularized incomplete beta via sum is unstable; use logs
+            s = 0.0
+            for i in range(k + 1):
+                s += exp(lgamma(n + 1) - lgamma(i + 1) - lgamma(n - i + 1)
+                         + i * np.log(p) + (n - i) * np.log(1 - p))
+            return s
+        lo, hi = 0.0, 1.0
+        for _ in range(60):
+            mid = (lo + hi) / 2
+            if cdf(k, n, mid) > delta: lo = mid
+            else: hi = mid
+        return hi
+
+    print("\n== selective risk control (error bound among automated, 95% conf) ==")
+    print(f"{'alpha':>6} {'qhat*':>6} {'auto%_eval':>10} {'ub95_cal':>9} {'err_eval':>8}")
+    grid = np.linspace(0.05, 0.95, 19)
+    for alpha in [0.01, 0.02, 0.05, 0.10]:
+        best = None
+        for q in grid:
+            auto = err = 0
+            for y, pr in cal:
+                S = [k2 for k2, v in pr.items() if v >= 1 - q]
+                if len(S) == 1:
+                    auto += 1; err += S[0] != y
+            if auto == 0: continue
+            ub = cp_upper(int(err), auto)
+            if ub <= alpha:
+                aev = eev = 0
+                for y, pr in ev:
+                    S = [k2 for k2, v in pr.items() if v >= 1 - q]
+                    if len(S) == 1:
+                        aev += 1; eev += S[0] != y
+                if best is None or q > best[0]:
+                    best = (q, aev / len(ev) * 100, eev / max(aev, 1) * 100, ub)
+        if best:
+            print(f"{alpha:>6} {best[0]:>6.3f} {best[1]:>10.1f} {best[3] * 100:>9.2f} {best[2]:>8.2f}")
+        else:
+            print(f"{alpha:>6} {'none':>6} {'—':>6} {'—':>8} {'—':>8}")
+
     print("\n== raw-confidence floor (same eval split) ==")
     print(f"{'tau':>5} {'auto%':>6} {'err_auto':>9}")
     for t in [0.9, 0.8, 0.7, 0.55, 0.5, 0.4, 0.3, 0.2]:

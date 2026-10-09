@@ -181,7 +181,13 @@ harvested rows into the next `moe_gate.head`.
   threshold live, and `tools/aci_qhat.py` closes the loop — labeled
   outcomes (feedback verdicts) → ACI step `qhat −= γ·(err_rate−α)` →
   pushed via `/_qhat`, wired into the daily flywheel. The error budget
-  survives distribution shift without a restart.
+  survives distribution shift without a restart. Two operating modes:
+  the coverage-max point above (empirical), or a **certified point** —
+  `conformal_eval.py` also computes a Clopper-Pearson 95% upper bound on
+  error *among automated answers* per threshold; at α=0.02 the certified
+  operating point is 82.2% automated with the bound at 1.11% error —
+  "no more than 2% of auto-answered requests are wrong, 95% confidence"
+  is a sentence you can put in a contract.
 - **French intent benchmark (MASSIVE fr-FR, 60 intents): 65%.** Real but
   not production-grade — used as the second domain in the MoE demo.
 - **Generic English email (Enron kitchen-l, 8–20 folder-routes): 38–48%.**
