@@ -82,6 +82,7 @@ echo "mtlm-router on http://0.0.0.0:\$PORT  (logs: logs/decisions.jsonl)"
 exec ./anvil-serve models/model.bin "\$PORT"
 EOF
 chmod +x "$PKG/start.sh"
+cp "$(dirname "$0")/smoke.sh" "$PKG/smoke.sh" 2>/dev/null && chmod +x "$PKG/smoke.sh"
 
 cat > "$PKG/mtlm-router.service" <<EOF
 [Unit]
@@ -107,6 +108,7 @@ no dependencies beyond a Linux x86_64 box.
 ## Run
 
     ./start.sh                 # systemd-free
+    ./smoke.sh                 # verifies all endpoints + the conformal gate
     # or: cp mtlm-router.service ~/.config/systemd/user/ && systemctl --user start mtlm-router
 
 ## Use
