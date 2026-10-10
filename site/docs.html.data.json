@@ -1,12 +1,12 @@
 {
-  "title": "mtlm-router — a typed decision layer that knows when to say no",
-  "description": "Self-hosted 7M-parameter router turning natural-language requests into typed, calibrated routing decisions in ~30ms on CPU. European-made, on-prem, flat cost — built for SME workflows: email triage, ticket dispatch, typed ops actions.",
+  "title": "mtlm-router docs — endpoints, conformal gating, MCP, observability",
+  "description": "Operator and API documentation for the mtlm-router appliance: every endpoint, the routing-decision fields, conformal qhat gating, the Jev-compatible /v1/systemone surface, MCP tools, Prometheus /metrics and the drift monitor.",
   "lang": "en",
   "root": "/mtlm-router",
   "nav_how": "How it works",
   "nav_moe": "Experts",
   "nav_numbers": "Numbers",
-  "alt_lang_url": "/mtlm-router/fr",
+  "alt_lang_url": "/mtlm-router/docs",
   "alt_lang_label": "FR",
   "alt_lang_title": "Version française",
   "github": "https://github.com/javimosch/mtlm-router",
@@ -16,7 +16,7 @@
   "nav_product": "Product",
   "nav_municipal": "Municipal",
   "nav_inbox": "Inbox",
+  "nav_docs": "Docs",
   "municipal_slug": "municipal",
-  "inbox_slug": "inbox",
-  "nav_docs": "Docs"
+  "inbox_slug": "inbox"
 }

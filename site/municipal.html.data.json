@@ -17,5 +17,6 @@
   "nav_municipal": "Municipal",
   "nav_inbox": "Inbox",
   "municipal_slug": "municipal",
-  "inbox_slug": "inbox"
+  "inbox_slug": "inbox",
+  "nav_docs": "Docs"
 }

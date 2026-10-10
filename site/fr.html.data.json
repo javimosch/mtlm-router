@@ -17,5 +17,6 @@
   "nav_municipal": "Collectivités",
   "nav_inbox": "Boîtes mail",
   "municipal_slug": "municipal-fr",
-  "inbox_slug": "inbox-fr"
+  "inbox_slug": "inbox-fr",
+  "nav_docs": "Docs"
 }

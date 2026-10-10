@@ -1,0 +1,192 @@
+{{>layout "layout.html"}}
+<div class="mb-12 pt-8">
+  <p class="mono text-cyan-400 text-sm mb-3 tracking-widest">DOCUMENTATION · v0.3.0</p>
+  <h1 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Operator &amp; API docs</h1>
+  <p class="text-gray-500 max-w-3xl text-lg">
+    Everything the appliance serves, what every field means, and how to run it —
+    the same surface an agent gets from <code class="mono text-cyan-300">GET /guide</code>, written for humans.
+    Machine-readable version lives on the running instance itself.
+  </p>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Install &amp; verify</h2>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># ~8.2MB, static, no deps — Linux x86_64</span>
+tar xzf mtlm-router-v0.3.0-linux-amd64.tar.gz
+cd mtlm-router-v0.3.0-linux-amd64
+./start.sh                        <span class="text-gray-500"># serves on :8097</span>
+./smoke.sh                        <span class="text-gray-500"># 9 checks: health, route, conformal gate, abstain, systemone…</span>
+python3 tools/monitor.py logs/decisions.jsonl   <span class="text-gray-500"># label-free drift check (exit 1 on drift)</span></pre>
+  </div>
+  <p class="text-gray-500 text-sm mt-3">Or <code class="mono">mtlm-router.service</code> for systemd (<code class="mono">~/.config/systemd/user/</code>).</p>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Endpoints</h2>
+  <div class="overflow-x-auto bg-gray-900 border border-gray-800 rounded-xl">
+    <table class="w-full text-sm">
+      <thead><tr class="border-b border-gray-800 text-gray-400"><td class="px-5 py-3">endpoint</td><td class="px-5 py-3">what it does</td><td class="px-5 py-3">body</td></tr></thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/route</td><td class="px-5 py-3">the dispatcher: gate → expert head → noul/score → optional execute</td><td class="px-5 py-3 mono text-xs">{state|messages, context[], expert?, options[], min_conf?, min_gate_conf?, execute?}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/decide</td><td class="px-5 py-3">route head only</td><td class="px-5 py-3 mono text-xs">{state|messages, context[]}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/noul</td><td class="px-5 py-3">escalation yes/no head</td><td class="px-5 py-3 mono text-xs">{state}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/score</td><td class="px-5 py-3">complexity tier 1–4</td><td class="px-5 py-3 mono text-xs">{state}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/assess</td><td class="px-5 py-3">decide+noul+score in one forward pass</td><td class="px-5 py-3 mono text-xs">{state}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/systemone</td><td class="px-5 py-3">Jev-compatible typed questions (noul|choice|score), no generation, no head files needed</td><td class="px-5 py-3 mono text-xs">{state, model?, questions:{qid:{type,instructions,criteria}}}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/chat/completions</td><td class="px-5 py-3">generative path, OpenAI-compatible, SSE stream</td><td class="px-5 py-3 mono text-xs">{messages, model?, stream?}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">POST /v1/feedback</td><td class="px-5 py-3">open submit — idempotent on <code class="mono">id</code>, 16KB cap, 30/min/ip</td><td class="px-5 py-3 mono text-xs">{message, kind?, context?, reporter?, id?}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /v1/feedback</td><td class="px-5 py-3">admin read (valid ANVIL_KEYS bearer), ?limit=n</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET|POST /_qhat</td><td class="px-5 py-3">live conformal recalibration — read or set per-lane qhat, no restart</td><td class="px-5 py-3 mono text-xs">POST {expert, qhat}</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /metrics</td><td class="px-5 py-3">Prometheus text: per-ep counters, per-lane requests/delegates/set_size, latency, uptime</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /v1/whoami</td><td class="px-5 py-3">masked key identity + tenant head + expert lanes</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /guide · /llms.txt</td><td class="px-5 py-3">the embedded operator manual (JSON) / agent plain-text summary</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /_health · /health</td><td class="px-5 py-3">liveness</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr><td class="px-5 py-3 mono text-cyan-300">POST /_shutdown</td><td class="px-5 py-3">token-gated (or loopback-only without keys) shutdown</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">A routing decision, field by field</h2>
+  <div class="grid md:grid-cols-2 gap-6 items-start">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-sm overflow-x-auto">{
+  <span class="text-cyan-300">"action"</span>: <span class="text-amber-300">"delegate"</span>,
+  <span class="text-cyan-300">"route"</span>: <span class="text-amber-300">"collecte"</span>,
+  <span class="text-cyan-300">"confidence"</span>: 0.174,
+  <span class="text-cyan-300">"domain"</span>: <span class="text-amber-300">"mairie_c"</span>,
+  <span class="text-cyan-300">"expert"</span>: <span class="text-amber-300">"mairie_c"</span>,
+  <span class="text-cyan-300">"set_size"</span>: 0,
+  <span class="text-cyan-300">"qhat"</span>: 0.648,
+  <span class="text-cyan-300">"reason"</span>: <span class="text-amber-300">"conformal_abstain"</span>,
+  <span class="text-cyan-300">"latency_ms"</span>: 34
+}</pre>
+    </div>
+    <div class="text-sm text-gray-400 space-y-3">
+      <p><code class="mono text-cyan-300">action</code> — <code class="mono">tool_call</code> | <code class="mono">delegate</code> | <code class="mono">generate</code>. <code class="mono">delegate</code> is a first-class answer, not a failure: route to a bigger model or a human.</p>
+      <p><code class="mono text-cyan-300">reason</code> — why: <code class="mono">low_confidence</code> · <code class="mono">low_gate_confidence</code> · <code class="mono">route_escalate</code> · <code class="mono">noul_escalate</code> · <code class="mono">conformal_abstain</code> · <code class="mono">head_trunk_disagree</code>.</p>
+      <p><code class="mono text-cyan-300">set_size</code>/<code class="mono text-cyan-300">qhat</code> — conformal fields, present on gated lanes. <code class="mono">set_size=1</code> means the prediction set is a singleton (coverage guarantee applies); <code class="mono">0</code> or &gt;1 means abstain.</p>
+      <p><code class="mono text-cyan-300">expert</code> — the lane that answered. Pin it with <code class="mono">{"expert":"mairie_c"}</code> in the body to skip the gate (and noul/score — the lane's own <code class="mono">escalate</code> class is its abstention path).</p>
+      <p><code class="mono text-cyan-300">via</code>/<code class="mono text-cyan-300">tier</code>/<code class="mono text-cyan-300">call</code> — present when execution or upstream delegation ran.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Conformal gating</h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="text-sm text-gray-400 space-y-3">
+      <p>Per lane, a calibrated threshold <code class="mono text-cyan-300">qhat</code> replaces the flat confidence floor: a decision only automates when the head's prediction set is a singleton — a finite-sample coverage guarantee, not a vibes threshold.</p>
+      <p>Set it at boot: <code class="mono text-cyan-300">ANVIL_EXPERT_QHAT=mairie_c:0.648</code> (the alpha=0.02 point on our municipal calibration split — <strong class="text-gray-300">recalibrate on your own data before trusting it</strong>, via <code class="mono">tools/conformal_eval.py</code>).</p>
+      <p>Move it at runtime — no restart:</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># read current qhats</span>
+curl localhost:8097/_qhat
+
+<span class="text-gray-500"># tighten a lane live (ACI hook calls this)</span>
+curl -X POST localhost:8097/_qhat \
+  -d '{"expert":"mairie_c","qhat":0.71}'
+
+<span class="text-gray-500"># closed loop: grade outcomes -> ACI step -> _qhat</span>
+python3 tools/aci_qhat.py feedback/labels.jsonl \
+  --expert mairie_c --alpha 0.02</pre>
+    </div>
+  </div>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">/v1/systemone — Jev-compatible typed questions</h2>
+  <div class="grid md:grid-cols-2 gap-6 items-start">
+    <div class="text-sm text-gray-400 space-y-3">
+      <p>Drop-in request/response surface for Jev clients. <code class="mono text-cyan-300">state</code> accepts a string, object or array. Question types: <code class="mono">noul</code>, <code class="mono">choice</code>, <code class="mono">score</code> (2–10 ordered levels). Choice criteria as a map or <code class="mono">"options":[...]</code> shorthand. Multiple questions per call.</p>
+      <p>Errors: <code class="mono">400</code> missing fields · <code class="mono">422</code> bad type/criteria · <code class="mono">422 {"type":"max_tokens_exceeded"}</code> on context overflow.</p>
+      <p class="text-gray-500"><strong class="text-gray-400">Honesty note:</strong> the contract is complete (19/19 conformance checks in <code class="mono">bench/systemone/contract.sh</code>); the raw 7M trunk's generic candidate semantics are shallow — trained taxonomy heads are the accurate path.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-sm overflow-x-auto">curl localhost:8097/v1/systemone -d '{
+  "state": "charged twice on my invoice",
+  "questions": {
+    "safe": {"type": "noul", "criteria": "safe to automate"},
+    "team": {"type": "choice", "options": ["billing","technical","returns"]},
+    "urgency": {"type": "score", "criteria": ["low","medium","high"]}
+  }
+}'
+<span class="text-gray-500"># → {"answers":{"safe":{"noul":0.02},"team":{"choice":"billing",
+#    "probabilities":{...}},"urgency":{"score":1,"legend":[...]}},
+#    "usage":{...}}</span></pre>
+    </div>
+  </div>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">For agents — MCP + embedded docs</h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="text-sm text-gray-400 space-y-3">
+      <p><code class="mono text-cyan-300">mtlm-mcp</code> is a pure-MFL stdio MCP server exposing two task-shaped tools — <code class="mono">route_request</code> and <code class="mono">typed_questions</code> — so MCP clients (Cursor, Claude Code, agent fleets) call calibrated routing as a native tool.</p>
+      <p>Env: <code class="mono">ANVIL_URL</code> (default <code class="mono">http://127.0.0.1:8097</code>), <code class="mono">ANVIL_KEY</code> (optional bearer). Tool descriptions carry the abstention contract: delegate/abstain means <em>do not guess</em>.</p>
+      <p>The server also self-documents: <code class="mono">GET /guide</code> (full JSON manual) and <code class="mono">GET /llms.txt</code> (one-screen agent summary) report what this instance actually loaded.</p>
+    </div>
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># build the MCP adapter</span>
+machin encode tools/mcp.src &gt; tools/mcp.mfl
+machin build tools/mcp.mfl -o mtlm-mcp
+
+<span class="text-gray-500"># register with your MCP client, e.g.</span>
+ANVIL_URL=http://127.0.0.1:8097 ./mtlm-mcp
+
+<span class="text-gray-500"># tools/list → route_request, typed_questions</span></pre>
+    </div>
+  </div>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Observability</h2>
+  <div class="overflow-x-auto bg-gray-900 border border-gray-800 rounded-xl mb-4">
+    <table class="w-full text-sm">
+      <thead><tr class="border-b border-gray-800 text-gray-400"><td class="px-5 py-3">signal</td><td class="px-5 py-3">where</td><td class="px-5 py-3">what it tells you</td></tr></thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">anvil_requests_total{ep,action}</td><td class="px-5 py-3 mono">/metrics</td><td class="px-5 py-3">traffic split — tool_call vs delegate rate</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">anvil_set_size_sum/count{lane}</td><td class="px-5 py-3 mono">/metrics</td><td class="px-5 py-3">rising set size = calibration aging, before labels arrive</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">anvil_decision_latency_ms_sum/count</td><td class="px-5 py-3 mono">/metrics</td><td class="px-5 py-3">mean decision latency</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">decisions.jsonl</td><td class="px-5 py-3 mono">ANVIL_LOG</td><td class="px-5 py-3">per-decision audit: state, action, conf, reason, set_size</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">tools/monitor.py</td><td class="px-5 py-3 mono">in the tarball</td><td class="px-5 py-3">baseline-vs-recent window drift check, exit 1 on drift</td></tr>
+        <tr><td class="px-5 py-3 mono text-cyan-300">feedback.jsonl</td><td class="px-5 py-3 mono">ANVIL_FEEDBACK_LOG</td><td class="px-5 py-3">production outcomes → labels → ACI recalibration</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-gray-500 text-sm">Recommended loop: Prometheus scrapes <code class="mono">/metrics</code> for live ops → <code class="mono">monitor.py</code> nightly for drift → grade outcomes into <code class="mono">feedback.jsonl</code> → <code class="mono">aci_qhat.py</code> re-tightens the gate. See the <a href="https://blog.intrane.fr/conformal-abstention-7m-router-knows-when-to-say-no" class="text-cyan-400 hover:underline">conformal abstention post</a> for the math.</p>
+</div>
+
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Environment</h2>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-xs md:text-sm overflow-x-auto"><span class="text-cyan-300">ANVIL_HEAD|NOUL|SCORE|GATE</span>=file.head      <span class="text-gray-500"># the four core heads</span>
+<span class="text-cyan-300">ANVIL_EXPERTS</span>=dom:file.head,...            <span class="text-gray-500"># pinned expert lanes</span>
+<span class="text-cyan-300">ANVIL_EXPERT_QHAT</span>=dom:0.648,...            <span class="text-gray-500"># conformal gate per lane (replaces minconf)</span>
+<span class="text-cyan-300">ANVIL_EXPERT_MINCONF</span>=dom:0.5,...           <span class="text-gray-500"># flat floor per lane (legacy)</span>
+<span class="text-cyan-300">ANVIL_KEYS</span>=k1,k2                            <span class="text-gray-500"># bearer auth on /v1/* + feedback admin</span>
+<span class="text-cyan-300">ANVIL_TENANTS</span>=key:file.head,...            <span class="text-gray-500"># per-key tenant head override</span>
+<span class="text-cyan-300">ANVIL_LOG</span>=logs/decisions.jsonl             <span class="text-gray-500"># decision audit log</span>
+<span class="text-cyan-300">ANVIL_FEEDBACK_LOG</span>=feedback.jsonl          <span class="text-gray-500"># submitted feedback</span>
+<span class="text-cyan-300">ANVIL_DELEGATE_URL|KEY|MODEL|SYS</span>            <span class="text-gray-500"># upstream for delegated requests</span>
+<span class="text-cyan-300">ANVIL_S1_T[_CHOICE|_NOUL|_SCORE]</span>            <span class="text-gray-500"># systemone candidate softmax temps</span>
+<span class="text-cyan-300">ANVIL_S1_HEAD</span>=file.head                     <span class="text-gray-500"># trained scorer for systemone candidates</span>
+<span class="text-cyan-300">ANVIL_BIND</span>=127.0.0.1                        <span class="text-gray-500"># bind loopback-only (default 0.0.0.0)</span>
+<span class="text-cyan-300">COLIBRI_THREADS</span>=8                           <span class="text-gray-500"># saturates ~8 on the reference box</span>
+<span class="text-cyan-300">COLIBRI_NOBATCH</span>=1                           <span class="text-gray-500"># disable batched prefill</span></pre>
+  </div>
+</div>
+
+<div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6">
+  <h2 class="text-xl font-bold mb-3">Verify a deployment</h2>
+  <p class="text-gray-400 text-sm mb-4">Two self-checks ship with the product — run them against any instance (local, hosted, a client's):</p>
+  <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># 9 endpoint+gate checks</span>
+./smoke.sh                       <span class="text-gray-500"># HOST=... to point at another instance</span>
+
+<span class="text-gray-500"># 19/19 Jev-contract conformance checks</span>
+HOST=http://localhost:8097 bench/systemone/contract.sh</pre>
+  <p class="text-gray-500 text-sm mt-4">Sources of truth while running: <code class="mono text-cyan-300">GET /guide</code> (JSON manual), <code class="mono text-cyan-300">GET /llms.txt</code> (agent summary), <code class="mono text-cyan-300">GET /v1/whoami</code> (what this instance loaded).</p>
+</div>
