@@ -83,6 +83,8 @@ exec ./anvil-serve models/model.bin "\$PORT"
 EOF
 chmod +x "$PKG/start.sh"
 cp "$(dirname "$0")/smoke.sh" "$PKG/smoke.sh" 2>/dev/null && chmod +x "$PKG/smoke.sh"
+mkdir -p "$PKG/tools"
+cp "$(dirname "$0")/monitor.py" "$PKG/tools/monitor.py" 2>/dev/null
 
 cat > "$PKG/mtlm-router.service" <<EOF
 [Unit]
@@ -109,6 +111,7 @@ no dependencies beyond a Linux x86_64 box.
 
     ./start.sh                 # systemd-free
     ./smoke.sh                 # verifies all endpoints + the conformal gate
+    python3 tools/monitor.py logs/decisions.jsonl   # label-free drift check (exit 1 on drift)
     # or: cp mtlm-router.service ~/.config/systemd/user/ && systemctl --user start mtlm-router
 
 ## Use

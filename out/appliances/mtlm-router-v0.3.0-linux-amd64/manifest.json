@@ -1,0 +1,10 @@
+{
+  "name": "v0.3.0",
+  "built": "2026-10-09T16:27:19Z",
+  "model": {"file": "models/model.bin", "sha256": "4ebfc27e93b540fc2f5ef198cbefcce25e5f2e246d8ec2dffda9629722e9fa07"},
+  "tokenizer": {"file": "models/tokenizer.bin", "sha256": "d9cf1af6992d6295e3fe42344725f2d64a0fad93875c029eaefbb172543ee51a"},
+  "heads": {"decide_mt.head": "2d7bab38dbf3f425e9c437df3fb3eae72ddd2933e924813aff20c01e340f9c58","noul_mt.head": "6621be1506e6e0b8d9989520f3207fe57fe87f217550fe144d948a13acad0109","score_mt.head": "ee043bd0b96330d2ba10d4a055752451ac26cef15733733c4ac0a66af9aa7a49"},
+  "gate": {"file": "models/gate_biz_mt.head", "sha256": "90eadeba42a548a7ac74882fc30cb8e0078064468fc53bfb51d1e94a4e935ccb"},
+  "experts": {"it_helpdesk": {"file": "models/helpdesk_pool_L-3_mean.head", "sha256": "478cae39914d191d49e2290591de70743fbbe557a286a8753bd05d54eb868280"},"mairie": {"file": "models/mairie_mt3.head", "sha256": "e22838829a5758e8294d9c85a0b62e050e40bd9d479b42e86f20bbd84636c706"},"mairie_c": {"file": "models/mairie_mt3c.head", "sha256": "56d5ea26ebc00dba76bc7588263e0e8d12498581a6d3430c2610a4a4eaadf40c"},"clinc": {"file": "models/clinc150_mt3.head", "sha256": "2110652d65a994984176da3d20596f094f5cb7550f70c117a76aac36bae733ec"}},
+  "endpoints": ["/v1/route","/v1/decide","/v1/noul","/v1/score","/v1/assess","/v1/chat/completions","/health"]
+}
