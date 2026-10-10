@@ -9,7 +9,7 @@ risk-vs-coverage curve plus AURC (area under the curve, trapezoid —
 the standard comparable metric for "does confidence order risk").
 
 Usage:
-    python3 bench/risk_coverage.py ../mtl-data/geored/geored12_holdout.jsonl \
+    python3 bench/risk_coverage.py ../mtl-data/municipal/municipal12_holdout.jsonl \
       --url http://127.0.0.1:8111 --expert mairie_c \
       --map collecte_om=collecte,collecte_selective=collecte [--json out.json]
 """

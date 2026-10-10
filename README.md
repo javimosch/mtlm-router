@@ -173,7 +173,7 @@ details in PRODUCT.md §Agent-first surface.
 - `tools/calibrate.py`, `tools/refit_temp.py`, `tools/health_check.py` — ops
 - `tools/package_appliance.sh` — build the self-hosted tarball
 - `docs/MODEL-CARD.md` — bilingual model card
-- `data/geored/` — moved to private `~/ai/mtlm-data` (client-owned corpus)
+- municipal corpus moved to private `mtl-data` repo (client-owned)
 
 ## License
 

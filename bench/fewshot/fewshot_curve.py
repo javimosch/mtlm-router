@@ -1,16 +1,16 @@
 # Few-shot learning curve: N labeled examples/route -> holdout accuracy.
 # Run on rbm21 (needs the HF export + head_probe.py):
 #   python3 fewshot_curve.py
-# Corpus: /tmp/geored_head/geored12_{train,holdout}.jsonl (sync from
-#   ../mtl-data/geored/); model: /root/mtlm/hf/router3s384.
+# Corpus: ../mtl-data/municipal/municipal12_{train,holdout}.jsonl (sync
+#   ../mtl-data/municipal/); model: /root/mtlm/hf/router3s384.
 # Results committed alongside this file as municipal_curve.jsonl.
 import sys, json, random
 sys.path.insert(0, "/root/mtlm/tools")
 import numpy as np
 import head_probe as hp
 
-tr=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/tmp/geored_head/geored12_train.jsonl")]
-ho=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/tmp/geored_head/geored12_holdout.jsonl")]
+tr=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("../mtl-data/municipal/municipal12_train.jsonl")]
+ho=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("../mtl-data/municipal/municipal12_holdout.jsonl")]
 labels=sorted({r[3] for r in tr}); lab={l:i for i,l in enumerate(labels)}
 yho=np.array([lab[r[3]] for r in ho])
 print(f"train={len(tr)} holdout={len(ho)} classes={len(labels)}", file=sys.stderr)

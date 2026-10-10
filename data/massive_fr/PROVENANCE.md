@@ -11,12 +11,12 @@ Majority baseline 5.9%.
 
 Verdict: works but mediocre vs fine-tuned multilingual encoders (~85-91%
 published). The trunk encodes ITS training distribution; heads excel on
-client-distribution exports (geored 79%) not arbitrary intent vocab.
+client-distribution exports (municipal export 79%) not arbitrary intent vocab.
 Product framing: 'a head per client trained on their export' — never
 'generic intent classifier'.
 
 Artifact: massive_fr_m4m.head (70KB, mean@-4, temp 0.762) on rbm21
-/tmp/geored_head/. Not shipped in any appliance — benchmark probe only.
+../mtl-data/municipal/. Not shipped in any appliance — benchmark probe only.
 
 Perf note: head_probe.py's full sweep (5-fold CV x 7 clf params x 12 combos)
 took >4h CPU at 60 classes and was killed; emit_massive.py (single fit per
