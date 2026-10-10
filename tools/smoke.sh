@@ -10,6 +10,9 @@ check() { # name, expr-result, expected-regex
 J='content-type: application/json'
 
 check "health"        "$(curl -s $HOST/health)"                                              '"ok":true'
+check "livez"         "$(curl -s $HOST/livez)"                                               '"ok":true'
+check "readyz"        "$(curl -s $HOST/readyz)"                                              '"ready":true'
+check "lanes"         "$(curl -s $HOST/v1/lanes)"                                            '"lanes":\['
 check "route"         "$(curl -s $HOST/v1/route -H "$J" -d '{"state":"my green bin was not collected","expert":"mairie_c"}')" '"action":"tool_call"'
 check "conformal"     "$(curl -s $HOST/v1/route -H "$J" -d '{"state":"my green bin was not collected","expert":"mairie_c"}')" '"qhat":0.648'
 check "abstain"       "$(curl -s $HOST/v1/route -H "$J" -d '{"state":"xyzzy quux","expert":"mairie_c"}')" 'conformal_abstain|delegate'

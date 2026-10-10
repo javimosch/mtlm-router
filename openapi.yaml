@@ -388,6 +388,61 @@ paths:
       responses:
         '200': {description: ok}
 
+  /livez:
+    get:
+      tags: [ops]
+      summary: Kubernetes-style liveness — always 200 while serving
+      operationId: livez
+      security: []
+      responses:
+        '200': {description: Process is live}
+
+  /readyz:
+    get:
+      tags: [ops]
+      summary: Kubernetes-style readiness — 503 until a head or expert lane is loaded
+      operationId: readyz
+      security: []
+      responses:
+        '200':
+          description: Ready — reports loaded decision surfaces
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ready: {type: boolean}
+                  head_routes: {type: integer}
+                  experts: {type: integer}
+                  gate_domains: {type: integer}
+        '503': {description: Not ready — no head or expert loaded}
+
+  /v1/lanes:
+    get:
+      tags: [ops]
+      summary: Per-lane readiness detail (routes, qhat, minconf, gate)
+      operationId: lanes
+      responses:
+        '200':
+          description: Lane status map
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  model: {type: string}
+                  default: {type: object}
+                  lanes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name: {type: string}
+                        routes: {type: integer}
+                        qhat: {type: number}
+                        minconf: {type: number}
+                  gate: {type: object}
+
   /v1/models:
     get:
       tags: [generative]
