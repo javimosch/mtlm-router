@@ -266,6 +266,11 @@ aligned with https://cli-specs.intrane.fr/ — **28/28 on cli-spec-conformance**
   `GET /v1/whoami` (masked-key tenant identity), `POST /_shutdown`
 - Env knobs: `ANVIL_BIND` (wrapper forces loopback; `start.sh` serves 0.0.0.0),
   `ANVIL_EXPERT_MINCONF` (per-lane abstention floors), `ANVIL_FEEDBACK_LOG`
+- **MCP adapter** (`tools/mcp.src` → `mtlm-mcp`): stdio JSON-RPC server
+  exposing two task-shaped tools — `route_request` (route + confidence +
+  abstain) and `typed_questions` (Jev `/v1/systemone` questions object).
+  Agents call it as a local tool; the adapter proxies `ANVIL_URL`/`ANVIL_KEY`,
+  so MCP hosts get calibrated routing without seeing the HTTP surface.
 
 ## Stack
 
