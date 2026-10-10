@@ -43,6 +43,8 @@ python3 tools/monitor.py logs/decisions.jsonl   <span class="text-gray-500"># la
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /v1/whoami</td><td class="px-5 py-3">masked key identity + tenant head + expert lanes</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /guide · /llms.txt</td><td class="px-5 py-3">the embedded operator manual (JSON) / agent plain-text summary</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /_health · /health</td><td class="px-5 py-3">liveness</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /livez · /readyz</td><td class="px-5 py-3">k8s liveness (always 200) / readiness (503 until a head or lane is loaded)</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /v1/lanes</td><td class="px-5 py-3">per-lane status: routes per head, qhat, minconf, gate domains</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr><td class="px-5 py-3 mono text-cyan-300">POST /_shutdown</td><td class="px-5 py-3">token-gated (or loopback-only without keys) shutdown</td><td class="px-5 py-3 mono text-xs">—</td></tr>
       </tbody>
     </table>
