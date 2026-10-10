@@ -39,6 +39,8 @@ def main():
     ap.add_argument("--appliance", required=True, help="appliance dir containing models/")
     ap.add_argument("--index", default=INDEX_URL)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--apply", action="store_true",
+                    help="also patch <appliance>/start.sh with a managed env block (idempotent)")
     a = ap.parse_args()
 
     index = json.loads(fetch(a.index))
@@ -70,6 +72,12 @@ def main():
 
     conf = (lane.get("conformal") or {})
     qh = conf.get("alpha_0.02", {}).get("qhat") or conf.get("selective_risk_alpha_02", {}).get("qhat")
+    head_rel = "models/" + os.path.basename(heads[0])
+
+    applied = None
+    if a.apply and not a.dry_run:
+        applied = apply_env_block(os.path.join(a.appliance, "start.sh"),
+                                  lane["name"], head_rel, qh)
     out = {
         "ok": True, "lane": f"{lane['name']}@{lane['version']}",
         "status": lane.get("status"), "holdout_acc": lane.get("holdout_acc"),
@@ -78,9 +86,51 @@ def main():
             "ANVIL_EXPERTS_add": f"{lane['name']}:models/{os.path.basename(heads[0])}",
             "ANVIL_EXPERT_QHAT_add": f"{lane['name']}:{qh}" if qh else None,
         },
-        "note": "add the ANVIL_EXPERTS entry to start.sh / systemd env, restart",
+        "applied_to": applied,
+        "note": "restart to activate" if applied else
+                "add the ANVIL_EXPERTS entry to start.sh / systemd env (or re-run with --apply), restart",
     }
     print(json.dumps(out, indent=2))
+
+
+BEGIN = "# >>> mtlm-lanes (managed by lane_install.py — do not edit)"
+END = "# <<< mtlm-lanes <<<"
+
+
+def apply_env_block(start_sh, name, head_rel, qhat):
+    """Idempotently merge a lane env block into start.sh (marker-delimited,
+    Ansible-blockinfile style). Re-running replaces the whole managed block
+    regenerated from its own `# lane` records — multiple lanes accumulate."""
+    if not os.path.exists(start_sh):
+        return None
+    text = open(start_sh).read()
+    lanes = {}
+    if BEGIN in text and END in text:
+        pre, rest = text.split(BEGIN, 1)
+        _, post = rest.split(END, 1)
+        for line in rest.splitlines():
+            if line.startswith("# lane "):
+                _, _, lname, lhead, lq = line.split(" ", 4)
+                lanes[lname] = (lhead.split("=", 1)[1], lq.split("=", 1)[1])
+        text = pre + post.lstrip("\n")
+    lanes[name] = (head_rel, str(qhat) if qhat else "")
+    block = [BEGIN]
+    for lname, (lhead, lq) in sorted(lanes.items()):
+        block.append(f"# lane {lname} head={lhead} qhat={lq}")
+        block.append(f'export ANVIL_EXPERTS="${{ANVIL_EXPERTS:+${{ANVIL_EXPERTS}},}}{lname}:{lhead}"')
+        if lq:
+            block.append(f'export ANVIL_EXPERT_QHAT="${{ANVIL_EXPERT_QHAT:+${{ANVIL_EXPERT_QHAT}},}}{lname}:{lq}"')
+    block.append(END)
+    block = "\n".join(block) + "\n"
+    lines = text.splitlines(keepends=True)
+    for i, l in enumerate(lines):
+        if l.startswith("exec "):
+            lines.insert(i, block)
+            break
+    else:
+        lines.append("\n" + block)
+    open(start_sh, "w").write("".join(lines))
+    return start_sh
 
 
 main()
