@@ -1,6 +1,6 @@
 {{>layout "layout.html"}}
 <div class="mb-12 pt-8">
-  <p class="mono text-cyan-400 text-sm mb-3 tracking-widest">DOCUMENTATION · v0.4.0</p>
+  <p class="mono text-cyan-400 text-sm mb-3 tracking-widest">DOCUMENTATION · v0.5.0</p>
   <h1 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Operator &amp; API docs</h1>
   <p class="text-gray-500 max-w-3xl text-lg">
     Everything the appliance serves, what every field means, and how to run it —
@@ -13,8 +13,8 @@
   <h2 class="text-2xl font-bold mb-4">Install &amp; verify</h2>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
 <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># ~8.2MB, static, no deps — Linux x86_64</span>
-tar xzf mtlm-router-v0.4.0-linux-amd64.tar.gz
-cd mtlm-router-v0.4.0-linux-amd64
+tar xzf mtlm-router-v0.5.0-linux-amd64.tar.gz
+cd mtlm-router-v0.5.0-linux-amd64
 ./start.sh                        <span class="text-gray-500"># serves on :8097</span>
 ./smoke.sh                        <span class="text-gray-500"># 9 checks: health, route, conformal gate, abstain, systemone…</span>
 python3 tools/monitor.py logs/decisions.jsonl   <span class="text-gray-500"># label-free drift check (exit 1 on drift)</span></pre>
