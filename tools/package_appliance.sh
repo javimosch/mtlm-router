@@ -87,6 +87,7 @@ mkdir -p "$PKG/tools"
 cp "$(dirname "$0")/monitor.py" "$PKG/tools/monitor.py" 2>/dev/null
 cp "$(dirname "$0")/shadow_report.py" "$PKG/tools/shadow_report.py" 2>/dev/null
 cp "$(dirname "$0")/../openapi.yaml" "$PKG/openapi.yaml" 2>/dev/null
+mkdir -p "$PKG/ops" && cp "$(dirname "$0")/../ops/RUNBOOK.md" "$PKG/ops/RUNBOOK.md" 2>/dev/null
 
 cat > "$PKG/mtlm-router.service" <<EOF
 [Unit]
