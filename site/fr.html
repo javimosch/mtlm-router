@@ -411,10 +411,16 @@
           <td class="px-5 py-3">73,8 % · AUROC OOS 0,842</td>
           <td class="px-5 py-3"><span class="text-green-300 mono text-xs">gratuit · certifié</span></td>
         </tr>
-        <tr>
+        <tr class="border-b border-gray-800">
           <td class="px-5 py-3 mono text-cyan-300">helpdesk</td>
           <td class="px-5 py-3">5 routes IT + escalate</td>
           <td class="px-5 py-3">corpus synthétique</td>
+          <td class="px-5 py-3"><span class="text-amber-300 mono text-xs">gratuit · démo</span></td>
+        </tr>
+        <tr>
+          <td class="px-5 py-3 mono text-cyan-300">eq_tone</td>
+          <td class="px-5 py-3">5 classes de ton — signaux d'escalade (frustration/détresse)</td>
+          <td class="px-5 py-3">51,4 % · voie volontairement honnête (s'abstient ~84-95 %)</td>
           <td class="px-5 py-3"><span class="text-amber-300 mono text-xs">gratuit · démo</span></td>
         </tr>
       </tbody>
@@ -437,8 +443,8 @@
       <div class="mono text-cyan-300 text-sm mb-2">APPLIANCE</div>
       <div class="text-3xl font-bold mb-1">Gratuit</div>
       <p class="text-gray-500 text-sm mb-4">Apache-2.0, pour toujours.</p>
-      <p class="text-gray-400 text-sm flex-1">L'archive v0.3.0 (~8 Mo) : moteur mhd3 multi-tap, modèle int8, têtes outils/helpdesk/mairie, unité systemd. Tourne sur n'importe quelle machine x86-64, sans GPU ni Python. Vos données ne quittent jamais votre réseau.</p>
-      <a href="{{.github}}/releases/tag/v0.3.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Télécharger v0.3.0</a>
+      <p class="text-gray-400 text-sm flex-1">L'archive v0.4.0 (~8 Mo) : moteur mhd3 multi-tap, modèle int8, têtes outils/helpdesk/mairie, unité systemd, smoke.sh + monitor.py + openapi.yaml. Tourne sur n'importe quelle machine x86-64, sans GPU ni Python. Vos données ne quittent jamais votre réseau.</p>
+      <a href="{{.github}}/releases/tag/v0.4.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Télécharger v0.4.0</a>
     </div>
     <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6 flex flex-col accent-glow">
       <div class="mono text-cyan-300 text-sm mb-2">API HÉBERGÉE</div>
@@ -468,7 +474,7 @@
     rien ne quitte la machine.
   </p>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 overflow-x-auto max-w-3xl mx-auto">
-    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-v0.3.0-linux-amd64.tar.gz &amp;&amp; cd mtlm-router-v0.3.0-linux-amd64</span>
+    <pre class="mono text-sm text-gray-300 leading-relaxed"><code><span class="text-gray-600">$ tar xzf mtlm-router-v0.4.0-linux-amd64.tar.gz &amp;&amp; cd mtlm-router-v0.4.0-linux-amd64</span>
 <span class="text-gray-600">$ ./start.sh &amp;</span>
 <span class="text-gray-600">$ curl localhost:8097/v1/route -d '{"state":"Dépôt illicite. micro onde","expert":"mairie"}'</span>
 <span class="text-green-300">{"route":"depot_illicite","domain":"mairie","action":"tool_call","confidence":0.999,...}</span></code></pre>
