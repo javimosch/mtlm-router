@@ -35,14 +35,55 @@ def pick(lanes, spec):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("lane", help="name or name@version, e.g. eq_tone or clinc150@0.1.2")
+    ap.add_argument("lane", nargs="?", help="name or name@version, e.g. eq_tone or clinc150@0.1.2")
     ap.add_argument("--appliance", required=True, help="appliance dir containing models/")
     ap.add_argument("--index", default=INDEX_URL)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--apply", action="store_true",
                     help="also patch <appliance>/start.sh with a managed env block (idempotent)")
+    ap.add_argument("--list", action="store_true",
+                    help="list lanes recorded in the appliance's managed block")
+    ap.add_argument("--uninstall", metavar="NAME",
+                    help="remove lane NAME from the managed block and delete its head")
     a = ap.parse_args()
 
+    start_sh = os.path.join(a.appliance, "start.sh")
+    if a.list:
+        text = open(start_sh).read() if os.path.exists(start_sh) else ""
+        lanes = read_lanes(text)
+        print(json.dumps({"ok": True, "lanes": [
+            {"name": n, "head": kv.get("head"), "qhat": kv.get("qhat"),
+             "ver": kv.get("ver"),
+             "head_present": os.path.exists(os.path.join(a.appliance, kv.get("head", "")))}
+            for n, kv in sorted(lanes.items())]}, indent=2))
+        sys.exit(0)
+    if a.uninstall:
+        text = open(start_sh).read() if os.path.exists(start_sh) else ""
+        lanes = read_lanes(text)
+        if a.uninstall not in lanes:
+            print(json.dumps({"ok": False, "error": f"{a.uninstall} not in managed block",
+                              "installed": sorted(lanes)})); sys.exit(1)
+        head = lanes.pop(a.uninstall)["head"]
+        newtext = text
+        if BEGIN in text and END in text:
+            pre, rest = text.split(BEGIN, 1)
+            _, post = rest.split(END, 1)
+            newtext = pre + post.lstrip("\n")
+            # regenerate via apply for remaining lanes
+            open(start_sh, "w").write(newtext)
+            for n, kv in list(lanes.items()):
+                apply_env_block(start_sh, n, kv["head"],
+                                None if kv.get("qhat") in (None, "-") else kv["qhat"],
+                                kv.get("ver", "-"))
+        hp = os.path.join(a.appliance, head)
+        if os.path.exists(hp):
+            os.remove(hp)
+        print(json.dumps({"ok": True, "uninstalled": a.uninstall,
+                          "removed_head": head, "remaining": sorted(lanes)}))
+        sys.exit(0)
+
+    if not a.lane:
+        ap.error("lane required (or use --list/--uninstall)")
     index = json.loads(fetch(a.index))
     lane = pick(index.get("lanes", []), a.lane)
     if lane is None:
@@ -77,7 +118,7 @@ def main():
     applied = None
     if a.apply and not a.dry_run:
         applied = apply_env_block(os.path.join(a.appliance, "start.sh"),
-                                  lane["name"], head_rel, qh)
+                                  lane["name"], head_rel, qh, lane["version"])
     out = {
         "ok": True, "lane": f"{lane['name']}@{lane['version']}",
         "status": lane.get("status"), "holdout_acc": lane.get("holdout_acc"),
@@ -97,29 +138,39 @@ BEGIN = "# >>> mtlm-lanes (managed by lane_install.py — do not edit)"
 END = "# <<< mtlm-lanes <<<"
 
 
-def apply_env_block(start_sh, name, head_rel, qhat):
+def read_lanes(text):
+    """Parse `# lane` records out of a managed block. Each record:
+    # lane <name> head=<rel> qhat=<v|-> ver=<semver|->"""
+    lanes = {}
+    if BEGIN in text and END in text:
+        rest = text.split(BEGIN, 1)[1].split(END, 1)[0]
+        for line in rest.splitlines():
+            if line.startswith("# lane "):
+                kv = dict(p.split("=", 1) for p in line.split(" ")[3:] if "=" in p)
+                lanes[line.split(" ")[2]] = kv
+    return lanes
+
+
+def apply_env_block(start_sh, name, head_rel, qhat, ver):
     """Idempotently merge a lane env block into start.sh (marker-delimited,
     Ansible-blockinfile style). Re-running replaces the whole managed block
     regenerated from its own `# lane` records — multiple lanes accumulate."""
     if not os.path.exists(start_sh):
         return None
     text = open(start_sh).read()
-    lanes = {}
+    lanes = read_lanes(text)
     if BEGIN in text and END in text:
         pre, rest = text.split(BEGIN, 1)
         _, post = rest.split(END, 1)
-        for line in rest.splitlines():
-            if line.startswith("# lane "):
-                _, _, lname, lhead, lq = line.split(" ", 4)
-                lanes[lname] = (lhead.split("=", 1)[1], lq.split("=", 1)[1])
         text = pre + post.lstrip("\n")
-    lanes[name] = (head_rel, str(qhat) if qhat else "")
+    lanes[name] = {"head": head_rel, "qhat": str(qhat) if qhat else "-",
+                   "ver": ver}
     block = [BEGIN]
-    for lname, (lhead, lq) in sorted(lanes.items()):
-        block.append(f"# lane {lname} head={lhead} qhat={lq}")
-        block.append(f'export ANVIL_EXPERTS="${{ANVIL_EXPERTS:+${{ANVIL_EXPERTS}},}}{lname}:{lhead}"')
-        if lq:
-            block.append(f'export ANVIL_EXPERT_QHAT="${{ANVIL_EXPERT_QHAT:+${{ANVIL_EXPERT_QHAT}},}}{lname}:{lq}"')
+    for lname, kv in sorted(lanes.items()):
+        block.append(f"# lane {lname} head={kv['head']} qhat={kv.get('qhat','-')} ver={kv.get('ver','-')}")
+        block.append(f'export ANVIL_EXPERTS="${{ANVIL_EXPERTS:+${{ANVIL_EXPERTS}},}}{lname}:{kv["head"]}"')
+        if kv.get("qhat") not in (None, "", "-"):
+            block.append(f'export ANVIL_EXPERT_QHAT="${{ANVIL_EXPERT_QHAT:+${{ANVIL_EXPERT_QHAT}},}}{lname}:{kv["qhat"]}"')
     block.append(END)
     block = "\n".join(block) + "\n"
     lines = text.splitlines(keepends=True)

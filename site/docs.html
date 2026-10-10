@@ -26,12 +26,13 @@ curl -s localhost:8097/v1/route -H 'content-type: application/json' \
 <span class="text-gray-500"># 3. verify the whole surface (12 checks)</span>
 ./smoke.sh http://localhost:8097
 
-<span class="text-gray-500"># 4. install a certified lane from the catalog</span>
-python3 tools/lane_install.py clinc150 --appliance .
-<span class="text-gray-500"># downloads the pack, verifies tarball+head sha256, writes models/,
-#  prints the exact ANVIL_EXPERTS / ANVIL_EXPERT_QHAT env lines to add</span>
+<span class="text-gray-500"># 4. install a certified lane from the catalog — --apply patches start.sh</span>
+python3 tools/lane_install.py clinc150 --appliance . --apply
+<span class="text-gray-500"># verifies tarball+head sha256, writes models/, and adds an idempotent
+#  managed env block to start.sh — no manual edits</span>
+python3 tools/lane_install.py --appliance . --list   <span class="text-gray-500"># what's installed</span>
 
-<span class="text-gray-500"># 5. add the printed env lines, restart, confirm the lane is live</span>
+<span class="text-gray-500"># 5. restart, confirm the lane is live</span>
 curl -s localhost:8097/readyz        <span class="text-gray-500"># "experts":5</span>
 curl -s localhost:8097/v1/lanes      <span class="text-gray-500"># clinc: 151 routes + qhat</span></pre>
   </div>
