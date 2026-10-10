@@ -101,11 +101,12 @@ def main():
                     fail(f"head has {ncls} classes vs {len(tax_labels)} taxonomy; extra is not a known fallback", errs)
 
     # honesty gate: 'certified' must carry a leak-free eval
-    lic = (man.get("license", "") + " " + man.get("provenance", "")).lower()
     metrics = man.get("metrics", {})
-    certified = "certified" in lic or man.get("certified") is True
+    certified = man.get("status") == "certified" or man.get("certified") is True
     if certified and not (metrics.get("holdout_acc") is not None and metrics.get("n_holdout")):
         fail("claimed certified but metrics lack holdout_acc/n_holdout", errs)
+    if "status" in man and man["status"] not in ("certified", "demo"):
+        fail(f"unknown status {man['status']}", errs)
 
     ok = not errs
     print(json.dumps({

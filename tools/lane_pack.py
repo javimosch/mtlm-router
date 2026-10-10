@@ -25,6 +25,8 @@ def main():
     p.add_argument("--labels", required=True, help="name :: description lines")
     p.add_argument("--eval-json", required=True, help='{"holdout_acc":..,"n":..,"oos_auroc":..,"qhat":..,"ops":[...]}')
     p.add_argument("--license", required=True)
+    p.add_argument("--status", required=True, choices=["certified", "demo"],
+                   help="certified = leak-free holdout eval stands behind it; demo = illustrative only")
     p.add_argument("--provenance", required=True)
     p.add_argument("--out", required=True)
     a = p.parse_args()
@@ -38,6 +40,7 @@ def main():
         "head_sha256": hashlib.sha256(h).hexdigest(),
         "taxonomy": [l.split("::")[0].strip() for l in open(a.labels) if "::" in l],
         "metrics": ev,
+        "status": a.status,
         "provenance": a.provenance,
         "license": a.license,
         "runtime": "anvil-serve >= v0.3.0 (ANVIL_EXPERTS=<lane>:<head>, ANVIL_EXPERT_QHAT if provided)",
