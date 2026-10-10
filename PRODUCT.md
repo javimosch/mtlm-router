@@ -279,3 +279,12 @@ aligned with https://cli-specs.intrane.fr/ — **28/28 on cli-spec-conformance**
 - runtime: [machin-anvil](https://github.com/javimosch/machin-anvil) (pure MFL,
   OpenAI-compatible + decision endpoints)
 - training + evals + reference dispatcher: this repo (`tools/`)
+
+## Lane packs — the sellable artifact
+
+`tools/lane_pack.py` assembles a **certified lane pack** (`*.lanepack.tar.gz`:
+head + manifest w/ metrics+sha256 + eval.json + labels + license). Certified
+= leak-free holdout eval + conformal operating point; demo packs without
+eval are marked as such. Catalog repo: github.com/javimosch/mtlm-heads
+(spec + free lanes). Client-fitted lanes live in private mtlm-data — never
+publish a head trained on client exports.
