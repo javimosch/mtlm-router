@@ -87,7 +87,7 @@ A frozen 7M trunk; domain knowledge lives in kilobyte `.head` files:
 
 ```bash
 ANVIL_GATE=moe_gate.head \
-ANVIL_EXPERTS="it_helpdesk:helpdesk.head,fleet_gate:fit.head,mairie:geored.head" \
+ANVIL_EXPERTS="it_helpdesk:helpdesk.head,fleet_gate:fit.head,mairie:mairie.head" \
 ./anvil-serve model.bin 8401
 ```
 
@@ -173,7 +173,7 @@ details in PRODUCT.md §Agent-first surface.
 - `tools/calibrate.py`, `tools/refit_temp.py`, `tools/health_check.py` — ops
 - `tools/package_appliance.sh` — build the self-hosted tarball
 - `docs/MODEL-CARD.md` — bilingual model card
-- `data/geored/` — real-corpus extraction notes + provenance (production-derived)
+- `data/geored/` — moved to private `~/ai/mtlm-data` (client-owned corpus)
 
 ## License
 

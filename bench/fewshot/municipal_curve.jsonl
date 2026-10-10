@@ -1,0 +1,9 @@
+{"n_per_class": 5, "rows": 80, "acc": 0.4945, "auto@0.7": 0.499, "err_auto": 0.269}
+{"n_per_class": 10, "rows": 155, "acc": 0.5861, "auto@0.7": 0.504, "err_auto": 0.1536}
+{"n_per_class": 25, "rows": 350, "acc": 0.6603, "auto@0.7": 0.596, "err_auto": 0.1724}
+{"n_per_class": 50, "rows": 639, "acc": 0.6793, "auto@0.7": 0.638, "err_auto": 0.1708}
+{"n_per_class": 100, "rows": 1141, "acc": 0.7093, "auto@0.7": 0.675, "err_auto": 0.1429}
+{"n_per_class": 200, "rows": 1848, "acc": 0.7299, "auto@0.7": 0.652, "err_auto": 0.1138}
+{"n_per_class": 400, "rows": 2709, "acc": 0.7678, "auto@0.7": 0.646, "err_auto": 0.0929}
+{"n_per_class": "all", "rows": 5799, "acc": 0.7962, "auto@0.7": 0.659, "err_auto": 0.0671}
+

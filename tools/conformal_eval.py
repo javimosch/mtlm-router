@@ -13,7 +13,7 @@ operating point, instead of hand-tuning min_conf on a curve. Compare
 against the raw-confidence floor printed below for the same eval split.
 
 Usage:
-  python3 tools/conformal_eval.py --holdout data/geored/geored12_holdout.jsonl \
+  python3 tools/conformal_eval.py --holdout ../mtl-data/geored/geored12_holdout.jsonl \
       --url http://127.0.0.1:8398 --map collecte_om=collecte,collecte_selective=collecte
   (--probs scored.json to reuse a cached score pass)
 """

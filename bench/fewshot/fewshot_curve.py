@@ -2,8 +2,8 @@
 # Run on rbm21 (needs the HF export + head_probe.py):
 #   python3 fewshot_curve.py
 # Corpus: /tmp/geored_head/geored12_{train,holdout}.jsonl (sync from
-#   data/geored/); model: /root/mtlm/hf/router3s384.
-# Results committed alongside this file as geored12_curve.jsonl.
+#   ../mtl-data/geored/); model: /root/mtlm/hf/router3s384.
+# Results committed alongside this file as municipal_curve.jsonl.
 import sys, json, random
 sys.path.insert(0, "/root/mtlm/tools")
 import numpy as np

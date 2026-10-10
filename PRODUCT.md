@@ -179,7 +179,7 @@ harvested rows into the next `moe_gate.head`.
 
 ## Field results on real corpora (2026-10)
 
-- **Municipal requests (geored12, real production export, 6,402 rows, 15
+- **Municipal requests (municipal corpus, real production export, 6,402 rows, 15
   routes): 81.5% live / 82.5% offline, leak-free** (mhd3 multi-tap head:
   concat of max-pooled taps at layers -4/-2/-3, one forward pass;
   single-tap equivalent 78.5% live). Merging the ambiguous
@@ -216,7 +216,7 @@ harvested rows into the next `moe_gate.head`.
   worst-class automation 66.7% exposed — the fairness check you'd want
   before trusting a municipal deployment).
 - **How much data does a lane need?** Few-shot learning curve on the real
-  municipal corpus (geored12, 16 routes; LR head on frozen-trunk features,
+  municipal corpus (16 routes; LR head on frozen-trunk features,
   633-row holdout, `bench/fewshot/`): 5 ex/class → 49%, 25 → 66%, 50 → 68%,
   100 → 71%, 200 → 73%, 400 → 77%, full 5.8k → 80%. Two reads: a working
   lane appears at **~50 labeled examples per route** — not 50,000 — and
