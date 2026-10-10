@@ -85,6 +85,7 @@ chmod +x "$PKG/start.sh"
 cp "$(dirname "$0")/smoke.sh" "$PKG/smoke.sh" 2>/dev/null && chmod +x "$PKG/smoke.sh"
 mkdir -p "$PKG/tools"
 cp "$(dirname "$0")/monitor.py" "$PKG/tools/monitor.py" 2>/dev/null
+cp "$(dirname "$0")/shadow_report.py" "$PKG/tools/shadow_report.py" 2>/dev/null
 cp "$(dirname "$0")/../openapi.yaml" "$PKG/openapi.yaml" 2>/dev/null
 
 cat > "$PKG/mtlm-router.service" <<EOF
@@ -113,6 +114,7 @@ no dependencies beyond a Linux x86_64 box.
     ./start.sh                 # systemd-free
     ./smoke.sh                 # verifies all endpoints + the conformal gate
     python3 tools/monitor.py logs/decisions.jsonl   # label-free drift check (exit 1 on drift)
+    python3 tools/shadow_report.py logs/decisions.jsonl  # canary verdict: promote(0)/hold(2)/wait(3)
     # or: cp mtlm-router.service ~/.config/systemd/user/ && systemctl --user start mtlm-router
 
 ## Use
