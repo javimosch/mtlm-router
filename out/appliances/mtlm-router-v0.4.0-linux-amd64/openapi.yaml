@@ -1,0 +1,499 @@
+openapi: 3.0.3
+info:
+  title: mtlm-router API
+  description: |
+    Self-hosted typed decision layer — a 7M-param trunk + small decision heads,
+    pure MFL, CPU-only (~8MB appliance, ~30ms decisions).
+
+    Delegation is a first-class answer: `action: "delegate"` plus a `reason`
+    means route the request to a bigger model or a human — never guess.
+    Conformal-gated lanes return `set_size`/`qhat`; only singleton prediction
+    sets (`set_size: 1`) carry the coverage guarantee.
+  version: 0.3.0
+  contact:
+    name: Javier Leandro Arancibia
+    url: https://github.com/javimosch/mtlm-router
+  license:
+    name: Apache-2.0
+servers:
+  - url: http://localhost:8097
+    description: appliance default
+  - url: https://api.mtlm-router.intrane.fr
+    description: hosted demo (bearer key required)
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: decide
+    description: Typed decision endpoints (heads over pooled hidden states — ~one prefill, no generation)
+  - name: systemone
+    description: Jev/TypeSafe-compatible typed questions
+  - name: generative
+    description: OpenAI-compatible generation
+  - name: ops
+    description: Health, metrics, calibration, admin
+
+paths:
+  /v1/route:
+    post:
+      tags: [decide]
+      summary: Route a natural-language request through gate → expert lane
+      description: |
+        The dispatcher. Picks a domain (gate head), scores an expert head,
+        applies the lane's abstention policy (minconf floor or conformal gate),
+        optionally executes a tool call (`execute: true`).
+        Pinning `expert` skips the gate AND noul/score — the lane's own
+        `escalate` class is its abstention path.
+      operationId: route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state: {type: string, description: "the request text (or use messages)"}
+                messages:
+                  type: array
+                  items: {type: object}
+                  description: OpenAI-style messages; last user message is used
+                context:
+                  type: array
+                  items: {type: string}
+                  description: optional prior context lines
+                expert: {type: string, description: "pin a lane (e.g. mairie_c); skips gate"}
+                options:
+                  type: array
+                  items: {type: string}
+                  description: restrict to this subset of routes
+                min_conf: {type: number, description: "per-request confidence floor (beats every env floor)"}
+                min_gate_conf: {type: number}
+                execute: {type: boolean, description: "run the routed tool call when head and trunk agree"}
+            examples:
+              pinned:
+                value: {state: "ma poubelle n'a pas été ramassée", expert: mairie_c}
+              gated:
+                value: {state: "unlock carol's account", execute: true}
+      responses:
+        '200':
+          description: Routing decision
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/RouteDecision'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+
+  /v1/decide:
+    post:
+      tags: [decide]
+      summary: Route head only
+      operationId: decide
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state: {type: string}
+                messages: {type: array, items: {type: object}}
+                context: {type: array, items: {type: string}}
+      responses:
+        '200':
+          description: Decision
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  choice: {type: string}
+                  conf: {type: number}
+                  latency_ms: {type: integer}
+        '400': {$ref: '#/components/responses/BadRequest'}
+
+  /v1/noul:
+    post:
+      tags: [decide]
+      summary: Escalation yes/no head
+      operationId: noul
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {state: {type: string}}
+      responses:
+        '200':
+          description: Escalation answer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer: {type: string, enum: [yes, no]}
+                  p_yes: {type: number}
+        '400': {$ref: '#/components/responses/BadRequest'}
+
+  /v1/score:
+    post:
+      tags: [decide]
+      summary: Complexity tier 1-4
+      operationId: score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {state: {type: string}}
+      responses:
+        '200':
+          description: Complexity grade
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  grade: {type: string}
+                  conf: {type: number}
+        '400': {$ref: '#/components/responses/BadRequest'}
+
+  /v1/assess:
+    post:
+      tags: [decide]
+      summary: decide + noul + score in one forward pass
+      operationId: assess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {state: {type: string}}
+      responses:
+        '200':
+          description: Combined assessment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  choice: {type: string}
+                  conf: {type: number}
+                  grade: {type: string}
+                  p_yes: {type: number}
+        '400': {$ref: '#/components/responses/BadRequest'}
+
+  /v1/systemone:
+    post:
+      tags: [systemone]
+      summary: Jev-compatible typed questions (noul | choice | score)
+      description: |
+        Contract-compatible with Jev/TypeSafe clients. `state` accepts a string,
+        object or array. Choice criteria may be a criteria map or an `options`
+        array shorthand. Score criteria are 2–10 ordered levels. Multiple
+        questions per request, stable answer keys.
+        Conformance: `bench/systemone/contract.sh` (19 checks).
+      operationId: systemone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [state, questions]
+              properties:
+                state:
+                  description: string, object, or array
+                  oneOf:
+                    - {type: string}
+                    - {type: object}
+                    - {type: array, items: {}}
+                model: {type: string, description: passthrough}
+                questions:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/Question'
+            example:
+              state: charged twice on my invoice
+              questions:
+                safe: {type: noul, criteria: safe to automate}
+                team: {type: choice, options: [billing, technical, returns]}
+                urgency: {type: score, criteria: [low, medium, high]}
+      responses:
+        '200':
+          description: Typed answers keyed by question id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  model: {type: string}
+                  answers:
+                    type: object
+                    additionalProperties: true
+                  usage:
+                    type: object
+                    properties:
+                      input_tokens: {type: integer}
+                      output_tokens: {type: integer}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+
+  /v1/chat/completions:
+    post:
+      tags: [generative]
+      summary: OpenAI-compatible generative path (SSE stream)
+      operationId: chatCompletions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [messages]
+              properties:
+                messages: {type: array, items: {type: object}}
+                model: {type: string}
+                stream: {type: boolean}
+                max_tokens: {type: integer}
+                temperature: {type: number}
+      responses:
+        '200':
+          description: Chat completion (JSON or SSE stream)
+          content:
+            application/json:
+              schema: {type: object}
+
+  /v1/feedback:
+    post:
+      tags: [ops]
+      summary: Submit feedback / labeled outcome (idempotent on id)
+      description: Open submit — 16KB cap, 30/min/ip. Labels feed ACI recalibration.
+      operationId: submitFeedback
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: {type: string}
+                kind: {type: string}
+                context: {type: string}
+                reporter: {type: string}
+                id: {type: string, description: idempotency key}
+      responses:
+        '200': {description: Accepted}
+    get:
+      tags: [ops]
+      summary: Read feedback (admin)
+      operationId: listFeedback
+      parameters:
+        - {name: limit, in: query, schema: {type: integer}}
+      responses:
+        '200': {description: Feedback rows}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+
+  /_qhat:
+    get:
+      tags: [ops]
+      summary: Read live conformal qhats per lane
+      operationId: getQhat
+      responses:
+        '200': {description: expert → qhat map}
+    post:
+      tags: [ops]
+      summary: Set a lane's qhat without restart (ACI/flywheel hook)
+      operationId: setQhat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [expert, qhat]
+              properties:
+                expert: {type: string}
+                qhat: {type: number}
+      responses:
+        '200': {description: Updated}
+        '403': {description: Forbidden (non-loopback without keys)}
+
+  /metrics:
+    get:
+      tags: [ops]
+      summary: Prometheus text format metrics
+      description: |
+        anvil_requests_total{ep,action}, anvil_lane_requests_total/expert,
+        anvil_delegates_total, anvil_set_size_sum/count{lane},
+        anvil_decision_latency_ms_sum/count, anvil_http_requests_total{ep},
+        anvil_uptime_seconds.
+      operationId: metrics
+      security: []
+      responses:
+        '200':
+          description: OpenMetrics text
+          content:
+            text/plain:
+              schema: {type: string}
+
+  /guide:
+    get:
+      tags: [ops]
+      summary: Embedded operator manual (JSON) — reports what this instance loaded
+      operationId: guide
+      security: []
+      responses:
+        '200': {description: Full JSON manual}
+
+  /llms.txt:
+    get:
+      tags: [ops]
+      summary: One-screen plain-text summary for agents
+      operationId: llmsTxt
+      security: []
+      responses:
+        '200':
+          content:
+            text/plain: {schema: {type: string}}
+
+  /_health:
+    get:
+      tags: [ops]
+      summary: Liveness
+      operationId: health
+      security: []
+      responses:
+        '200':
+          description: Service status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  service: {type: string}
+                  model: {type: string}
+
+  /health:
+    get:
+      tags: [ops]
+      summary: Liveness (alias)
+      operationId: healthAlias
+      security: []
+      responses:
+        '200': {description: ok}
+
+  /v1/models:
+    get:
+      tags: [generative]
+      summary: Model id
+      operationId: models
+      responses:
+        '200': {description: Model list}
+
+  /v1/whoami:
+    get:
+      tags: [ops]
+      summary: Masked key identity + tenant head + expert lanes
+      operationId: whoami
+      responses:
+        '200': {description: Identity}
+
+  /_shutdown:
+    post:
+      tags: [ops]
+      summary: Graceful shutdown (token-gated or loopback-only without keys)
+      operationId: shutdown
+      responses:
+        '200': {description: Shutting down}
+        '403': {description: Forbidden}
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: ANVIL_KEYS — required on /v1/* when keys are configured
+
+  schemas:
+    Question:
+      type: object
+      required: [type]
+      properties:
+        type: {type: string, enum: [noul, choice, score]}
+        instructions: {type: string}
+        criteria:
+          description: "noul: phrase · choice: map of option→description · score: 2-10 ordered levels"
+          oneOf:
+            - {type: string}
+            - {type: object}
+            - {type: array, items: {type: string}}
+        options:
+          type: array
+          items: {type: string}
+          description: choice shorthand — alternative to a criteria map
+
+    RouteDecision:
+      type: object
+      properties:
+        object: {type: string, example: route}
+        model: {type: string}
+        action:
+          type: string
+          enum: [tool_call, delegate, generate]
+          description: "delegate is a first-class answer — never guess through it"
+        route: {type: string}
+        confidence: {type: number}
+        p_yes: {type: number}
+        domain: {type: string}
+        gate_confidence: {type: number}
+        expert: {type: string}
+        set_size:
+          type: integer
+          description: conformal prediction-set size; 1 = singleton (automatable), 0 or >1 = abstain
+        qhat: {type: number, description: lane's calibrated threshold}
+        reason:
+          type: string
+          enum: [ok, low_confidence, low_gate_confidence, route_escalate, noul_escalate, conformal_abstain, head_trunk_disagree]
+        via: {type: string}
+        tier: {type: string}
+        call:
+          type: object
+          properties:
+            name: {type: string}
+            arguments: {type: object}
+        content: {type: string}
+        latency_ms: {type: integer}
+
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message: {type: string}
+            type:
+              type: string
+              enum: [invalid_request_error, max_tokens_exceeded]
+
+  responses:
+    BadRequest:
+      description: Missing/invalid required fields
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ApiError'}
+    Unauthorized:
+      description: Missing or invalid bearer key
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ApiError'}
+    Unprocessable:
+      description: "Bad question type/criteria, or context overflow (type: max_tokens_exceeded)"
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ApiError'}

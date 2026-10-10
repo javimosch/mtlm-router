@@ -1,0 +1,12 @@
+[Unit]
+Description=mtlm-router — typed decision layer (pure MFL)
+After=network.target
+[Service]
+Type=simple
+WorkingDirectory=%h/mtlm-router-v0.4.0-linux-amd64
+Environment=ANVIL_TOOLS_INJECT=0 ANVIL_LOG=logs/decisions.jsonl ANVIL_HEAD=models/decide_mt.head ANVIL_NOUL=models/noul_mt.head ANVIL_SCORE=models/score_mt.head ANVIL_GATE=models/gate_biz_mt.head ANVIL_EXPERTS=it_helpdesk:models/helpdesk_pool_L-3_mean.head,mairie:models/mairie_mt3.head,mairie_c:models/mairie_mt3c.head,clinc:models/clinc150_mt3.head
+ExecStart=%h/mtlm-router-v0.4.0-linux-amd64/anvil-serve models/model.bin 8097
+Restart=on-failure
+RestartSec=3
+[Install]
+WantedBy=default.target
