@@ -1,0 +1,71 @@
+// mcp.src — stdio MCP server exposing mtlm-router as two task-shaped tools.
+// Build: machin encode mcp.src > mcp.mfl && machin build mcp.mfl -o mtlm-mcp
+// Env:   ANVIL_URL (default http://127.0.0.1:8097), ANVIL_KEY (bearer)
+// Register in an MCP client as a stdio server; every call proxies the local
+// appliance — the model never sees the HTTP surface.
+
+var base = "http://127.0.0.1:8097"
+var key = ""
+
+func unq(s) (o) {
+	o = s
+	if len(s) >= 2 && has_prefix(s, "\"") && has_suffix(s, "\"") { o = substr(s, 1, len(s)-1) }
+	return
+}
+
+func jesc(s) (o) {
+	o = replace(s, "\\", "\\\\")
+	o = replace(o, "\"", "\\\"")
+	o = replace(o, "\n", "\\n")
+	o = replace(o, "\r", "\\r")
+	o = replace(o, "\t", "\\t")
+	return
+}
+
+func tool_result(id, text, iserr) {
+	println("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"" + jesc(text) + "\"}],\"isError\":" + iserr + "}}")
+}
+
+func call_tool(id, name, args) {
+	path := ""
+	if name == "route_request" { path = "/v1/route" }
+	if name == "typed_questions" { path = "/v1/systemone" }
+	if len(path) == 0 {
+		println("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"error\":{\"code\":-32601,\"message\":\"unknown tool: " + jesc(name) + "\"}}")
+		return
+	}
+	hdr := []string{"content-type: application/json"}
+	if len(key) > 0 { hdr = append(hdr, "Authorization: Bearer " + key) }
+	st, b, e := http_request("POST", base + path, hdr, args)
+	if len(e) > 0 { tool_result(id, "upstream error: " + e, "true")  return }
+	if len(b) == 0 { tool_result(id, "empty response (status " + str(st) + ")", "true")  return }
+	tool_result(id, b, "false")
+}
+
+func main() {
+	if len(env("ANVIL_URL")) > 0 { base = env("ANVIL_URL") }
+	key = env("ANVIL_KEY")
+	while true {
+		line := input()
+		if len(line) == 0 { return }
+		m, _ := json_get(line, ".method")
+		m = unq(m)
+		id, _ := json_get(line, ".id")
+		if len(id) == 0 { id = "-1" }  // notification — handled, never replied to
+		if m == "initialize" && id != "-1" {
+			println("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{\"tools\":{}},\"serverInfo\":{\"name\":\"mtlm-router\",\"version\":\"0.3.0\"}}")
+		}
+		if m == "tools/list" && id != "-1" {
+			println("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":{\"tools\":[" +
+				"{\"name\":\"route_request\",\"description\":\"Route a free-text request to the best tool/route with calibrated confidence and abstention. 'state' is the request text; 'expert' optionally pins a domain lane (mairie_c, clinc, it_helpdesk). Returns action (tool_call|delegate|clarify), route, confidence, reason — delegate/abstain means do NOT guess, hand off.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"state\":{\"type\":\"string\"},\"expert\":{\"type\":\"string\"},\"context\":{\"type\":\"array\"}},\"required\":[\"state\"]}}," +
+				"{\"name\":\"typed_questions\",\"description\":\"Evaluate typed Jev-style questions about a state: noul (yes/no probability), choice (pick from options map or array), score (rating scale 2-10 levels). 'questions' maps ids to {type, instructions, criteria|options}.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"state\":{},\"questions\":{\"type\":\"object\"}},\"required\":[\"state\",\"questions\"]}}" +
+				"]}}")
+		}
+		if m == "tools/call" && id != "-1" {
+			name, _ := json_get(line, ".params.name")
+			args, _ := json_get(line, ".params.arguments")
+			if len(args) == 0 { args = "{}" }
+			call_tool(id, unq(name), args)
+		}
+	}
+}
