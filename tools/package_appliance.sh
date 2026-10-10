@@ -85,6 +85,7 @@ chmod +x "$PKG/start.sh"
 cp "$(dirname "$0")/smoke.sh" "$PKG/smoke.sh" 2>/dev/null && chmod +x "$PKG/smoke.sh"
 mkdir -p "$PKG/tools"
 cp "$(dirname "$0")/monitor.py" "$PKG/tools/monitor.py" 2>/dev/null
+cp "$(dirname "$0")/../openapi.yaml" "$PKG/openapi.yaml" 2>/dev/null
 
 cat > "$PKG/mtlm-router.service" <<EOF
 [Unit]
