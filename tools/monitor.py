@@ -45,11 +45,15 @@ def summarize(rows):
         autos = [r for r in rs if auto(r)]
         sets = [r["set_size"] for r in rs if r.get("set_size") is not None]
         confs = [r.get("confidence", r.get("conf")) for r in autos if r.get("confidence", r.get("conf")) is not None]
+        shad = [r["shadow"] for r in rs if isinstance(r.get("shadow"), dict)]
+        agrees = [1 if s.get("agree") else 0 for s in shad]
         out[lane] = {
             "n": len(rs),
             "auto_pct": round(len(autos) / len(rs) * 100, 1) if rs else 0,
             "set_size_mean": round(statistics.mean(sets), 3) if sets else None,
             "conf_mean": round(statistics.mean(confs), 3) if confs else None,
+            "shadow_n": len(shad),
+            "shadow_agree_pct": round(statistics.mean(agrees) * 100, 1) if agrees else None,
         }
     return out
 

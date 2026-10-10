@@ -172,7 +172,8 @@ ANVIL_URL=http://127.0.0.1:8097 ./mtlm-mcp
 <span class="text-cyan-300">ANVIL_EXPERT_MINCONF</span>=dom:0.5,...           <span class="text-gray-500"># flat floor per lane (legacy)</span>
 <span class="text-cyan-300">ANVIL_KEYS</span>=k1,k2                            <span class="text-gray-500"># bearer auth on /v1/* + feedback admin</span>
 <span class="text-cyan-300">ANVIL_TENANTS</span>=key:file.head,...            <span class="text-gray-500"># per-key tenant head override</span>
-<span class="text-cyan-300">ANVIL_LOG</span>=logs/decisions.jsonl             <span class="text-gray-500"># decision audit log</span>
+<span class="text-cyan-300">ANVIL_SHADOW</span>=dom:file.head,...             <span class="text-gray-500"># canary: scored on same features, log-only "shadow" field</span>
+<span class="text-cyan-300">ANVIL_LOG</span>=logs/decisions.jsonl             <span class="text-gray-500"># decision audit log (shadow.agree feeds monitor.py)</span>
 <span class="text-cyan-300">ANVIL_FEEDBACK_LOG</span>=feedback.jsonl          <span class="text-gray-500"># submitted feedback</span>
 <span class="text-cyan-300">ANVIL_DELEGATE_URL|KEY|MODEL|SYS</span>            <span class="text-gray-500"># upstream for delegated requests</span>
 <span class="text-cyan-300">ANVIL_S1_T[_CHOICE|_NOUL|_SCORE]</span>            <span class="text-gray-500"># systemone candidate softmax temps</span>
