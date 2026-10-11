@@ -1,0 +1,41 @@
+{
+ "bench": "bench/route_latency.py",
+ "host": "rbm21 (LXC, shared CPU)",
+ "date": "2026-10-11",
+ "runs": {
+  "expert_civic_fr": {
+   "url": "http://localhost:8440/v1/route",
+   "expert": "civic_fr",
+   "n": 100,
+   "client_ms": {
+    "p50": 62.3,
+    "p95": 77.4,
+    "p99": 79.6,
+    "mean": 59.7
+   },
+   "server_ms": {
+    "p50": 62,
+    "p95": 77,
+    "p99": 79,
+    "mean": 58.9
+   }
+  },
+  "trunk_only": {
+   "url": "http://localhost:8440/v1/route",
+   "expert": null,
+   "n": 100,
+   "client_ms": {
+    "p50": 62.4,
+    "p95": 75.6,
+    "p99": 78.6,
+    "mean": 59.3
+   },
+   "server_ms": {
+    "p50": 62,
+    "p95": 75,
+    "p99": 78,
+    "mean": 58.6
+   }
+  }
+ }
+}

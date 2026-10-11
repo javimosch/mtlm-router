@@ -130,6 +130,19 @@ Setting a floor per request beats env: `"min_conf": 0.7` in `/v1/route`.
 Re-measure with `bench/oos_eval.py --head X.head --in-scope p.jsonl
 --oos q.jsonl` after any head or corpus change — floors are per-artifact.
 
+## 5d. Route latency (measured)
+
+`bench/route_latency.py` — 100 mixed-length probes, localhost client:
+
+| mode | p50 | p95 | p99 |
+|---|---|---|---|
+| trunk only | 61ms | 75ms | 78ms |
+| + expert head (civic_fr) | 61ms | 74ms | 77ms |
+
+The head matmul is free at these sizes — latency is the frozen-trunk
+forward pass (~300-token cap). Budget ~80ms per route call; set client
+timeouts from p95, not p50. Latest run: `bench/route_latency_latest.json`.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:
