@@ -1,0 +1,190 @@
+{"text": "my neighbour plays loud music every night until 3am", "oos_kind": "id_oos", "topic": "noise"}
+{"text": "there is constant drilling noise from the flat upstairs", "oos_kind": "id_oos", "topic": "noise"}
+{"text": "the pub on our street has customers shouting outside past midnight", "oos_kind": "id_oos", "topic": "noise"}
+{"text": "car alarms keep going off all night on our road", "oos_kind": "id_oos", "topic": "noise"}
+{"text": "the construction site starts jackhammering at 6am on weekends", "oos_kind": "id_oos", "topic": "noise"}
+{"text": "a group of teenagers keeps harassing people outside the shop", "oos_kind": "id_oos", "topic": "antisocial"}
+{"text": "someone is dealing drugs in the stairwell of our block", "oos_kind": "id_oos", "topic": "antisocial"}
+{"text": "youths are racing mopeds up and down the pavement every evening", "oos_kind": "id_oos", "topic": "antisocial"}
+{"text": "people keep urinating in the alley behind our building", "oos_kind": "id_oos", "topic": "antisocial"}
+{"text": "intoxicated people are sleeping in the lobby of our flats", "oos_kind": "id_oos", "topic": "antisocial"}
+{"text": "the number 42 bus has not shown up three days in a row", "oos_kind": "id_oos", "topic": "transit"}
+{"text": "the bus shelter timetable is completely wrong", "oos_kind": "id_oos", "topic": "transit"}
+{"text": "trams are always overcrowded at rush hour on this line", "oos_kind": "id_oos", "topic": "transit"}
+{"text": "the night bus route was cancelled without any notice", "oos_kind": "id_oos", "topic": "transit"}
+{"text": "the metro station lift has been broken for weeks", "oos_kind": "id_oos", "topic": "transit"}
+{"text": "my council flat has had a leaking ceiling for two months", "oos_kind": "id_oos", "topic": "housing"}
+{"text": "the council has not fixed our broken boiler since november", "oos_kind": "id_oos", "topic": "housing"}
+{"text": "there is mould growing on the walls of my council house", "oos_kind": "id_oos", "topic": "housing"}
+{"text": "our rent account shows a payment that never arrived", "oos_kind": "id_oos", "topic": "housing"}
+{"text": "the housing office lost my repair application for the third time", "oos_kind": "id_oos", "topic": "housing"}
+{"text": "my council tax bill has doubled and nobody can explain why", "oos_kind": "id_oos", "topic": "council_tax"}
+{"text": "i was charged council tax for a property i moved out of", "oos_kind": "id_oos", "topic": "council_tax"}
+{"text": "the council tax direct debit was taken twice this month", "oos_kind": "id_oos", "topic": "council_tax"}
+{"text": "i need to dispute my council tax band", "oos_kind": "id_oos", "topic": "council_tax"}
+{"text": "my student council tax exemption was rejected wrongly", "oos_kind": "id_oos", "topic": "council_tax"}
+{"text": "my neighbour is building an extension without planning permission", "oos_kind": "id_oos", "topic": "planning"}
+{"text": "the council approved a 10 storey block that will shadow our garden", "oos_kind": "id_oos", "topic": "planning"}
+{"text": "i want to object to the new development on the high street", "oos_kind": "id_oos", "topic": "planning"}
+{"text": "a listed building on our street is being demolished illegally", "oos_kind": "id_oos", "topic": "planning"}
+{"text": "the new flats block all sunlight to our playground", "oos_kind": "id_oos", "topic": "planning"}
+{"text": "my child was refused a place at the local school", "oos_kind": "id_oos", "topic": "education"}
+{"text": "the school crossing patrol was removed without warning", "oos_kind": "id_oos", "topic": "education"}
+{"text": "school meal payments were charged twice", "oos_kind": "id_oos", "topic": "education"}
+{"text": "the catchment area changed and nobody informed parents", "oos_kind": "id_oos", "topic": "education"}
+{"text": "my sons special needs support was cut by the council", "oos_kind": "id_oos", "topic": "education"}
+{"text": "my housing benefit claim has been pending for 8 weeks", "oos_kind": "id_oos", "topic": "benefits"}
+{"text": "the job centre sanctioned me unfairly", "oos_kind": "id_oos", "topic": "benefits"}
+{"text": "my council tax support application was lost", "oos_kind": "id_oos", "topic": "benefits"}
+{"text": "universal credit stopped paying my rent element", "oos_kind": "id_oos", "topic": "benefits"}
+{"text": "i cannot reach anyone about my benefits review", "oos_kind": "id_oos", "topic": "benefits"}
+{"text": "how would you say fly in italian", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the spanish word for pasta", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would they say butter in zambia", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how do you say fast in spanish", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the word for trees in norway", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how does one say wonderful in german", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how do they say tacos in mexico", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would one say cruiser in china", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the french word you use for potato", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what would the word for grass be in finland", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how do you say please in french", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say nice to meet you if i were russian", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the right way to say excuse me in spanish", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how do i say i'm sorry in chinese", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say thank you if i were mexican", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say what is your name if i were french", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say i must be going now if i were german", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how do i say bathroom in italian", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how might i say hello if i were scottish", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i must know how to say thank you in german", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say i love you if i were german", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say how are you today if i were mexican", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say where is the bathroom if i were korean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say i need directions if i were french", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how would i say i am lost if i were japanese", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "english to spanish for dog", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is dog in spanish", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how do you say dog in spanish", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "dog in spanish", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the spanish word for dog", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you please provide me with assistance in moving money from one account to another", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like help moving money between accounts", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you assist me in moving money from one account to another", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like help moving money from one account to another", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like assistance moving money from one account to another", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can i move some money around", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can i make a transfer between my accounts", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need to make a transfer of my money", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can i move some money between my two accounts", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like to distribute some money between my accounts", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like to transfer $100 from my checking to saving account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "help me transfer $100 from my checking to saving account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "transfer $100 from my checking to saving account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you please help me move $100 from my checking to saving account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "please move $100 from my checking to saving account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "transfer seventeen dollars from rbs to woodforest account, please", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "send twelve dollars between cabelas and bank of london accounts, please", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "transfer ninety dollars between glacier checking and farmers accounts, please", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "transfer seventy dollars between national and citizens accounts", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "transfer four and sixty seven dollars from bank of oklahoma checking to security bank account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "how much money can i transfer today", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "add funds to the retirement account from the pnc account only", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "would you move 100 dollars from the checking and put it into savings", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "repeat what the weather will be like", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like to put 100 dollars from the checking into the savings account now", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "please transfer $5000 to money market from checking account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need $360 transfered from savings to checking account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "make an immediate transfer of ten thousand from money market to checking", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i'd like to transfer $400 from household to savings account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "transer $800 from my checking to savings account", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a 4 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a 2 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a 3 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a 5 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a 1 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "who set up the numbers for it", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "start the timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "start a timer please", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need to start a timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need a timer to be set", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "could you set a timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need to have a timer for 10 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "make a 10 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "give me a 10 minute timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "will you create a timer for me", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "please begin a timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "is it possible to set a timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i want a timer set for 10 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a timer for 10 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can i get a timer set", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need to use a timer", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a timer to go off in 1 hour", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need a timer for 45 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "in 15 minutes the timer should go off", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "start the timer now", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a timer for 30 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "set a timer for 5 minutes from now", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "let me know when it's been 5 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you set the timer to 20 minutes", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "define antebellum", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "define discontent", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the meaning of incandescent", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does confrontation mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does serendipity mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the definition of luminescent", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the definiton of auspicious", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does circuitous mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the definition of unencumbered", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does adulation mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does assiduous mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does amicable mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the definition of remunerative", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does anachronistic mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the definition of idiosyncratic", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does yolo mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you tell me the meaning of fluctuate", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does the word polynomial mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does ferrari mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the meaning of the word girn", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does mature mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i'd like to know what bitcoin means", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i heard some woman say she was going to yerd me, what's that mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you tell me what obsolescence means", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "please explain the word catastrophic to me", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the meaning of naff", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you tell me what dendrofilous means", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does peer-to-peer actually mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "define epicurean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what does epicurean mean", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "would you let me know what the meaning is life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "would you let me know what is the point of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "right now, i need to know the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "define the meaning of life for me", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i want to know the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "would you explain the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need you to tell me the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need to know what the meaning of life is now", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "tell me what the meaning of life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i need to know what the point of life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "let me know what the point of life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "would you provide me with what the point of life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "tell me what the point of life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the reason humans even exist", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "do you think our lives have purpose or meaning", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you tell me about the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "can you tell me what the meaning of life is", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what do you know about the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "i would like information on the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what information can you give me on the meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the core meaning of life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what do you know about lifes meaning", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "is there any consensun regarding lifes true meaning", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "is there a reason beyond biology about why humans are alive", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "do you think being alive has any meaning", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "is there meaning to life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "is there meaning in life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what is the answer to life", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's the answer to it all", "oos_kind": "far_oos", "topic": "clinc"}
+{"text": "what's life mean to you", "oos_kind": "far_oos", "topic": "clinc"}
