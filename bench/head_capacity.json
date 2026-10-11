@@ -1,0 +1,18 @@
+{
+ "linear": {
+  "in_scope": 0.991,
+  "oos_recall": 0.636,
+  "id_oos": 0.333,
+  "far_oos": 1.0,
+  "natural_acc": 0.455,
+  "natural_foos": 0.045
+ },
+ "mlp64": {
+  "in_scope": 0.988,
+  "oos_recall": 0.773,
+  "id_oos": 0.583,
+  "far_oos": 1.0,
+  "natural_acc": 0.455,
+  "natural_foos": 0.136
+ }
+}
