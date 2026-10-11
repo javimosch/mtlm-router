@@ -52,7 +52,8 @@ class Fixture(unittest.TestCase):
         self.index = {"lanes": [
             lane("demo", "1.0", "demo-1.0", yanked=True,
                  superseded_by="demo@2.0", yank_reason="demo pack"),
-            lane("demo", "2.0", "demo-2.0"),
+            lane("demo", "2.0", "demo-2.0",
+                 operating={"min_conf": 0.7, "note": "weak argmax, floor rescues"}),
             # newest version of demo is yanked — unpinned install must NOT pick it
             lane("demo", "9.9", "demo-9.9", yanked=True,
                  superseded_by="demo@2.0", yank_reason="bad head"),
@@ -90,6 +91,17 @@ class Fixture(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         self.assertTrue(any("yanked" in w for w in out["warnings"]), out)
         self.assertTrue(os.path.exists(os.path.join(self.app, "models", "x.head")))
+
+    def test_apply_writes_minconf_floor(self):
+        rc, out = self.run_cli("demo", "--apply")
+        self.assertEqual(rc, 0, out)
+        text = open(os.path.join(self.app, "start.sh")).read()
+        self.assertIn("ANVIL_EXPERT_MINCONF", text)
+        self.assertIn("demo:0.7", text)
+        self.assertIn("minconf=0.7", text)
+        # uninstall regenerates the block and preserves nothing stale
+        self.run_cli("--uninstall", "demo")
+        self.assertNotIn("ANVIL_EXPERT_MINCONF", open(os.path.join(self.app, "start.sh")).read())
 
     def test_apply_writes_managed_block(self):
         rc, out = self.run_cli("demo", "--apply")

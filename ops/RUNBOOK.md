@@ -129,6 +129,10 @@ held-out in-scope + OOS probes (snapshot: `bench/oos_eval_catalog.json`):
 | eq_tone | none — use conformal | — | — | tone lane: `neutral` is its negative class; conf naturally ~0.4, conformal qhat is the calibrated gate |
 
 Setting a floor per request beats env: `"min_conf": 0.7` in `/v1/route`.
+`lane_install --apply` now writes the registry-recommended floor
+(`floors.json` → `index.json operating.min_conf`) into the managed block as
+`ANVIL_EXPERT_MINCONF=<lane>:<floor>` automatically — floors are enforced at
+install time, not advisory.
 Re-measure with `bench/oos_eval.py --head X.head --in-scope p.jsonl
 --oos q.jsonl` after any head or corpus change — floors are per-artifact.
 

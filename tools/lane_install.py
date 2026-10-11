@@ -78,7 +78,8 @@ def main():
             for n, kv in list(lanes.items()):
                 apply_env_block(start_sh, n, kv["head"],
                                 None if kv.get("qhat") in (None, "-") else kv["qhat"],
-                                kv.get("ver", "-"))
+                                kv.get("ver", "-"),
+                                None if kv.get("minconf") in (None, "-") else kv["minconf"])
         hp = os.path.join(a.appliance, head)
         if os.path.exists(hp):
             os.remove(hp)
@@ -180,12 +181,13 @@ def main():
 
     conf = (lane.get("conformal") or {})
     qh = conf.get("alpha_0.02", {}).get("qhat") or conf.get("selective_risk_alpha_02", {}).get("qhat")
+    mc = (lane.get("operating") or {}).get("min_conf")
     head_rel = "models/" + os.path.basename(heads[0])
 
     applied = None
     if a.apply and not a.dry_run:
         applied = apply_env_block(os.path.join(a.appliance, "start.sh"),
-                                  lane["name"], head_rel, qh, lane["version"])
+                                  lane["name"], head_rel, qh, lane["version"], mc)
     out = {
         "ok": True, "lane": f"{lane['name']}@{lane['version']}",
         "status": lane.get("status"), "holdout_acc": lane.get("holdout_acc"),
@@ -193,6 +195,7 @@ def main():
         "activate": {
             "ANVIL_EXPERTS_add": f"{lane['name']}:models/{os.path.basename(heads[0])}",
             "ANVIL_EXPERT_QHAT_add": f"{lane['name']}:{qh}" if qh else None,
+            "ANVIL_EXPERT_MINCONF_add": f"{lane['name']}:{mc}" if mc else None,
         },
         "applied_to": applied,
         "warnings": warnings,
@@ -219,7 +222,7 @@ def read_lanes(text):
     return lanes
 
 
-def apply_env_block(start_sh, name, head_rel, qhat, ver):
+def apply_env_block(start_sh, name, head_rel, qhat, ver, minconf=None):
     """Idempotently merge a lane env block into start.sh (marker-delimited,
     Ansible-blockinfile style). Re-running replaces the whole managed block
     regenerated from its own `# lane` records — multiple lanes accumulate."""
@@ -232,13 +235,16 @@ def apply_env_block(start_sh, name, head_rel, qhat, ver):
         _, post = rest.split(END, 1)
         text = pre + post.lstrip("\n")
     lanes[name] = {"head": head_rel, "qhat": str(qhat) if qhat else "-",
-                   "ver": ver}
+                   "minconf": str(minconf) if minconf else "-", "ver": ver}
     block = [BEGIN]
     for lname, kv in sorted(lanes.items()):
-        block.append(f"# lane {lname} head={kv['head']} qhat={kv.get('qhat','-')} ver={kv.get('ver','-')}")
+        block.append(f"# lane {lname} head={kv['head']} qhat={kv.get('qhat','-')} "
+                     f"minconf={kv.get('minconf','-')} ver={kv.get('ver','-')}")
         block.append(f'export ANVIL_EXPERTS="${{ANVIL_EXPERTS:+${{ANVIL_EXPERTS}},}}{lname}:{kv["head"]}"')
         if kv.get("qhat") not in (None, "", "-"):
             block.append(f'export ANVIL_EXPERT_QHAT="${{ANVIL_EXPERT_QHAT:+${{ANVIL_EXPERT_QHAT}},}}{lname}:{kv["qhat"]}"')
+        if kv.get("minconf") not in (None, "", "-"):
+            block.append(f'export ANVIL_EXPERT_MINCONF="${{ANVIL_EXPERT_MINCONF:+${{ANVIL_EXPERT_MINCONF}},}}{lname}:{kv["minconf"]}"')
     block.append(END)
     block = "\n".join(block) + "\n"
     lines = text.splitlines(keepends=True)
