@@ -104,6 +104,12 @@ freshness gate `python3 tools/render_catalog.py --check` exits 1 when
 `site/catalog.html` differs from a fresh render; run it in CI or before
 deploy so the funnel surface can't silently lag the registry.
 
+Companion gate for the docs page: `python3 tools/check_docs.py` exit-1s
+when `site/docs.html` drifts — openapi.yaml paths missing from the
+endpoint table, or stale numeric claims (smoke check count, contract
+conformance count are re-counted from the scripts). Run it before any
+landing deploy that touches `docs.html`.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:
