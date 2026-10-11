@@ -20,6 +20,8 @@ LANES = {
    ["des tags sur le mur de l ecole","un nid de poule devant chez moi","encombrants sur le trottoir","comment faire des crepes"]),
  "clinc":     (f"{M}/clinc150_mt3.head",       "clinc",  None,
    ["what is the weather like today","book me a flight to paris","how many calories in a banana","tell me a joke"]),
+ "clinc2":    (f"{M2}/clinc150_v2.head",       "clinc2", None,
+   ["what is my account balance","set a timer for 10 minutes","order a large pepperoni pizza","hire a divorce lawyer"]),
  "helpdesk":  (f"{M2}/helpdesk_v2_mt.head",    "helpdesk2", None,
    ["reset my password please","file a bug for the vpn client","check my ticket status","the coffee machine is broken"]),
  "helpdesk1": (f"{M}/helpdesk_pool_L-3_mean.head","helpdesk1",[(-3,"mean")],

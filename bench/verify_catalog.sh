@@ -19,6 +19,7 @@ BENCH=${BENCH:-/root/mtlm/bench}
 EXPERTS="civic:$HOSTED/models/civic_v2_mt.head,\
 civic_fr:$HOSTED/models/civic_fr_v2_mt.head,\
 clinc:$HOSTED/models/clinc150_mt3.head,\
+clinc2:$MODELS2/clinc150_v2.head,\
 helpdesk1:$HOSTED/models/helpdesk_pool_L-3_mean.head,\
 helpdesk2:$MODELS2/helpdesk_v2_mt.head,\
 mairie:$HOSTED/models/mairie_mt3.head,\
@@ -34,6 +35,13 @@ for i in 1 2 3 4 5 6 7 8 9 10; do
   curl -sf "http://localhost:$PORT/readyz" >/dev/null 2>&1 && break
   sleep 1
 done
+# a readyz hit means nothing if OUR instance died on bind — a stale server
+# on the same port would silently answer with the wrong expert set
+if ! kill -0 "$PID" 2>/dev/null; then
+  echo "[verify_catalog] scratch anvil died (port $PORT in use?)" >&2
+  tail -5 "/tmp/verify_catalog_$$.log" >&2
+  exit 1
+fi
 python3 "$BENCH/catalog_parity.py" --url "http://localhost:$PORT"
 RC=$?
 kill $PID 2>/dev/null
