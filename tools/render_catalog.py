@@ -55,7 +55,7 @@ def card(l):
     <p class="text-gray-400 text-sm mb-3">{tline}{' · <span class="text-gray-500">' + prov + '</span>' if prov else ''}</p>
     <div class="text-sm text-gray-300 mb-4">{' · '.join(metrics) if metrics else '<span class="text-gray-600">no holdout metrics</span>'}</div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py {name}@{ver} --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: {esc(l.get('sha256',''))[:24]}… · pricing: {esc(pricing)}</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: {esc(l.get('sha256',''))[:24]}… · pricing: {esc(pricing)}{(' · superseded by <strong>' + esc(l['superseded_by']) + '</strong>') if l.get('superseded_by') else ''}</p>
   </div>"""
 
 MD_START, MD_END = "<!-- lanes:start -->", "<!-- lanes:end -->"
@@ -63,7 +63,7 @@ MD_START, MD_END = "<!-- lanes:start -->", "<!-- lanes:end -->"
 
 def md_table(lanes):
     rows = ["| lane | routes | status | holdout | oos recall | install |", "|---|---|---|---|---|---|"]
-    for l in sorted(lanes, key=lambda l: (l.get("yanked", False), l["name"], l["version"])):
+    for l in sorted(lanes, key=lambda l: (bool(l.get("yanked")), l["name"], l["version"])):
         if l.get("yanked"):
             continue
         name = f"{l['name']}@{l['version']}"
@@ -96,7 +96,7 @@ def main():
     a = ap.parse_args()
     raw = urllib.request.urlopen(a.index).read() if a.index.startswith("http") else open(a.index, "rb").read()
     lanes = json.loads(raw)["lanes"]
-    cards = "\n".join(card(l) for l in sorted(lanes, key=lambda l: (l.get("yanked", False), l["name"], l["version"])))
+    cards = "\n".join(card(l) for l in sorted(lanes, key=lambda l: (bool(l.get("yanked")), l["name"], l["version"])))
     page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lane catalog — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
 <style>.mono{{font-family:ui-monospace,monospace}}body{{background:#030712;color:#d1d5db}}</style></head>

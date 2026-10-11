@@ -127,7 +127,6 @@ candidates pass holdout and still regress a dominant lane live.
 | `clinc150@0.1.3` | 151 | certified | 73.8% | 15% | `lane_install clinc150` |
 | `clinc150@0.1.4` | 151 | certified | 74.1% | 20% | `lane_install clinc150` |
 | `eq_tone@0.1.1` | 5 | demo | 51.4% | — | `lane_install eq_tone` |
-| `helpdesk@0.1.1` | 5 | demo | — | — | `lane_install helpdesk` |
 | `helpdesk@0.2.0` | 7 | demo | 100.0% | 90% | `lane_install helpdesk` |
 <!-- lanes:end -->
 
