@@ -51,6 +51,26 @@ def main():
             problems.append(f"contract.sh has {contract_n} checks, docs.html claims {claim}")
             break
 
+    # 4. response-example keys: JSON fields shown in the RouteDecision
+    # field-by-field block must be declared RouteDecision properties (the
+    # conf→confidence / p_yes→probability drift class). Tolerates a few
+    # non-field tokens legitimately shown in examples.
+    spec = open(a.spec).read()
+    m = re.search(r"RouteDecision:.*?properties:\n(.*?)\n    \w", spec, re.S)
+    block = m.group(1) if m else ""
+    declared = set(re.findall(r"^        (\w+):", block, re.M))
+    sec = re.search(r'field by field(.*?)<h2', docs, re.S)
+    if sec:
+        # keys appear as "field"</span>: inside syntax-highlighted spans —
+        # strip tags first, then take quoted words followed by a colon
+        plain = re.sub(r"<[^>]+>", "", sec.group(1))
+        shown = set(re.findall(r'"(\w+)"\s*:', plain)) - declared
+        shown -= {"error", "message", "type", "name", "arguments"}
+        if shown:
+            problems.append(f"docs route example shows undeclared fields: {sorted(shown)}")
+    elif declared:
+        problems.append("docs.html has no 'field by field' route example to check")
+
     print(json.dumps({
         "ok": not problems,
         "problems": problems,
