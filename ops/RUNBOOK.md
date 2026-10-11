@@ -80,9 +80,23 @@ exposed it. Gate (enforced by `lane_pack.py` for `certified`):
    `ANVIL_EXPERTS=probe:models/candidate.head ./start.sh`
 2. Send ≥3 probe texts — one clearly in-scope, one clearly out-of-scope —
    and eyeball `route`/`confidence` sanity.
-3. Pack with `--live-verified`; the manifest records it and
+3. **Parity gate (stronger than eyeballing):**
+   `bench/head_parity.py --head <file> --url <instance> --expert <lane>
+   --probes <txt> --tol 0.05` — scores every probe offline (`head_io` +
+   HF features) AND live via `/v1/route`, exit 1 if any probe disagrees
+   on top route or conf delta > tol. Catches wrong taps, transposed
+   weights, and stale artifacts — the failure modes live eyeballing misses.
+   NOTE: anvil serves expert features under `DECIDE_SYS` regardless of the
+   corpus's training prompt — parity checks always use `DECIDE_SYS`.
+4. Pack with `--live-verified`; the manifest records it and
    `lane_verify` reports it. `certified` packs built without the flag are
    refused; older certified packs verify with a warning.
+
+After a catalog change (new pack, retrained head, or a `head_io`/serve
+parser change), run the whole-catalog regression:
+`bench/catalog_parity.py --url <multi-expert instance>` — ~4 probes per
+lane across every shipped head, exit 1 on any offline↔live divergence.
+First run caught a real mhd2 layout bug in the parser (29/29 green after).
 
 ## 6. Recalibration (conformal)
 
