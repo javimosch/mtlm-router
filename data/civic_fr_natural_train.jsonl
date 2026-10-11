@@ -1,0 +1,62 @@
+{"text": "des tags en plein sur le mur de l ecole primaire", "route": "graffiti_affiches"}
+{"text": "le kiosque a journaux est couvert de graffitis", "route": "graffiti_affiches"}
+{"text": "des affiches collees en sauvage sur tous les poteaux de la rue", "route": "graffiti_affiches"}
+{"text": "tag a la bombe sur la porte de la salle des fetes", "route": "graffiti_affiches"}
+{"text": "quelqu un a tague l arret de bus cette nuit", "route": "graffiti_affiches"}
+{"text": "affiches de concerts collees partout sur le panneau d affichage libre", "route": "graffiti_affiches"}
+{"text": "une epave de voiture abandonnee depuis des mois rue des lilas", "route": "stationnement_epaves"}
+{"text": "camionnette qui pourrit sur le parking depuis le printemps", "route": "stationnement_epaves"}
+{"text": "scooter sans plaque abandonne en bas de l immeuble", "route": "stationnement_epaves"}
+{"text": "voiture brulee qui traine devant la creche", "route": "stationnement_epaves"}
+{"text": "un break couvert de poussiere squate la meme place depuis des mois", "route": "stationnement_epaves"}
+{"text": "caravane garee a demeure devant les garages", "route": "stationnement_epaves"}
+{"text": "la haie du voisin deborde completement sur le trottoir", "route": "arbres_vegetation"}
+{"text": "branche morte au dessus du passage pieton pres de l ecole", "route": "arbres_vegetation"}
+{"text": "un arbre penche dangereusement au dessus de la rue", "route": "arbres_vegetation"}
+{"text": "ronces qui envahissent le cheminement vers le parc", "route": "arbres_vegetation"}
+{"text": "arbuste qui cache le panneau stop on voit plus rien", "route": "arbres_vegetation"}
+{"text": "racines qui soulevent le trottoir devant chez moi", "route": "arbres_vegetation"}
+{"text": "le cafe du coin etale ses tables sur tout le trottoir on passe plus", "route": "activites_commerciales"}
+{"text": "terrasse de restaurant qui bloque completement le passage pieton", "route": "activites_commerciales"}
+{"text": "le primeur met son etal en plein milieu du trottoir", "route": "activites_commerciales"}
+{"text": "enseigne deposee par terre apres le vent devant la boutique", "route": "activites_commerciales"}
+{"text": "food truck installe n importe comment sur la place", "route": "activites_commerciales"}
+{"text": "le lampadaire de la rue est en panne depuis une semaine", "route": "eclairage"}
+{"text": "plus de lumiere dans l impasse le soir c est glauque", "route": "eclairage"}
+{"text": "lampadaire qui clignote toute la nuit devant mes fenetres", "route": "eclairage"}
+{"text": "eclairage public casse sous le ponton", "route": "eclairage"}
+{"text": "le tunnel pieton est dans le noir total", "route": "eclairage"}
+{"text": "luminaire arrache sur le parking de la mairie", "route": "eclairage"}
+{"text": "un nid de poule enorme juste devant mon portail", "route": "voirie_trottoir"}
+{"text": "nids de poule partout apres le virage c est dangereux", "route": "voirie_trottoir"}
+{"text": "trottoir completement defonce rue des ecoles", "route": "voirie_trottoir"}
+{"text": "dalle de trottoir cassee une mamie s est fait mal", "route": "voirie_trottoir"}
+{"text": "un trou beant dans la chaussee devant la poste", "route": "voirie_trottoir"}
+{"text": "bordure de trottoir effondree les voitures montent dessus", "route": "voirie_trottoir"}
+{"text": "fuite d eau sur la chaussee depuis ce matin", "route": "eau"}
+{"text": "de l eau coule en permanence sous la canalisation rue des pins", "route": "eau"}
+{"text": "la bouche d incendie fuit et ca inonde le trottoir", "route": "eau"}
+{"text": "fontaine de la place qui deborde en continu", "route": "eau"}
+{"text": "regard d eau qui bouillonne sur la route", "route": "eau"}
+{"text": "fuite au niveau du compteur d eau de la copropriete", "route": "eau"}
+{"text": "le banc de la place est casse on peut plus s asseoir", "route": "mobilier_urbain"}
+{"text": "banc public arrache et jete dans les buissons", "route": "mobilier_urbain"}
+{"text": "la table du parc a ete vandalisee", "route": "mobilier_urbain"}
+{"text": "poteau de la barriere de parking tordu", "route": "mobilier_urbain"}
+{"text": "jardiniere municipale defoncee place de l eglise", "route": "mobilier_urbain"}
+{"text": "le panneau d affichage de la mairie a la vitre brisee", "route": "mobilier_urbain"}
+{"text": "un matelas abandonne sur le trottoir depuis une semaine", "route": "objets_encombrants"}
+{"text": "canape et frigo deposes sauvagement rue des acacias", "route": "objets_encombrants"}
+{"text": "encombrants qui trainent devant l immeuble ca commence a puer", "route": "objets_encombrants"}
+{"text": "des gravats deposes en pleine nuit derriere le gymnase", "route": "objets_encombrants"}
+{"text": "une vieille armoire jete sur le parking du parc", "route": "objets_encombrants"}
+{"text": "poubelle renversee et dechets eparpilles partout", "route": "proprete_dechets"}
+{"text": "sacs poubelle eclates devant la boulangerie", "route": "proprete_dechets"}
+{"text": "depot sauvage de gravats le long du chemin de halage", "route": "proprete_dechets"}
+{"text": "des ordures qui debordent du conteneur depuis jours", "route": "proprete_dechets"}
+{"text": "verre casse et canettes partout sur le square", "route": "proprete_dechets"}
+{"text": "des rats qui courent dans la cour de l immeuble", "route": "autre"}
+{"text": "essaim d abeilles installe dans le parc public", "route": "autre"}
+{"text": "question sur les horaires d ouverture de la decheterie", "route": "autre"}
+{"text": "feu tricolore en panne au carrefour de l eglise", "route": "autre"}
+{"text": "pigeonniers qui nichent sous l auvent de la halle", "route": "autre"}
