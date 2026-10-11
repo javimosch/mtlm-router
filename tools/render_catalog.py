@@ -25,6 +25,9 @@ def card(l):
     if acc is not None:
         n = l.get("n_holdout")
         metrics.append(f"<strong>{acc*100:.1f}%</strong>" + (f" holdout (n={n})" if n else " holdout"))
+    oo = l.get("oos") or {}
+    if isinstance(oo.get("oos_recall"), (int, float)):
+        metrics.append(f"OOS recall <strong>{oo['oos_recall']*100:.0f}%</strong>")
     conf = l.get("conformal") or {}
     for k in ("alpha_0.05", "alpha_0.02", "selective_risk_alpha_02"):
         c = conf.get(k)
@@ -51,7 +54,7 @@ MD_START, MD_END = "<!-- lanes:start -->", "<!-- lanes:end -->"
 
 
 def md_table(lanes):
-    rows = ["| lane | routes | status | holdout | `oos` class | install |", "|---|---|---|---|---|---|"]
+    rows = ["| lane | routes | status | holdout | oos recall | install |", "|---|---|---|---|---|---|"]
     for l in sorted(lanes, key=lambda l: (l.get("yanked", False), l["name"], l["version"])):
         if l.get("yanked"):
             continue
@@ -59,7 +62,8 @@ def md_table(lanes):
         status = l.get("status", "demo")
         acc = l.get("holdout_acc")
         acc_s = f"{acc*100:.1f}%" if acc is not None else "—"
-        oos = "yes" if "oos" in (l.get("taxonomy") or []) else "—"
+        oos_r = (l.get("oos") or {}).get("oos_recall")
+        oos = f"{oos_r*100:.0f}%" if isinstance(oos_r, (int, float)) else ("yes" if "oos" in (l.get("taxonomy") or []) else "—")
         rows.append(f"| `{name}` | {l.get('classes', len(l.get('taxonomy', [])))} | {status} | {acc_s} | {oos} | `lane_install {l['name']}` |")
     return "\n".join(rows)
 
