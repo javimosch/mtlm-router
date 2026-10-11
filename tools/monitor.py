@@ -57,6 +57,26 @@ def summarize(rows):
         }
     return out
 
+def ks2samp(xs, ys):
+    """Two-sample Kolmogorov–Smirnov on conf distributions: D = max|F1-F2|,
+    flagged when D exceeds the alpha=0.01 critical value
+    c = 1.63 * sqrt((n+m)/(nm)). Label-free covariate-shift signal — the score
+    distribution moving before any ground truth exists."""
+    n, m = len(xs), len(ys)
+    if n < 30 or m < 30:
+        return None
+    xs, ys = sorted(xs), sorted(ys)
+    i = j = D = 0
+    while i < n and j < m:
+        if xs[i] <= ys[j]:
+            i += 1
+        else:
+            j += 1
+        D = max(D, abs(i / n - j / m))
+    crit = 1.63 * ((n + m) / (n * m)) ** 0.5
+    return {"D": round(D, 3), "crit": round(crit, 3), "shifted": D > crit}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("log")
@@ -71,15 +91,37 @@ def main():
         return
     base = summarize(rows[: a.baseline])
     recent = summarize(rows[-a.window:])
+    # per-lane conf samples for the KS test (score-distribution shift)
+    def confs_of(rs):
+        by = collections.defaultdict(list)
+        for r in rs:
+            c = r.get("confidence", r.get("conf"))
+            if c is not None:
+                by[lane_of(r)].append(c)
+        return by
+    base_confs, rec_confs = confs_of(rows[: a.baseline]), confs_of(rows[-a.window:])
     report, drift = {"baseline": base, "recent": recent, "drift": []}, []
     for lane, r in recent.items():
         b = base.get(lane)
+        ks = ks2samp(base_confs.get(lane, []), rec_confs.get(lane, []))
         if not b or not r.get("set_size_mean") or not b.get("set_size_mean"):
+            d = {"lane": lane}
+            if ks:
+                d.update({"conf_ks_D": ks["D"], "conf_ks_crit_0.01": ks["crit"],
+                          "conf_dist_shifted": ks["shifted"]})
+                if ks["shifted"]:
+                    d["drifted"] = True
+                    drift.append(lane)
+                    report["drift"].append(d)
             continue
         ss_shift = (r["set_size_mean"] - b["set_size_mean"]) / max(b["set_size_mean"], 1e-9)
         auto_shift = (r["auto_pct"] - b["auto_pct"]) / max(b["auto_pct"], 1e-9)
         d = {"lane": lane, "set_size_shift": round(ss_shift, 3), "auto_shift": round(auto_shift, 3)}
-        if ss_shift > a.tol or auto_shift < -a.tol:
+        if ks:
+            d["conf_ks_D"] = ks["D"]
+            d["conf_ks_crit_0.01"] = ks["crit"]
+            d["conf_dist_shifted"] = ks["shifted"]
+        if ss_shift > a.tol or auto_shift < -a.tol or (ks and ks["shifted"]):
             d["drifted"] = True
             drift.append(lane)
         report["drift"].append(d)

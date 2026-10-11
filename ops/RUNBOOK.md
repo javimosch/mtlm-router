@@ -38,7 +38,8 @@ Gotchas that have actually bitten:
 
 ## 4. Daily / weekly maintenance loop
 
-    # label-free drift check — flags rising set_size / falling auto% per lane
+    # label-free drift check — flags rising set_size, falling auto%, and
+    # conf-distribution shift (two-sample KS, alpha=0.01) per lane
     python3 tools/monitor.py logs/decisions.jsonl --window 500 --baseline 500
     # exit 1 = drifted lane(s) → calibration aging, BEFORE labels exist
 
