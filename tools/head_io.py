@@ -6,7 +6,9 @@ Format (little-endian):
   int32     featdim
   float32   temperature
   mhd3: u8 ntaps, then ntaps x (u8 kind, u8 layer_plus1)
-        kind: 0=mean 1=max 2=last ; layer_plus1 = anvil layer + 1
+        kind: 1=max 2=mean (see tools/emit_civic.py writer) ;
+        layer_plus1 = anvil layer + 1
+  mhd2: no tap metadata — byte 16 onward is weight data; caller supplies taps.
   float32[n_classes * featdim]  W  — ROW-MAJOR (n_classes, featdim); logits = X @ W.T + b
   float32[n_classes]            b
   per class: u8 len + utf-8 name
@@ -22,7 +24,7 @@ Gotchas this file exists to prevent (paid for in bench/oos_eval_mairie):
 import struct
 import numpy as np
 
-_KIND = {0: "mean", 1: "max", 2: "last"}
+_KIND = {1: "max", 2: "mean"}
 
 
 def load_head(path, n_layers=6):
@@ -40,11 +42,13 @@ def load_head(path, n_layers=6):
         raise ValueError(f"{path}: bad magic {magic!r}")
     nr, fd = struct.unpack("<ii", d[4:12])
     temp = struct.unpack("<f", d[12:16])[0]
-    ntaps = d[16]
-    if magic == "mhd2":
-        ntaps = 0
-    taps_meta = [struct.unpack("<BB", d[17 + 2 * i:19 + 2 * i]) for i in range(ntaps)]
-    off = 17 + 2 * ntaps
+    if magic == "mhd3":
+        ntaps = d[16]
+        taps_meta = [struct.unpack("<BB", d[17 + 2 * i:19 + 2 * i]) for i in range(ntaps)]
+        off = 17 + 2 * ntaps
+    else:  # mhd2: weights start at byte 16
+        taps_meta = []
+        off = 16
     need = off + 4 * nr * fd + 4 * nr
     if len(d) < need:
         raise ValueError(f"{path}: truncated weights (need {need}, have {len(d)})")
