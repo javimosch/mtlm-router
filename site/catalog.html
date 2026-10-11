@@ -4,7 +4,7 @@
 <body class="max-w-4xl mx-auto px-6 py-14">
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
 <h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
-<p class="text-gray-400 text-sm mb-2">8 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
+<p class="text-gray-400 text-sm mb-2">9 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
 <p class="text-gray-500 text-sm mb-10">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
 <div class="space-y-4">
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -60,6 +60,17 @@
     <div class="text-sm text-gray-300 mb-4"><strong>73.8%</strong> holdout (n=5500) · α=.05 → 38% auto @ 0.00% err</div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py clinc150@0.1.2 --apply --appliance .</pre>
     <p class="text-gray-600 text-xs mt-2 mono">sha256: 7257a15d2a2282cee754af35… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">clinc150<span class="text-gray-500">@0.1.3</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">151 routes: accept_reservations, account_blocked, alarm, application_status, apr, are_you_a_bot, balance, bill_balance… · <span class="text-gray-500">Trained on the public CLINC150 benchmark (train split only), holdout eval on untouched test split. v0.1.1: labels.txt repaired; v0.1.2: manifest status field added. v0.1.3: eval.json gains measured oos_recall + leak/cove</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>73.8%</strong> holdout (n=5500) · OOS recall <strong>15%</strong> · α=.05 → 38% auto @ 0.00% err</div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py clinc150@0.1.3 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: d46f14e1f6e6f3095ff3871d… · pricing: free</p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
