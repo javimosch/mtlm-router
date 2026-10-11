@@ -28,6 +28,11 @@ def card(l):
     oo = l.get("oos") or {}
     if isinstance(oo.get("oos_recall"), (int, float)):
         metrics.append(f"OOS recall <strong>{oo['oos_recall']*100:.0f}%</strong>")
+    leak, cov = oo.get("oos_leak_curve") or {}, oo.get("coverage_curve") or {}
+    for t in ("0.7", "0.5"):
+        if leak.get(t) is not None and cov.get(t) is not None:
+            metrics.append(f"conf≥{t} → {leak[t]*100:.1f}% leak / {cov[t]*100:.0f}% cov")
+            break
     conf = l.get("conformal") or {}
     for k in ("alpha_0.05", "alpha_0.02", "selective_risk_alpha_02"):
         c = conf.get(k)
