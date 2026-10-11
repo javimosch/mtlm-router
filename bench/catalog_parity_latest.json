@@ -1,0 +1,8 @@
+{
+ "probes": 29,
+ "diverged": 0,
+ "parity": true,
+ "tol": 0.05,
+ "date": "2026-10-11",
+ "note": "periodic re-run after index.json normalization + head_io tests; all 7 lanes offline==live"
+}
