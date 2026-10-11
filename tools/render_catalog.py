@@ -39,6 +39,9 @@ def card(l):
         if c and c.get("auto") is not None:
             metrics.append(f"α=.05 → {c['auto']*100:.0f}% auto @ {c.get('err',0)*100:.2f}% err")
             break
+    op = l.get("operating") or {}
+    if op.get("min_conf") is not None:
+        metrics.append(f"recommended floor <strong>conf≥{op['min_conf']}</strong>")
     tax = l.get("taxonomy") or []
     tline = f"{l.get('classes', len(tax))} routes" + (": " + ", ".join(esc(t) for t in tax[:8]) + ("…" if len(tax) > 8 else "") if tax else "")
     prov = esc((l.get("provenance") or "")[:220])
