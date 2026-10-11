@@ -13,7 +13,7 @@ Exit 0 ok / 1 failure. Stdlib only.
 
   python3 tools/lane_verify.py eq_tone-0.1.0.lanepack.tar.gz [--sums SHA256SUMS.txt]
 """
-import argparse, hashlib, json, os, struct, sys, tarfile
+import argparse, hashlib, json, os, struct, sys, tarfile, tempfile
 
 
 def sha256(path):
@@ -95,6 +95,24 @@ def verify_pack(pack, sums=None):
                 tail = members[heads[0]][-512:]
                 if not any(t in tail for t in (b"chat", b"oos")):
                     fail(f"head has {ncls} classes vs {len(tax_labels)} taxonomy; extra is not a known fallback", errs)
+
+            # embedded label names vs taxonomy — the clinc150@0.1.1 incident
+            # was exactly this drift (labels.txt repaired post-hoc)
+            try:
+                sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+                from head_io import load_head
+                with tempfile.NamedTemporaryFile(suffix=".head", delete=False) as tf:
+                    tf.write(head); tp = tf.name
+                head_labels = set(load_head(tp)["labels"])
+                os.unlink(tp)
+                missing = tax_labels - head_labels
+                extra_names = head_labels - tax_labels - {"chat"}
+                if missing:
+                    fail(f"head lacks taxonomy labels: {sorted(missing)[:8]}")
+                if extra_names:
+                    fail(f"head embeds non-taxonomy labels: {sorted(extra_names)[:8]}")
+            except Exception as e:
+                fail(f"head label parse failed: {e}")
 
     # honesty gate: 'certified' must carry a leak-free eval
     metrics = man.get("metrics", {})
