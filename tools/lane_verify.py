@@ -132,6 +132,8 @@ def main():
     ap.add_argument("pack", nargs="?", help="a .lanepack.tar.gz, or omit with --dir")
     ap.add_argument("--dir", help="verify every *.lanepack.tar.gz in DIR")
     ap.add_argument("--sums", help="SHA256SUMS.txt-style file to check tarball against")
+    ap.add_argument("--strict", action="store_true",
+                    help="warnings affect the exit code: 0 clean / 2 warnings-only / 1 errors")
     a = ap.parse_args()
 
     if a.dir:
@@ -145,17 +147,22 @@ def main():
             rep, code = verify_pack(p, a.sums)
             reports.append(rep)
             failed += code
+        warned = sum(bool(r.get("warnings")) for r in reports)
         print(json.dumps({
             "ok": failed == 0, "packs": len(packs), "failed": failed,
             "lanes": [{k: v for k, v in r.items() if k != "pack" or True} for r in reports]},
             indent=2))
-        sys.exit(1 if failed else 0)
+        if failed:
+            sys.exit(1)
+        sys.exit(2 if a.strict and warned else 0)
 
     if not a.pack:
         ap.error("pack required (or use --dir)")
     rep, code = verify_pack(a.pack, a.sums)
     print(json.dumps(rep))
-    sys.exit(code)
+    if code:
+        sys.exit(code)
+    sys.exit(2 if a.strict and rep.get("warnings") else 0)
 
 
 main()

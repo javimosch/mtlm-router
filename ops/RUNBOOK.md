@@ -91,6 +91,8 @@ exposed it. Gate (enforced by `lane_pack.py` for `certified`):
 4. Pack with `--live-verified`; the manifest records it and
    `lane_verify` reports it. `certified` packs built without the flag are
    refused; older certified packs verify with a warning.
+   CI should run `lane_verify --strict` — exit codes: 0 clean, 2
+   warnings-only, 1 errors (a warning is a gate to fix, not noise to keep).
 
 After a catalog change (new pack, retrained head, or a `head_io`/serve
 parser change), run the whole-catalog regression:
