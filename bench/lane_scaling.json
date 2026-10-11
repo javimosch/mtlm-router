@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-11",
+  "trunk": "m7router3s384",
+  "method": "interleaved, expert-pinned, server latency_ms",
+  "rss_kb": {
+    "1_lane": 5524,
+    "5_lanes": 6956,
+    "per_lane_delta": 358
+  },
+  "startup_ms": {
+    "1_lane": 2,
+    "5_lanes": 5
+  },
+  "route_latency_ms": {
+    "1_lane": {
+      "p50": 39.0,
+      "p95": 41.0,
+      "mean": 39.1
+    },
+    "5_lanes": {
+      "p50": 39.0,
+      "p95": 45.0,
+      "mean": 39.3
+    }
+  },
+  "verdict": "lanes are ~360KB resident each and ~0 added latency; scales to catalog-size lane sets on one trunk"
+}
