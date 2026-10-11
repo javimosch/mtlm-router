@@ -281,10 +281,11 @@
 <span class="text-gray-600">» "1ere dotation. bac pour le verre"    [router] dotation_bacs  @ 1.00 (174ms)</span>
 <span class="text-gray-600">» "demande de passeport"                [router] escalate       @ 0.42 — delegates, not guesses</span></code></pre>
   </div>
-  <div class="max-w-3xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+  <div class="max-w-4xl mx-auto mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
     <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">+1.4MB / ~0ms</div><div class="text-xs text-gray-500 mt-1">5 lanes on one trunk — measured (bench/lane_scaling)</div></div>
     <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">−0.2%</div><div class="text-xs text-gray-500 mt-1">shadow-canary scoring overhead, interleaved A/B (bench/shadow_overhead)</div></div>
     <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">96.8%</div><div class="text-xs text-gray-500 mt-1">OOS recall — civic 0.2.1's explicit out-of-scope class (bench/oos_eval)</div></div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">~470 tok/s</div><div class="text-xs text-gray-500 mt-1">decode throughput, 7M int8 trunk, plain CPU (bench/gen_speed)</div></div>
   </div>
   <p class="text-center mt-3 text-xs text-gray-600">Every number ships with its harness in the repo — rerun it, don't trust it.</p>
 </div>
