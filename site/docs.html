@@ -71,6 +71,7 @@ python3 tools/shadow_report.py logs/decisions.jsonl  <span class="text-gray-500"
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET|POST /_qhat</td><td class="px-5 py-3">live conformal recalibration — read or set per-lane qhat, no restart</td><td class="px-5 py-3 mono text-xs">POST {expert, qhat}</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /metrics</td><td class="px-5 py-3">Prometheus text: per-ep counters, per-lane requests/delegates/set_size, latency, uptime</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /v1/whoami</td><td class="px-5 py-3">masked key identity + tenant head + expert lanes</td><td class="px-5 py-3 mono text-xs">—</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /v1/models</td><td class="px-5 py-3">OpenAI-style model list</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /guide · /llms.txt</td><td class="px-5 py-3">the embedded operator manual (JSON) / agent plain-text summary</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /_health · /health</td><td class="px-5 py-3">liveness</td><td class="px-5 py-3 mono text-xs">—</td></tr>
         <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">GET /livez · /readyz</td><td class="px-5 py-3">k8s liveness (always 200) / readiness (503 until a head or lane is loaded)</td><td class="px-5 py-3 mono text-xs">—</td></tr>
@@ -243,7 +244,7 @@ python3 tools/lane_install.py --uninstall helpdesk --appliance .
 <div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6">
   <h2 class="text-xl font-bold mb-3">Verify a deployment</h2>
   <p class="text-gray-400 text-sm mb-4">Two self-checks ship with the product — run them against any instance (local, hosted, a client's):</p>
-  <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># 9 endpoint+gate checks</span>
+  <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># 12 endpoint+gate checks</span>
 ./smoke.sh                       <span class="text-gray-500"># HOST=... to point at another instance</span>
 
 <span class="text-gray-500"># 19/19 Jev-contract conformance checks</span>
