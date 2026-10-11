@@ -145,6 +145,16 @@ The head matmul is free at these sizes — latency is the frozen-trunk
 forward pass (~300-token cap). Budget ~80ms per route call; set client
 timeouts from p95, not p50. Latest run: `bench/route_latency_latest.json`.
 
+## 5e. API contract drift guard
+
+`bench/api_contract.py --url http://localhost:PORT` probes every typed
+endpoint (`route`, `decide`, `noul`, `score`, `assess`) and fails if a live
+response carries a field `openapi.yaml` doesn't declare, or an enum value
+outside the spec. Run it after touching a route handler — spec drift found
+2026-10 (conf→confidence, p_yes→probability, probabilities blocks added)
+sat unshipped until this check existed. Endpoints that 400 on a lane-pinned
+instance (no noul/score heads) are skipped.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:

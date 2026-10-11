@@ -107,9 +107,14 @@ paths:
               schema:
                 type: object
                 properties:
+                  object: {type: string, example: decision}
+                  model: {type: string}
                   choice: {type: string}
-                  conf: {type: number}
-                  latency_ms: {type: integer}
+                  confidence: {type: number}
+                  probabilities:
+                    type: object
+                    additionalProperties: {type: number}
+                    description: full softmax over route classes
         '400': {$ref: '#/components/responses/BadRequest'}
 
   /v1/noul:
@@ -132,8 +137,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  answer: {type: string, enum: [yes, no]}
-                  p_yes: {type: number}
+                  object: {type: string, example: noul}
+                  model: {type: string}
+                  answer: {type: string, enum: ["yes", "no"]}
+                  probability: {type: number, description: P(yes)}
         '400': {$ref: '#/components/responses/BadRequest'}
 
   /v1/score:
@@ -156,8 +163,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  grade: {type: string}
-                  conf: {type: number}
+                  object: {type: string, example: score}
+                  model: {type: string}
+                  grade: {type: string, description: complexity tier 1-4}
+                  confidence: {type: number}
+                  probabilities:
+                    type: object
+                    additionalProperties: {type: number}
         '400': {$ref: '#/components/responses/BadRequest'}
 
   /v1/assess:
@@ -180,10 +192,23 @@ paths:
               schema:
                 type: object
                 properties:
-                  choice: {type: string}
-                  conf: {type: number}
-                  grade: {type: string}
-                  p_yes: {type: number}
+                  object: {type: string, example: assess}
+                  model: {type: string}
+                  decision:
+                    type: object
+                    properties:
+                      choice: {type: string}
+                      confidence: {type: number}
+                  noul:
+                    type: object
+                    properties:
+                      answer: {type: string, enum: ["yes", "no"]}
+                      probability: {type: number}
+                  score:
+                    type: object
+                    properties:
+                      grade: {type: string}
+                      confidence: {type: number}
         '400': {$ref: '#/components/responses/BadRequest'}
 
   /v1/systemone:
