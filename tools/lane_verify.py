@@ -31,6 +31,7 @@ def fail(msg, errs):
 def verify_pack(pack, sums=None):
     """Run all checks on one pack; return (report_dict, exit_code)."""
     errs = []
+    warnings = []
 
     if sums:
         want = None
@@ -103,16 +104,35 @@ def verify_pack(pack, sums=None):
                 from head_io import load_head
                 with tempfile.NamedTemporaryFile(suffix=".head", delete=False) as tf:
                     tf.write(head); tp = tf.name
-                head_labels = set(load_head(tp)["labels"])
+                parsed = load_head(tp)
                 os.unlink(tp)
+            except Exception as e:
+                parsed = None
+                fail(f"head label parse failed: {e}")
+            if parsed:
+                head_labels = set(parsed["labels"])
                 missing = tax_labels - head_labels
                 extra_names = head_labels - tax_labels - {"chat"}
                 if missing:
                     fail(f"head lacks taxonomy labels: {sorted(missing)[:8]}")
                 if extra_names:
                     fail(f"head embeds non-taxonomy labels: {sorted(extra_names)[:8]}")
-            except Exception as e:
-                fail(f"head label parse failed: {e}")
+                # declared taps (metrics.taps) vs embedded taps — formats seen
+                # in the wild: [[-2,"mean"],...] or "mean@-2,-3,-4"/"mean@L-3"
+                decl = man.get("metrics", {}).get("taps")
+                if decl is not None:
+                    try:
+                        if isinstance(decl, list):
+                            declared = {(int(i), str(k)) for i, k in decl}
+                        else:
+                            kind, _, layers = str(decl).partition("@")
+                            declared = {(int(l.replace("L", "")), kind.strip())
+                                        for l in layers.split(",") if l.strip()}
+                        embedded = {(int(i), k) for i, k in parsed["taps"]}
+                        if declared != embedded:
+                            fail(f"declared taps {sorted(declared)} != embedded {sorted(embedded)}")
+                    except Exception as e:
+                        warnings.append(f"metrics.taps unparsable ('{decl}'): {e}")
 
     # honesty gate: 'certified' must carry a leak-free eval
     metrics = man.get("metrics", {})
@@ -122,7 +142,6 @@ def verify_pack(pack, sums=None):
     if "status" in man and man["status"] not in ("certified", "demo"):
         fail(f"unknown status {man['status']}", errs)
 
-    warnings = []
     if certified and not man.get("live_verified"):
         warnings.append("certified pack predates the live_verified gate — "
                         "re-pack with --live-verified after loading the head in anvil")
