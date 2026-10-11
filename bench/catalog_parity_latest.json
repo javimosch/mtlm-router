@@ -1,5 +1,5 @@
 {
- "probes": 33,
+ "probes": 37,
  "diverged": 0,
  "parity": true,
  "tol": 0.05,
@@ -11,7 +11,8 @@
   "helpdesk": true,
   "helpdesk1": true,
   "mairie": true,
-  "eq": true
+  "eq": true,
+  "bank77": true
  },
- "note": "PASS 72 rerun incl clinc150_v2 (0.1.4 head) \u2014 port-collision guard added to verify_catalog.sh"
+ "note": "PASS 82: bank77 lane added; verify_catalog gains expert-set assertion (catches stale-server bind race)"
 }

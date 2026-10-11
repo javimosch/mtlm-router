@@ -23,7 +23,8 @@ clinc2:$MODELS2/clinc150_v2.head,\
 helpdesk1:$HOSTED/models/helpdesk_pool_L-3_mean.head,\
 helpdesk2:$MODELS2/helpdesk_v2_mt.head,\
 mairie:$HOSTED/models/mairie_mt3.head,\
-eq:$MODELS2/eq_tone_mt.head"
+eq:$MODELS2/eq_tone_mt.head,\
+bank77:$MODELS2/banking77_mt.head"
 
 echo "[verify_catalog] starting scratch anvil on :$PORT" >&2
 cd "$HOSTED"
@@ -40,6 +41,16 @@ done
 if ! kill -0 "$PID" 2>/dev/null; then
   echo "[verify_catalog] scratch anvil died (port $PORT in use?)" >&2
   tail -5 "/tmp/verify_catalog_$$.log" >&2
+  exit 1
+fi
+# kill -0 can race a slow bind failure — a stale server on the port passes it.
+# the real invariant: the answering server must expose OUR expert set.
+WANT=$(echo "$EXPERTS" | tr ',' '\n' | cut -d: -f1 | sort)
+GOT=$(curl -sf "http://localhost:$PORT/v1/lanes" | python3 -c 'import json,sys; print("\n".join(sorted(l["name"] for l in json.load(sys.stdin).get("lanes",[]))))' 2>/dev/null)
+if [ "$WANT" != "$GOT" ]; then
+  echo "[verify_catalog] expert mismatch — answering server is not our scratch instance" >&2
+  echo "want: $(echo $WANT | tr '\n' ' ')" >&2
+  echo "got:  $(echo $GOT | tr '\n' ' ')" >&2
   exit 1
 fi
 python3 "$BENCH/catalog_parity.py" --url "http://localhost:$PORT"

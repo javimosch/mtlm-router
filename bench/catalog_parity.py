@@ -30,6 +30,8 @@ LANES = {
    ["1ere dotation bac verre","ramassage encombrants","carte identite renouvellement","depot illicite canape"]),
  "eq":        (f"{M2}/eq_tone_mt.head",        "eq",     None,
    ["i am so frustrated with this service","this is unacceptable and i want a refund","thank you so much for your help","how do i reset my router"]),
+ "bank77":    (f"{M2}/banking77_mt.head",      "bank77", None,
+   ["my card has not arrived yet","i want to dispute a transaction","what is your exchange rate","order me a pizza"]),
 }
 
 def live(url, expert, text, key=""):
