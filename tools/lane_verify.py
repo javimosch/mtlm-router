@@ -179,9 +179,26 @@ def main():
         if not packs:
             print(json.dumps({"ok": False, "errors": [f"no packs in {a.dir}"]}))
             sys.exit(1)
+        # yanked packs are exempt from warning gates under --strict — the fix
+        # for a deprecated artifact is its successor, not a republish
+        # (lifecycle policy: deprecation exits the working set, not the archive)
+        yanked = set()
+        for cand in (os.path.join(a.dir, "deprecated.json"),
+                     os.path.join(a.dir, os.pardir, "deprecated.json")):
+            if os.path.exists(cand):
+                try:
+                    yanked = {k for k in json.load(open(cand)) if not k.startswith("_")}
+                except Exception:
+                    pass
+                break
         reports, failed = [], 0
         for p in packs:
             rep, code = verify_pack(p, a.sums)
+            nv = f"{rep.get('name')}@{rep.get('version')}"
+            if nv in yanked:
+                rep["yanked"] = True
+                rep["exempted_warnings"] = rep["warnings"]
+                rep["warnings"] = []
             reports.append(rep)
             failed += code
         warned = sum(bool(r.get("warnings")) for r in reports)
