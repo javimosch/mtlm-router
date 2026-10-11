@@ -109,6 +109,14 @@ def verify_pack(pack, sums=None):
         warnings.append("certified pack predates the live_verified gate — "
                         "re-pack with --live-verified after loading the head in anvil")
 
+    # abstention-honesty check: taxonomy declares an abstain class
+    # (oos/escalate) but eval.json carries no OOS-side measurement at all.
+    if {"oos", "escalate"} & tax_labels:
+        ev = json.loads(members["eval.json"])
+        if not any("oos" in k or "leak" in k or "coverage" in k for k in ev):
+            warnings.append("taxonomy has oos/escalate class but eval.json has no "
+                            "oos*/leak*/coverage* metrics — buyers can't see the abstention story")
+
     ok = not errs
     return {
         "pack": pack, "ok": ok,
