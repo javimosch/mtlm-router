@@ -91,11 +91,12 @@ def main():
         if not installed:
             print(json.dumps({"ok": True, "lanes": [], "note": "no managed lanes"})); sys.exit(0)
         index = json.loads(fetch(a.index))
-        latest = {}
+        latest, latest_lane = {}, {}
         for l in index.get("lanes", []):
             cur = latest.get(l["name"])
             if cur is None or [int(x) for x in l["version"].split(".")] > [int(x) for x in cur.split(".")]:
                 latest[l["name"]] = l["version"]
+                latest_lane[l["name"]] = l
         rows, outdated = [], False
         for n, kv in sorted(installed.items()):
             inst, avail = kv.get("ver") or "-", latest.get(n)
@@ -104,7 +105,16 @@ def main():
                 ("outdated" if [int(x) for x in inst.split(".")] < [int(x) for x in avail.split(".")]
                  else "current"))
             outdated = outdated or st == "outdated"
-            rows.append({"lane": n, "installed": inst, "latest": avail, "status": st})
+            row = {"lane": n, "installed": inst, "latest": avail, "status": st}
+            ll = latest_lane.get(n) or {}
+            if ll.get("holdout_acc") is not None:
+                row["latest_holdout_acc"] = ll["holdout_acc"]
+            oo = ll.get("oos") or {}
+            if oo.get("oos_recall") is not None:
+                row["latest_oos_recall"] = oo["oos_recall"]
+            row["latest_has_oos_class"] = "oos" in (ll.get("taxonomy") or [])
+            row["latest_live_verified"] = bool(ll.get("live_verified"))
+            rows.append(row)
         print(json.dumps({"ok": not outdated, "lanes": rows}, indent=2))
         sys.exit(1 if outdated else 0)
 
