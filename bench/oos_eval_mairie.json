@@ -1,0 +1,114 @@
+taps resolved: [(-4, 'max'), (-2, 'max'), (-3, 'max')]
+{
+ "in": [
+  {
+   "text": "1ere dotation bac verre",
+   "route": "dotation_bacs",
+   "conf": 0.992
+  },
+  {
+   "text": "changement bac casse",
+   "route": "changement_bacs",
+   "conf": 0.71
+  },
+  {
+   "text": "ramassage encombrants",
+   "route": "collecte_encombrant",
+   "conf": 0.942
+  },
+  {
+   "text": "depot illicite canape",
+   "route": "escalate",
+   "conf": 0.576
+  },
+  {
+   "text": "collecte bio quand ca passe",
+   "route": "escalate",
+   "conf": 0.292
+  },
+  {
+   "text": "sacs jaunes distribution",
+   "route": "changement_bacs",
+   "conf": 0.785
+  },
+  {
+   "text": "point apport verre plein",
+   "route": "escalate",
+   "conf": 0.791
+  },
+  {
+   "text": "dechetterie horaires",
+   "route": "escalate",
+   "conf": 0.502
+  }
+ ],
+ "oos": [
+  {
+   "text": "carte identite renouvellement",
+   "route": "collecte_bio",
+   "conf": 0.573
+  },
+  {
+   "text": "mariage rendez vous",
+   "route": "escalate",
+   "conf": 0.537
+  },
+  {
+   "text": "stationnement payant",
+   "route": "escalate",
+   "conf": 0.735
+  },
+  {
+   "text": "nid de poule rue des fleurs",
+   "route": "collecte_encombrant",
+   "conf": 0.223
+  },
+  {
+   "text": "bruit voisinage nuit",
+   "route": "escalate",
+   "conf": 0.5
+  },
+  {
+   "text": "bus 42 en retard",
+   "route": "escalate",
+   "conf": 0.403
+  },
+  {
+   "text": "cantine scolaire inscription",
+   "route": "conteneurs_enterres",
+   "conf": 0.283
+  },
+  {
+   "text": "taxe fonciere augmentation",
+   "route": "escalate",
+   "conf": 0.56
+  },
+  {
+   "text": "lampadaire clignotant",
+   "route": "escalate",
+   "conf": 0.721
+  },
+  {
+   "text": "mariage civil dossier",
+   "route": "escalate",
+   "conf": 0.518
+  },
+  {
+   "text": "permis de construire",
+   "route": "escalate",
+   "conf": 0.699
+  },
+  {
+   "text": "passage pieton efface",
+   "route": "escalate",
+   "conf": 0.647
+  }
+ ],
+ "summary": {
+  "in_scope_median": 0.7478357553482056,
+  "oos_median": 0.5485507249832153,
+  "oos_escalate_share": 0.75,
+  "oos_leak_05": 0.75,
+  "oos_leak_07": 0.16666666666666666
+ }
+}
