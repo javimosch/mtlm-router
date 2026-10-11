@@ -1,0 +1,330 @@
+{"text": "encore des encombrants de marché avenue de Paris, ras le bol", "route": "activites_commerciales"}
+{"text": "bonjour, un candélabre cassé à côté de la boulangerie depuis plusieurs jours", "route": "eclairage"}
+{"text": "je signale un réverbère qui ne marche plus devant l'école", "route": "eclairage"}
+{"text": "un graffiti sur le pont devant chez moi. merci d'intervenir", "route": "graffiti_affiches"}
+{"text": "signalement : un bac roulant abandonné sur le trottoir", "route": "objets_encombrants"}
+{"text": "signalement : une grille d'arbre cassée au coin de la rue", "route": "mobilier_urbain"}
+{"text": "une branche qui menace de tomber dans l'allée", "route": "arbres_vegetation"}
+{"text": "anomalie rue de la République : une flaque stagnante", "route": "eau"}
+{"text": "y a-t-il moyen d'agir ? un vélib vandalisé sur la chaussée", "route": "stationnement_epaves"}
+{"text": "anomalie près de l'arrêt de bus : un trou dans la chaussée", "route": "voirie_trottoir"}
+{"text": "je voudrais signaler des encombrants de marché face au métro", "route": "activites_commerciales"}
+{"text": "merci de faire quelque chose, un souci sur l'espace public à côté de la boulangerie", "route": "autre"}
+{"text": "merci de faire quelque chose, un pavé arraché place du marché", "route": "voirie_trottoir"}
+{"text": "anomalie : une voiture en stationnement gênant", "route": "stationnement_epaves"}
+{"text": "signalement : un problème dans la rue devant chez moi", "route": "autre"}
+{"text": "je voudrais signaler un trou dangereux sur la voie place du marché", "route": "voirie_trottoir"}
+{"text": "signalement : une branche qui menace de tomber dans ma rue", "route": "arbres_vegetation"}
+{"text": "des riverains se plaignent : des feuilles mortes accumulées à côté de la boulangerie", "route": "proprete_dechets"}
+{"text": "une branche sur les câbles juste devant la mairie depuis des semaines", "route": "arbres_vegetation"}
+{"text": "problème récurrent : une bosse sur la route face au métro", "route": "voirie_trottoir"}
+{"text": "des herbes éparses devant l'école. merci d'intervenir", "route": "arbres_vegetation"}
+{"text": "je signale une fuite d'eau dans l'allée", "route": "eau"}
+{"text": "bonjour, un appareil hydraulique qui fuit au pied de l'immeuble depuis plusieurs jours", "route": "eau"}
+{"text": "encore un problème dans la rue rue de la République, ras le bol", "route": "autre"}
+{"text": "je signale un arbre dangereux rue de la République", "route": "arbres_vegetation"}
+{"text": "urgent : un arbre en mauvais état impasse des Lilas", "route": "arbres_vegetation"}
+{"text": "je voudrais signaler un bac roulant abandonné sur la chaussée", "route": "objets_encombrants"}
+{"text": "des riverains se plaignent : un pavé arraché au coin de la rue", "route": "voirie_trottoir"}
+{"text": "des riverains se plaignent : une terrasse non autorisée sur la chaussée", "route": "activites_commerciales"}
+{"text": "un appareil hydraulique qui fuit boulevard central, risque d'accident", "route": "eau"}
+{"text": "des branchages à ramasser devant l'école, risque d'accident", "route": "arbres_vegetation"}
+{"text": "un écoulement d'eau permanent juste devant la mairie depuis des semaines", "route": "eau"}
+{"text": "à signaler rue Victor Hugo : un incident sur la voie publique", "route": "autre"}
+{"text": "signalement : des déchets divers en vrac avenue de Paris", "route": "objets_encombrants"}
+{"text": "bonjour, des graffitis sur la boîte aux lettres au pied de l'immeuble depuis plusieurs jours", "route": "graffiti_affiches"}
+{"text": "merci de faire quelque chose, du mobilier urbain détérioré boulevard central", "route": "mobilier_urbain"}
+{"text": "ça fait une semaine qu'il y a un problème dans la rue dans ma rue", "route": "autre"}
+{"text": "à signaler juste devant la mairie : un tag sur la poubelle", "route": "graffiti_affiches"}
+{"text": "un nid-de-poule près du parc. merci d'intervenir", "route": "voirie_trottoir"}
+{"text": "bonjour, une bosse sur la route sur le trottoir depuis plusieurs jours", "route": "voirie_trottoir"}
+{"text": "je voudrais signaler une voiture en stationnement gênant boulevard central", "route": "stationnement_epaves"}
+{"text": "ça fait une semaine qu'il y a un graffiti sur le pont place du marché", "route": "graffiti_affiches"}
+{"text": "je signale un appareil hydraulique qui fuit devant l'école", "route": "eau"}
+{"text": "une affiche agrafée rue de la République depuis des semaines", "route": "graffiti_affiches"}
+{"text": "des déchets et salissures dans l'allée", "route": "proprete_dechets"}
+{"text": "des riverains se plaignent : un véhicule épave sur la chaussée", "route": "stationnement_epaves"}
+{"text": "des riverains se plaignent : une trottinette abandonnée devant le portail", "route": "stationnement_epaves"}
+{"text": "des encombrants de marché avenue de Paris. merci d'intervenir", "route": "activites_commerciales"}
+{"text": "un souci sur l'espace public dans l'allée. merci d'intervenir", "route": "autre"}
+{"text": "une épave de scooter . merci d'intervenir", "route": "stationnement_epaves"}
+{"text": "signalement : un banc public cassé près du parc", "route": "mobilier_urbain"}
+{"text": "bonjour, une terrasse non autorisée près du parc depuis plusieurs jours", "route": "activites_commerciales"}
+{"text": "des déchets et salissures près du parc", "route": "proprete_dechets"}
+{"text": "des bouteilles de gaz hilarant devant le portail. merci d'intervenir", "route": "proprete_dechets"}
+{"text": "depuis ce matin il y a un souci sur l'espace public à côté de la boulangerie", "route": "autre"}
+{"text": "problème récurrent : un tag sur la poubelle près du parc", "route": "graffiti_affiches"}
+{"text": "une voiture sur la place handicapé devant chez moi, risque d'accident", "route": "stationnement_epaves"}
+{"text": "à signaler devant le portail : du mobilier urbain détérioré", "route": "mobilier_urbain"}
+{"text": "y a-t-il moyen d'agir ? des déchets divers en vrac impasse des Lilas", "route": "objets_encombrants"}
+{"text": "urgent : une poubelle de rue sale rue de la République", "route": "proprete_dechets"}
+{"text": "à signaler rue Victor Hugo : une branche qui menace de tomber", "route": "arbres_vegetation"}
+{"text": "encore des salissures au pied d'un arbre rue de la République, ras le bol", "route": "proprete_dechets"}
+{"text": "je voudrais signaler des cartons et des sacs de déchets avenue de Paris", "route": "objets_encombrants"}
+{"text": "ça fait une semaine qu'il y a des barrières de chantier rue de la République", "route": "objets_encombrants"}
+{"text": "ça fait une semaine qu'il y a une lumière publique en panne à côté de la boulangerie", "route": "eclairage"}
+{"text": "une épave de scooter devant le portail. merci d'intervenir", "route": "stationnement_epaves"}
+{"text": "il y a un écoulement d'eau permanent avenue de Paris, c'est dangereux", "route": "eau"}
+{"text": "ça fait une semaine qu'il y a une moto abandonnée depuis des semaines boulevard central", "route": "stationnement_epaves"}
+{"text": "bonjour, le restaurant laisse ses poubelles dehors près de l'arrêt de bus depuis plusieurs jours", "route": "activites_commerciales"}
+{"text": "merci de faire quelque chose, une flaque stagnante près de l'arrêt de bus", "route": "eau"}
+{"text": "une flaque stagnante impasse des Lilas, risque d'accident", "route": "eau"}
+{"text": "je signale un problème de voirie sur la chaussée", "route": "autre"}
+{"text": "anomalie près du parc : un problème dans la rue", "route": "autre"}
+{"text": "anomalie rue Victor Hugo : le restaurant laisse ses poubelles dehors", "route": "activites_commerciales"}
+{"text": "encore un panneau routier endommagé dans l'allée, ras le bol", "route": "voirie_trottoir"}
+{"text": "je signale un dysfonctionnement à signaler sur le trottoir", "route": "autre"}
+{"text": "des riverains se plaignent : un panneau mal orienté près de l'arrêt de bus", "route": "voirie_trottoir"}
+{"text": "des herbes éparses juste devant la mairie, risque d'accident", "route": "arbres_vegetation"}
+{"text": "à signaler rue de la République : un abribus endommagé", "route": "mobilier_urbain"}
+{"text": "depuis ce matin il y a des affiches collées sur le mur dans l'allée", "route": "graffiti_affiches"}
+{"text": "anomalie dans ma rue : un souci sur l'espace public", "route": "autre"}
+{"text": "y a-t-il moyen d'agir ? un bac roulant abandonné", "route": "objets_encombrants"}
+{"text": "à signaler sur la chaussée : une barrière cassée", "route": "mobilier_urbain"}
+{"text": "encore des barrières de chantier à côté de la boulangerie, ras le bol", "route": "objets_encombrants"}
+{"text": "je signale une terrasse non autorisée près de l'arrêt de bus", "route": "activites_commerciales"}
+{"text": "il y a une poubelle débordante près du parc, c'est dangereux", "route": "proprete_dechets"}
+{"text": "un arbre affaissé sur le trottoir, risque d'accident", "route": "arbres_vegetation"}
+{"text": "signalement : un lampadaire qui clignote place du marché", "route": "eclairage"}
+{"text": "je signale une poubelle de rue sale sur le trottoir", "route": "proprete_dechets"}
+{"text": "des barrières de chantier rue Victor Hugo depuis des semaines", "route": "objets_encombrants"}
+{"text": "encore un candélabre cassé sur la chaussée, ras le bol", "route": "eclairage"}
+{"text": "un canapé abandonné impasse des Lilas. merci d'intervenir", "route": "objets_encombrants"}
+{"text": "un meuble encombrant impasse des Lilas depuis des semaines", "route": "objets_encombrants"}
+{"text": "je voudrais signaler une branche qui menace de tomber près de l'arrêt de bus", "route": "arbres_vegetation"}
+{"text": "merci de faire quelque chose, un panneau mal orienté place du marché", "route": "voirie_trottoir"}
+{"text": "problème récurrent : une épave de vélo place du marché", "route": "stationnement_epaves"}
+{"text": "un garde-corps détérioré boulevard central, risque d'accident", "route": "mobilier_urbain"}
+{"text": "ça fait une semaine qu'il y a une lumière publique en panne dans ma rue", "route": "eclairage"}
+{"text": "il y a un candélabre cassé au coin de la rue", "route": "eclairage"}
+{"text": "urgent : des tags sur la façade face au métro", "route": "graffiti_affiches"}
+{"text": "je signale un candélabre cassé sur le trottoir", "route": "eclairage"}
+{"text": "un canapé abandonné au coin de la rue, risque d'accident", "route": "objets_encombrants"}
+{"text": "il y a un deux-roues qui bloque le passage dans ma rue, c'est dangereux", "route": "stationnement_epaves"}
+{"text": "y a-t-il moyen d'agir ? un arbre affaissé rue de la République", "route": "arbres_vegetation"}
+{"text": "des tags sur la façade au coin de la rue depuis des semaines", "route": "graffiti_affiches"}
+{"text": "je signale des affiches collées sur le mur impasse des Lilas", "route": "graffiti_affiches"}
+{"text": "il y a une haie qui envahit le trottoir place du marché", "route": "arbres_vegetation"}
+{"text": "y a-t-il moyen d'agir ? un tag sur le rideau métallique juste devant la mairie", "route": "graffiti_affiches"}
+{"text": "je signale un banc public cassé au coin de la rue", "route": "mobilier_urbain"}
+{"text": "problème récurrent : un arbre dangereux au pied de l'immeuble", "route": "arbres_vegetation"}
+{"text": "des riverains se plaignent : des encombrants de marché rue Victor Hugo", "route": "activites_commerciales"}
+{"text": "je signale une poubelle de rue dégradée au pied de l'immeuble", "route": "mobilier_urbain"}
+{"text": "une épave de scooter au coin de la rue, risque d'accident", "route": "stationnement_epaves"}
+{"text": "je voudrais signaler une bosse sur la route près de l'arrêt de bus", "route": "voirie_trottoir"}
+{"text": "depuis ce matin il y a une moto abandonnée depuis des semaines rue de la République", "route": "stationnement_epaves"}
+{"text": "anomalie avenue de Paris : des graffitis sur la boîte aux lettres", "route": "graffiti_affiches"}
+{"text": "une haie qui envahit le trottoir sur la chaussée, risque d'accident", "route": "arbres_vegetation"}
+{"text": "à signaler place du marché : des mégots par terre", "route": "proprete_dechets"}
+{"text": "anomalie rue Victor Hugo : une moto abandonnée depuis des semaines", "route": "stationnement_epaves"}
+{"text": "des riverains se plaignent : un trou dans la chaussée place du marché", "route": "voirie_trottoir"}
+{"text": "un éclairage public éteint la nuit avenue de Paris, risque d'accident", "route": "eclairage"}
+{"text": "bonjour, des affiches collées sur le mur rue de la République depuis plusieurs jours", "route": "graffiti_affiches"}
+{"text": "un appareil hydraulique qui fuit au pied de l'immeuble", "route": "eau"}
+{"text": "depuis ce matin il y a un graffiti sur le pont juste devant la mairie", "route": "graffiti_affiches"}
+{"text": "problème récurrent : des gravats de chantier devant l'école", "route": "objets_encombrants"}
+{"text": "des riverains se plaignent : un tag sur le rideau métallique boulevard central", "route": "graffiti_affiches"}
+{"text": "des riverains se plaignent : des branchages à ramasser à côté de la boulangerie", "route": "arbres_vegetation"}
+{"text": "à signaler sur la chaussée : une affiche agrafée", "route": "graffiti_affiches"}
+{"text": "encore un matelas jeté juste devant la mairie, ras le bol", "route": "objets_encombrants"}
+{"text": "je signale des encombrants de marché boulevard central", "route": "activites_commerciales"}
+{"text": "je voudrais signaler un lampadaire éteint impasse des Lilas", "route": "eclairage"}
+{"text": "depuis ce matin il y a un frigo déposé impasse des Lilas", "route": "objets_encombrants"}
+{"text": "merci de faire quelque chose, une fuite d'eau dans l'allée", "route": "eau"}
+{"text": "ça fait une semaine qu'il y a un arbre dangereux dans l'allée", "route": "arbres_vegetation"}
+{"text": "des riverains se plaignent : un souci sur l'espace public près du parc", "route": "autre"}
+{"text": "je voudrais signaler un matelas jeté devant chez moi", "route": "objets_encombrants"}
+{"text": "à signaler au pied de l'immeuble : une fuite d'eau", "route": "eau"}
+{"text": "ça fait une semaine qu'il y a une affiche agrafée sur le trottoir", "route": "graffiti_affiches"}
+{"text": "je voudrais signaler une barrière cassée devant l'école", "route": "mobilier_urbain"}
+{"text": "le restaurant laisse ses poubelles dehors près de l'arrêt de bus", "route": "activites_commerciales"}
+{"text": "problème récurrent : un graffiti sur le pont place du marché", "route": "graffiti_affiches"}
+{"text": "il y a une épave de vélo dans l'allée", "route": "stationnement_epaves"}
+{"text": "encore un arbre affaissé près du parc, ras le bol", "route": "arbres_vegetation"}
+{"text": "je signale un problème dans la rue sur le trottoir", "route": "autre"}
+{"text": "une commode abandonnée dans l'allée. merci d'intervenir", "route": "objets_encombrants"}
+{"text": "à signaler près du parc : un pavé arraché", "route": "voirie_trottoir"}
+{"text": "un souci sur l'espace public depuis des semaines", "route": "autre"}
+{"text": "une rue plongée dans le noir face au métro, risque d'accident", "route": "eclairage"}
+{"text": "je voudrais signaler des branchages à ramasser au coin de la rue", "route": "arbres_vegetation"}
+{"text": "urgent : une terrasse non autorisée sur la chaussée", "route": "activites_commerciales"}
+{"text": "anomalie rue Victor Hugo : un panneau routier endommagé", "route": "voirie_trottoir"}
+{"text": "depuis ce matin il y a une barrière cassée juste devant la mairie", "route": "mobilier_urbain"}
+{"text": "un commerce qui bloque le trottoir avenue de Paris", "route": "activites_commerciales"}
+{"text": "je voudrais signaler un nid-de-poule boulevard central", "route": "voirie_trottoir"}
+{"text": "depuis ce matin il y a des herbes éparses rue Victor Hugo", "route": "arbres_vegetation"}
+{"text": "depuis ce matin il y a un problème dans la rue devant l'école", "route": "autre"}
+{"text": "des objets encombrants devant chez moi", "route": "objets_encombrants"}
+{"text": "une poubelle de rue sale devant l'école depuis des semaines", "route": "proprete_dechets"}
+{"text": "des riverains se plaignent : un appareil hydraulique qui fuit rue de la République", "route": "eau"}
+{"text": "des riverains se plaignent : une épave de scooter près du parc", "route": "stationnement_epaves"}
+{"text": "signalement : un étalage excessif face au métro", "route": "activites_commerciales"}
+{"text": "bonjour, une canalisation cassée depuis plusieurs jours", "route": "eau"}
+{"text": "il y a une branche sur les câbles près du parc, c'est dangereux", "route": "arbres_vegetation"}
+{"text": "signalement : des salissures au pied d'un arbre au pied de l'immeuble", "route": "proprete_dechets"}
+{"text": "des riverains se plaignent : un dépôt sauvage près du point tri dans ma rue", "route": "proprete_dechets"}
+{"text": "depuis ce matin il y a une terrasse qui gêne la circulation boulevard central", "route": "activites_commerciales"}
+{"text": "merci de faire quelque chose, des gravats de chantier sur le trottoir", "route": "objets_encombrants"}
+{"text": "des riverains se plaignent : un scooter garé sur le trottoir sur le trottoir", "route": "stationnement_epaves"}
+{"text": "signalement : un dépôt sauvage près du point tri sur le trottoir", "route": "proprete_dechets"}
+{"text": "je signale une bouche d'égout bouchée dans ma rue", "route": "eau"}
+{"text": "y a-t-il moyen d'agir ? une lumière publique en panne place du marché", "route": "eclairage"}
+{"text": "encore une fuite d'eau place du marché, ras le bol", "route": "eau"}
+{"text": "des encombrants de marché place du marché. merci d'intervenir", "route": "activites_commerciales"}
+{"text": "à signaler près du parc : un potelet détérioré", "route": "mobilier_urbain"}
+{"text": "signalement : des mégots par terre impasse des Lilas", "route": "proprete_dechets"}
+{"text": "signalement : un graffiti sur le mur sur le trottoir", "route": "graffiti_affiches"}
+{"text": "merci de faire quelque chose, un tag sur le rideau métallique devant l'école", "route": "graffiti_affiches"}
+{"text": "depuis ce matin il y a un véhicule épave sur la chaussée", "route": "stationnement_epaves"}
+{"text": "anomalie dans l'allée : des autocollants sur le panneau", "route": "graffiti_affiches"}
+{"text": "urgent : des autocollants sur le panneau avenue de Paris", "route": "graffiti_affiches"}
+{"text": "il y a une barrière cassée au pied de l'immeuble, c'est dangereux", "route": "mobilier_urbain"}
+{"text": "une commode abandonnée devant l'école. merci d'intervenir", "route": "objets_encombrants"}
+{"text": "un commerce qui bloque le trottoir impasse des Lilas, risque d'accident", "route": "activites_commerciales"}
+{"text": "un arbre affaissé impasse des Lilas, risque d'accident", "route": "arbres_vegetation"}
+{"text": "bonjour, quelque chose d'anormal près de l'arrêt de bus depuis plusieurs jours", "route": "autre"}
+{"text": "anomalie près de l'arrêt de bus : un bac à ordures débordant", "route": "proprete_dechets"}
+{"text": "problème récurrent : une poubelle de rue sale dans l'allée", "route": "proprete_dechets"}
+{"text": "il y a une barrière cassée impasse des Lilas, c'est dangereux", "route": "mobilier_urbain"}
+{"text": "je voudrais signaler une canalisation cassée avenue de Paris", "route": "eau"}
+{"text": "bonjour, un tag sur le rideau métallique devant le portail depuis plusieurs jours", "route": "graffiti_affiches"}
+{"text": "merci de faire quelque chose, un éclairage public éteint la nuit place du marché", "route": "eclairage"}
+{"text": "bonjour, un banc public cassé depuis plusieurs jours", "route": "mobilier_urbain"}
+{"text": "y a-t-il moyen d'agir ? une fissure dans la chaussée face au métro", "route": "voirie_trottoir"}
+{"text": "ça fait une semaine qu'il y a une épave de vélo boulevard central", "route": "stationnement_epaves"}
+{"text": "un dysfonctionnement à signaler rue Victor Hugo depuis des semaines", "route": "autre"}
+{"text": "anomalie : un bac roulant abandonné", "route": "objets_encombrants"}
+{"text": "je signale une barrière cassée devant chez moi", "route": "mobilier_urbain"}
+{"text": "des riverains se plaignent : une lumière publique en panne au pied de l'immeuble", "route": "eclairage"}
+{"text": "bonjour, une lumière publique en panne impasse des Lilas depuis plusieurs jours", "route": "eclairage"}
+{"text": "anomalie juste devant la mairie : un potelet détérioré", "route": "mobilier_urbain"}
+{"text": "je voudrais signaler un dysfonctionnement à signaler place du marché", "route": "autre"}
+{"text": "y a-t-il moyen d'agir ? un banc public cassé devant l'école", "route": "mobilier_urbain"}
+{"text": "il y a du mobilier urbain détérioré sur la chaussée", "route": "mobilier_urbain"}
+{"text": "y a-t-il moyen d'agir ? un éclairage public éteint la nuit impasse des Lilas", "route": "eclairage"}
+{"text": "à signaler place du marché : une voiture en stationnement gênant", "route": "stationnement_epaves"}
+{"text": "anomalie avenue de Paris : une fissure dans la chaussée", "route": "voirie_trottoir"}
+{"text": "bonjour, des herbes éparses dans l'allée depuis plusieurs jours", "route": "arbres_vegetation"}
+{"text": "signalement : un potelet détérioré à côté de la boulangerie", "route": "mobilier_urbain"}
+{"text": "à signaler près de l'arrêt de bus : des bouteilles de gaz hilarant", "route": "proprete_dechets"}
+{"text": "une terrasse qui gêne la circulation près de l'arrêt de bus, risque d'accident", "route": "activites_commerciales"}
+{"text": "des riverains se plaignent : une poubelle débordante dans ma rue", "route": "proprete_dechets"}
+{"text": "des riverains se plaignent : un dysfonctionnement à signaler boulevard central", "route": "autre"}
+{"text": "il y a un bac à ordures débordant au pied de l'immeuble, c'est dangereux", "route": "proprete_dechets"}
+{"text": "encore une voiture sur la place handicapé à côté de la boulangerie, ras le bol", "route": "stationnement_epaves"}
+{"text": "y a-t-il moyen d'agir ? un panneau routier endommagé sur la chaussée", "route": "voirie_trottoir"}
+{"text": "problème récurrent : un graffiti sur le pont rue Victor Hugo", "route": "graffiti_affiches"}
+{"text": "y a-t-il moyen d'agir ? une canalisation cassée devant chez moi", "route": "eau"}
+{"text": "encore un scooter garé sur le trottoir sur le trottoir, ras le bol", "route": "stationnement_epaves"}
+{"text": "ça fait une semaine qu'il y a un banc public cassé boulevard central", "route": "mobilier_urbain"}
+{"text": "il y a un épanchement d'urine près de l'arrêt de bus, c'est dangereux", "route": "proprete_dechets"}
+{"text": "je signale des déchets divers en vrac devant chez moi", "route": "objets_encombrants"}
+{"text": "un lampadaire éteint près du parc", "route": "eclairage"}
+{"text": "anomalie devant chez moi : un frigo déposé", "route": "objets_encombrants"}
+{"text": "des encombrants de marché près de l'arrêt de bus", "route": "activites_commerciales"}
+{"text": "ça fait une semaine qu'il y a un candélabre cassé", "route": "eclairage"}
+{"text": "une terrasse qui gêne la circulation dans ma rue depuis des semaines", "route": "activites_commerciales"}
+{"text": "un bac à ordures débordant sur la chaussée. merci d'intervenir", "route": "proprete_dechets"}
+{"text": "depuis ce matin il y a un tag sur le rideau métallique dans l'allée", "route": "graffiti_affiches"}
+{"text": "à signaler impasse des Lilas : un dysfonctionnement à signaler", "route": "autre"}
+{"text": "encore une poubelle de rue sale juste devant la mairie, ras le bol", "route": "proprete_dechets"}
+{"text": "problème récurrent : une épave de caddie à côté de la boulangerie", "route": "objets_encombrants"}
+{"text": "un arbre en mauvais état impasse des Lilas", "route": "arbres_vegetation"}
+{"text": "il y a une canalisation cassée devant le portail", "route": "eau"}
+{"text": "bonjour, un souci sur l'espace public impasse des Lilas depuis plusieurs jours", "route": "autre"}
+{"text": "urgent : un réverbère qui ne marche plus rue Victor Hugo", "route": "eclairage"}
+{"text": "il y a un réverbère qui ne marche plus juste devant la mairie", "route": "eclairage"}
+{"text": "il y a une rue plongée dans le noir près du parc, c'est dangereux", "route": "eclairage"}
+{"text": "à signaler juste devant la mairie : un arbre affaissé", "route": "arbres_vegetation"}
+{"text": "urgent : un incident sur la voie publique dans ma rue", "route": "autre"}
+{"text": "bonjour, des barrières de chantier près du parc depuis plusieurs jours", "route": "objets_encombrants"}
+{"text": "encore des mégots par terre dans l'allée, ras le bol", "route": "proprete_dechets"}
+{"text": "anomalie : des autocollants sur le panneau", "route": "graffiti_affiches"}
+{"text": "je voudrais signaler des nuisances sonores du bar sur le trottoir", "route": "activites_commerciales"}
+{"text": "il y a un lampadaire qui clignote près du parc, c'est dangereux", "route": "eclairage"}
+{"text": "y a-t-il moyen d'agir ? une lumière publique en panne dans l'allée", "route": "eclairage"}
+{"text": "je signale un bac à ordures débordant près du parc", "route": "proprete_dechets"}
+{"text": "bonjour, un candélabre cassé au pied de l'immeuble depuis plusieurs jours", "route": "eclairage"}
+{"text": "des riverains se plaignent : un éclairage public éteint la nuit à côté de la boulangerie", "route": "eclairage"}
+{"text": "encore un problème de voirie au coin de la rue, ras le bol", "route": "autre"}
+{"text": "depuis ce matin il y a un deux-roues qui bloque le passage dans l'allée", "route": "stationnement_epaves"}
+{"text": "y a-t-il moyen d'agir ? des déjections canines à côté de la boulangerie", "route": "proprete_dechets"}
+{"text": "depuis ce matin il y a une moto abandonnée depuis des semaines dans ma rue", "route": "stationnement_epaves"}
+{"text": "ça fait une semaine qu'il y a un problème de voirie près de l'arrêt de bus", "route": "autre"}
+{"text": "un banc public cassé", "route": "mobilier_urbain"}
+{"text": "il y a une canalisation cassée au pied de l'immeuble, c'est dangereux", "route": "eau"}
+{"text": "anomalie face au métro : un arbre en mauvais état", "route": "arbres_vegetation"}
+{"text": "anomalie place du marché : un véhicule épave", "route": "stationnement_epaves"}
+{"text": "il y a des déchets et salissures sur le trottoir, c'est dangereux", "route": "proprete_dechets"}
+{"text": "encore une poubelle de rue sale devant chez moi, ras le bol", "route": "proprete_dechets"}
+{"text": "depuis ce matin il y a le restaurant laisse ses poubelles dehors impasse des Lilas", "route": "activites_commerciales"}
+{"text": "signalement : un bac roulant abandonné à côté de la boulangerie", "route": "objets_encombrants"}
+{"text": "il y a des bouteilles de gaz hilarant impasse des Lilas", "route": "proprete_dechets"}
+{"text": "je voudrais signaler une bosse sur la route boulevard central", "route": "voirie_trottoir"}
+{"text": "depuis ce matin il y a un incident sur la voie publique boulevard central", "route": "autre"}
+{"text": "ça fait une semaine qu'il y a un potelet détérioré avenue de Paris", "route": "mobilier_urbain"}
+{"text": "encore une bosse sur la route devant chez moi, ras le bol", "route": "voirie_trottoir"}
+{"text": "anomalie avenue de Paris : un problème dans la rue", "route": "autre"}
+{"text": "il y a une flaque stagnante avenue de Paris", "route": "eau"}
+{"text": "des riverains se plaignent : un panneau mal orienté place du marché", "route": "voirie_trottoir"}
+{"text": "je voudrais signaler un panneau mal orienté dans ma rue", "route": "voirie_trottoir"}
+{"text": "anomalie dans ma rue : une fuite d'eau", "route": "eau"}
+{"text": "je signale un arbre affaissé au coin de la rue", "route": "arbres_vegetation"}
+{"text": "des riverains se plaignent : une barrière cassée impasse des Lilas", "route": "mobilier_urbain"}
+{"text": "y a-t-il moyen d'agir ? un dépôt sauvage près du point tri rue Victor Hugo", "route": "proprete_dechets"}
+{"text": "merci de faire quelque chose, un débordement d'eau impasse des Lilas", "route": "eau"}
+{"text": "à signaler juste devant la mairie : le restaurant laisse ses poubelles dehors", "route": "activites_commerciales"}
+{"text": "problème récurrent : un scooter garé sur le trottoir dans ma rue", "route": "stationnement_epaves"}
+{"text": "depuis ce matin il y a des affiches sauvages sur le trottoir", "route": "graffiti_affiches"}
+{"text": "il y a une lumière publique en panne devant l'école", "route": "eclairage"}
+{"text": "encore un lampadaire qui clignote , ras le bol", "route": "eclairage"}
+{"text": "du mobilier urbain détérioré à côté de la boulangerie. merci d'intervenir", "route": "mobilier_urbain"}
+{"text": "encore un débordement d'eau devant chez moi, ras le bol", "route": "eau"}
+{"text": "il y a une moto abandonnée depuis des semaines à côté de la boulangerie, c'est dangereux", "route": "stationnement_epaves"}
+{"text": "il y a une épave de scooter place du marché", "route": "stationnement_epaves"}
+{"text": "il y a un candélabre cassé près du parc, c'est dangereux", "route": "eclairage"}
+{"text": "encore une flaque stagnante sur le trottoir, ras le bol", "route": "eau"}
+{"text": "signalement : une trottinette abandonnée avenue de Paris", "route": "stationnement_epaves"}
+{"text": "des riverains se plaignent : des encombrants de marché", "route": "activites_commerciales"}
+{"text": "signalement : une épave de caddie à côté de la boulangerie", "route": "objets_encombrants"}
+{"text": "je voudrais signaler une canalisation cassée devant le portail", "route": "eau"}
+{"text": "ça fait une semaine qu'il y a une terrasse qui gêne la circulation sur la chaussée", "route": "activites_commerciales"}
+{"text": "je signale un commerce qui bloque le trottoir dans ma rue", "route": "activites_commerciales"}
+{"text": "je voudrais signaler un tag sur la poubelle devant l'école", "route": "graffiti_affiches"}
+{"text": "y a-t-il moyen d'agir ? un revêtement de trottoir manquant près de l'arrêt de bus", "route": "voirie_trottoir"}
+{"text": "il y a un arbre dangereux près de l'arrêt de bus, c'est dangereux", "route": "arbres_vegetation"}
+{"text": "ça fait une semaine qu'il y a une barrière cassée à côté de la boulangerie", "route": "mobilier_urbain"}
+{"text": "une rue plongée dans le noir dans l'allée, risque d'accident", "route": "eclairage"}
+{"text": "une bouche d'égout bouchée près du parc", "route": "eau"}
+{"text": "problème récurrent : un incident sur la voie publique juste devant la mairie", "route": "autre"}
+{"text": "ça fait une semaine qu'il y a des autocollants sur le panneau face au métro", "route": "graffiti_affiches"}
+{"text": "depuis ce matin il y a un abribus endommagé juste devant la mairie", "route": "mobilier_urbain"}
+{"text": "merci de faire quelque chose, une fuite d'eau rue Victor Hugo", "route": "eau"}
+{"text": "je voudrais signaler un meuble encombrant sur le trottoir", "route": "objets_encombrants"}
+{"text": "du mobilier urbain détérioré sur le trottoir", "route": "mobilier_urbain"}
+{"text": "merci de faire quelque chose, un trou dangereux sur la voie dans l'allée", "route": "voirie_trottoir"}
+{"text": "le restaurant laisse ses poubelles dehors près de l'arrêt de bus depuis des semaines", "route": "activites_commerciales"}
+{"text": "à signaler place du marché : un souci sur l'espace public", "route": "autre"}
+{"text": "un étalage excessif place du marché, risque d'accident", "route": "activites_commerciales"}
+{"text": "il y a un banc public cassé impasse des Lilas, c'est dangereux", "route": "mobilier_urbain"}
+{"text": "signalement : des gravats de chantier devant l'école", "route": "objets_encombrants"}
+{"text": "depuis ce matin il y a une branche qui menace de tomber à côté de la boulangerie", "route": "arbres_vegetation"}
+{"text": "il y a un trou dangereux sur la voie juste devant la mairie", "route": "voirie_trottoir"}
+{"text": "bonjour, un problème dans la rue rue de la République depuis plusieurs jours", "route": "autre"}
+{"text": "je voudrais signaler un banc public cassé au pied de l'immeuble", "route": "mobilier_urbain"}
+{"text": "encore un trou dangereux sur la voie impasse des Lilas, ras le bol", "route": "voirie_trottoir"}
+{"text": "un panneau mal orienté place du marché depuis des semaines", "route": "voirie_trottoir"}
+{"text": "un débordement d'eau rue Victor Hugo", "route": "eau"}
+{"text": "urgent : un dépôt sauvage près du point tri devant le portail", "route": "proprete_dechets"}
+{"text": "problème récurrent : un étalage excessif dans l'allée", "route": "activites_commerciales"}
+{"text": "il y a un problème de voirie devant l'école, c'est dangereux", "route": "autre"}
+{"text": "anomalie devant le portail : un réverbère qui ne marche plus", "route": "eclairage"}
+{"text": "signalement : un affaissement du trottoir devant l'école", "route": "voirie_trottoir"}
+{"text": "anomalie avenue de Paris : un pavé arraché", "route": "voirie_trottoir"}
+{"text": "une canalisation cassée près du parc", "route": "eau"}
+{"text": "des nuisances sonores du bar juste devant la mairie. merci d'intervenir", "route": "activites_commerciales"}
+{"text": "anomalie rue Victor Hugo : une voiture sur la place handicapé", "route": "stationnement_epaves"}
+{"text": "merci de faire quelque chose, des objets encombrants devant chez moi", "route": "objets_encombrants"}
+{"text": "je signale une haie qui envahit le trottoir impasse des Lilas", "route": "arbres_vegetation"}
+{"text": "ça fait une semaine qu'il y a un panneau mal orienté au pied de l'immeuble", "route": "voirie_trottoir"}
+{"text": "ça fait une semaine qu'il y a de la peinture sur le trottoir sur la chaussée", "route": "graffiti_affiches"}
