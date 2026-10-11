@@ -110,6 +110,26 @@ endpoint table, or stale numeric claims (smoke check count, contract
 conformance count are re-counted from the scripts). Run it before any
 landing deploy that touches `docs.html`.
 
+## 5c. Per-lane operating points (confidence floors)
+
+The argmax route is only half the decision — `ANVIL_EXPERT_MINCONF=lane:t`
+(or per-request `min_conf`) gates low-confidence decisions to `delegate`.
+Recommended floors measured by `bench/oos_eval.py` on each lane's
+held-out in-scope + OOS probes (snapshot: `bench/oos_eval_catalog.json`):
+
+| lane | recommended floor | leak@floor | coverage@floor | note |
+|---|---|---|---|---|
+| helpdesk | none needed | 0% | 100% | abstains correctly at argmax |
+| civic | 0.5 | 4.2% | 96% | strong; 0.7 → 2% leak, 76% cov |
+| civic_fr | none needed | 9% | ~100% | conf ~1.0 everywhere — gating useless, argmax abstain does the work |
+| clinc150 | **0.7** | 7.5% | 70% | 15% argmax abstain; leaks are low-conf (median 0.23) so the floor does the work |
+| mairie | 0.9 (strict) / 0.7 (balanced) | 0% / 13% | 25% / 62% | no `oos` class — floor is the only OOS defense; pick per risk appetite |
+| eq_tone | none — use conformal | — | — | tone lane: `neutral` is its negative class; conf naturally ~0.4, conformal qhat is the calibrated gate |
+
+Setting a floor per request beats env: `"min_conf": 0.7` in `/v1/route`.
+Re-measure with `bench/oos_eval.py --head X.head --in-scope p.jsonl
+--oos q.jsonl` after any head or corpus change — floors are per-artifact.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:
