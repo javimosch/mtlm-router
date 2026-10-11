@@ -98,6 +98,12 @@ parser change), run the whole-catalog regression:
 lane across every shipped head, exit 1 on any offline↔live divergence.
 First run caught a real mhd2 layout bug in the parser (29/29 green after).
 
+Any `index.json` mutation also requires regenerating the catalog page —
+`python3 tools/render_catalog.py` — and redeploying the landing. The
+freshness gate `python3 tools/render_catalog.py --check` exits 1 when
+`site/catalog.html` differs from a fresh render; run it in CI or before
+deploy so the funnel surface can't silently lag the registry.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:
