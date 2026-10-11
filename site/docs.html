@@ -214,6 +214,32 @@ ANVIL_URL=http://127.0.0.1:8097 ./mtlm-mcp
   </div>
 </div>
 
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Lane manager — <span class="mono">tools/lane_install.py</span></h2>
+  <p class="text-gray-400 text-sm mb-4">Package-manager lifecycle for heads from <a href="https://github.com/javimosch/mtlm-heads" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">mtlm-heads</a>: fetch → sha256-verify → install → activate → inspect → update-check → remove. JSON on stdout, exit codes 0/1.</p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+<pre class="mono text-xs md:text-sm overflow-x-auto"><span class="text-gray-500"># install latest non-yanked version (or pin with name@ver)</span>
+python3 tools/lane_install.py <span class="text-cyan-300">helpdesk</span> --apply --appliance .
+python3 tools/lane_install.py <span class="text-cyan-300">civic@0.2.1</span> --apply --appliance .
+<span class="text-gray-500"># → fetches index.json, verifies tarball sha256 + head sha256 vs manifest,
+#   writes models/*.head, patches start.sh's managed env block. JSON includes:</span>
+<span class="text-gray-500">#   "warnings": ["newer version available: helpdesk@0.2.0 (installing 0.1.1)",
+#                "replaces installed helpdesk@0.1.1 (upgrade|downgrade!)"]</span>
+
+<span class="text-gray-500"># inspect the managed block — name, head, qhat, version, head_present</span>
+python3 tools/lane_install.py --list --appliance .
+
+<span class="text-gray-500"># pip --outdated for lanes: current|outdated|unknown|not-in-catalog</span>
+python3 tools/lane_install.py --check --appliance .   <span class="text-gray-500"># exit 1 if any outdated — cron-able</span>
+
+<span class="text-gray-500"># remove: drops the record, regenerates the block, deletes the head file</span>
+python3 tools/lane_install.py --uninstall helpdesk --appliance .
+
+<span class="text-gray-500"># flags: --dry-run (resolve+verify only) · --index URL (private catalog)</span></pre>
+  </div>
+  <p class="text-gray-500 text-sm mt-3">The managed block in <code class="mono">start.sh</code> (<code class="mono"># &gt;&gt;&gt; mtlm-lanes … # &lt;&lt;&lt;</code>) is regenerated from <code class="mono"># lane</code> records on every operation — installs accumulate, reinstalls update in place. Everything outside the markers is untouched.</p>
+</div>
+
 <div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6">
   <h2 class="text-xl font-bold mb-3">Verify a deployment</h2>
   <p class="text-gray-400 text-sm mb-4">Two self-checks ship with the product — run them against any instance (local, hosted, a client's):</p>
