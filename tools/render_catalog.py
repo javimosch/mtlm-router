@@ -96,17 +96,37 @@ def main():
     a = ap.parse_args()
     raw = urllib.request.urlopen(a.index).read() if a.index.startswith("http") else open(a.index, "rb").read()
     lanes = json.loads(raw)["lanes"]
-    cards = "\n".join(card(l) for l in sorted(lanes, key=lambda l: (bool(l.get("yanked")), l["name"], l["version"])))
+    vkey = lambda l: [int(x) for x in l["version"].split(".")]
+    # main grid = latest non-yanked pack per lane; older + yanked go under
+    # "other versions" (npm/GitLab registry pattern — the list shows what to run)
+    latest = {}
+    for l in lanes:
+        if l.get("yanked"):
+            continue
+        cur = latest.get(l["name"])
+        if cur is None or vkey(l) > vkey(cur):
+            latest[l["name"]] = l
+    live = sorted(latest.values(), key=lambda l: l["name"])
+    dead = sorted([l for l in lanes if l not in live],
+                  key=lambda l: (l["name"], vkey(l)), reverse=False)
+    cards = "\n".join(card(l) for l in live)
+    superseded = ""
+    if dead:
+        superseded = f"""
+<details class="mt-8">
+  <summary class="cursor-pointer text-gray-500 text-sm hover:text-gray-300">other versions ({len(dead)}) — older or yanked packs, installable by exact pin</summary>
+  <div class="space-y-4 mt-4">{" ".join(card(l) for l in dead)}</div>
+</details>"""
     page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lane catalog — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
 <style>.mono{{font-family:ui-monospace,monospace}}body{{background:#030712;color:#d1d5db}}</style></head>
 <body class="max-w-4xl mx-auto px-6 py-14">
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
 <h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
-<p class="text-gray-400 text-sm mb-2">{len(lanes)} packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
+<p class="text-gray-400 text-sm mb-2">{len(live)} lanes · {len(lanes)} packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
 <p class="text-gray-500 text-sm mb-10">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="{INDEX}" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
 <div class="space-y-4">{cards}
-</div>
+</div>{superseded}
 <div class="mt-10 bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">CUSTOM LANE — paid</div>
   <p class="text-gray-400 text-sm mb-4">None of these routes are yours? Send your route table (names + a few phrasings each): you get a ~7KB <span class="mono">.head</span> trained and calibrated on your corpus — eval report, abstention threshold, one free re-train after a week of shadow traffic. €149 / domain, one-off, 3 business days.</p>
