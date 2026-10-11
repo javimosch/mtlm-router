@@ -1,1 +1,3 @@
+out/appliances/*/models/*.head
+out/appliances/*/anvil-serve-*
 out/appliances/*/logs/
