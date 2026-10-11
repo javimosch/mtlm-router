@@ -91,8 +91,11 @@ def main():
         if not installed:
             print(json.dumps({"ok": True, "lanes": [], "note": "no managed lanes"})); sys.exit(0)
         index = json.loads(fetch(a.index))
-        latest, latest_lane = {}, {}
+        latest, latest_lane, by_nv = {}, {}, {}
         for l in index.get("lanes", []):
+            by_nv[f"{l['name']}@{l['version']}"] = l
+            if l.get("yanked"):
+                continue
             cur = latest.get(l["name"])
             if cur is None or [int(x) for x in l["version"].split(".")] > [int(x) for x in cur.split(".")]:
                 latest[l["name"]] = l["version"]
@@ -100,12 +103,19 @@ def main():
         rows, outdated = [], False
         for n, kv in sorted(installed.items()):
             inst, avail = kv.get("ver") or "-", latest.get(n)
+            inst_lane = by_nv.get(f"{n}@{inst}")
+            yanked = bool(inst_lane and inst_lane.get("yanked"))
             st = "not-in-catalog" if avail is None else (
                 "unknown" if inst == "-" else
-                ("outdated" if [int(x) for x in inst.split(".")] < [int(x) for x in avail.split(".")]
+                ("outdated" if yanked or
+                 [int(x) for x in inst.split(".")] < [int(x) for x in avail.split(".")]
                  else "current"))
             outdated = outdated or st == "outdated"
             row = {"lane": n, "installed": inst, "latest": avail, "status": st}
+            if yanked:
+                row["installed_yanked"] = True
+                if inst_lane.get("superseded_by"):
+                    row["superseded_by"] = inst_lane["superseded_by"]
             ll = latest_lane.get(n) or {}
             if ll.get("holdout_acc") is not None:
                 row["latest_holdout_acc"] = ll["holdout_acc"]
@@ -132,6 +142,10 @@ def main():
     sibs = [l for l in index["lanes"] if l["name"] == lane["name"] and not l.get("yanked")]
     newest = max(sibs, key=lambda l: vkey(l["version"]))
     warnings = []
+    if lane.get("yanked"):
+        warnings.append(f"{lane['name']}@{lane['version']} is yanked"
+                        + (f" — superseded by {lane['superseded_by']}" if lane.get("superseded_by") else "")
+                        + (f": {lane['yank_reason']}" if lane.get("yank_reason") else ""))
     if newest["version"] != lane["version"]:
         warnings.append(f"newer version available: {lane['name']}@{newest['version']} "
                         f"(installing {lane['version']})")
