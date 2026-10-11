@@ -69,6 +69,21 @@ Promotion gate after burn-in:
 look *better*, that's a taxonomy/quality divergence — run a labeled eval
 (`lane_verify` / `risk_coverage`), agreement alone can't prove it.
 
+## 5b. Publishing a lane pack (pre-publish gate)
+
+Offline eval is necessary but NOT sufficient — the civic 0.2.0 incident
+shipped a head whose emit-time label alignment was broken; offline metrics
+were green because they came from a different fit, and only live probing
+exposed it. Gate (enforced by `lane_pack.py` for `certified`):
+
+1. Load the candidate head in a real anvil instance:
+   `ANVIL_EXPERTS=probe:models/candidate.head ./start.sh`
+2. Send ≥3 probe texts — one clearly in-scope, one clearly out-of-scope —
+   and eyeball `route`/`confidence` sanity.
+3. Pack with `--live-verified`; the manifest records it and
+   `lane_verify` reports it. `certified` packs built without the flag are
+   refused; older certified packs verify with a warning.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:

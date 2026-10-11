@@ -27,9 +27,16 @@ def main():
     p.add_argument("--license", required=True)
     p.add_argument("--status", required=True, choices=["certified", "demo"],
                    help="certified = leak-free holdout eval stands behind it; demo = illustrative only")
+    p.add_argument("--live-verified", action="store_true",
+                   help="the head was loaded in a real anvil instance and produced sane "
+                        "routes on probe texts. REQUIRED for certified packs (civic 0.2.0 "
+                        "incident: an offline-green but misaligned fit shipped garbage live)")
     p.add_argument("--provenance", required=True)
     p.add_argument("--out", required=True)
     a = p.parse_args()
+    if a.status == "certified" and not a.live_verified:
+        p.error("--status certified requires --live-verified (load the head in anvil "
+                "and confirm sane routes first — offline eval alone is not sufficient)")
     ev = json.load(open(a.eval_json))
     h = open(a.head, "rb").read()
     manifest = {
@@ -41,6 +48,7 @@ def main():
         "taxonomy": [l.split("::")[0].strip() for l in open(a.labels) if "::" in l],
         "metrics": ev,
         "status": a.status,
+        "live_verified": bool(a.live_verified),
         "provenance": a.provenance,
         "license": a.license,
         "runtime": "anvil-serve >= v0.3.0 (ANVIL_EXPERTS=<lane>:<head>, ANVIL_EXPERT_QHAT if provided)",

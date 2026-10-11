@@ -108,11 +108,18 @@ def main():
     if "status" in man and man["status"] not in ("certified", "demo"):
         fail(f"unknown status {man['status']}", errs)
 
+    warnings = []
+    if certified and not man.get("live_verified"):
+        warnings.append("certified pack predates the live_verified gate — "
+                        "re-pack with --live-verified after loading the head in anvil")
+
     ok = not errs
     print(json.dumps({
         "pack": a.pack, "ok": ok,
         "name": man.get("name"), "version": man.get("version"),
         "classes": len(tax_labels), "holdout_acc": metrics.get("holdout_acc"),
+        "live_verified": man.get("live_verified"),
+        "warnings": warnings,
         "errors": errs}))
     sys.exit(0 if ok else 1)
 
