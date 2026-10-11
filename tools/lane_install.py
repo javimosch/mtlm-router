@@ -26,11 +26,12 @@ def pick(lanes, spec):
         name, ver = spec.split("@", 1)
         return next((l for l in lanes if l["name"] == name and l["version"] == ver), None)
     cands = [l for l in lanes if l["name"] == spec]
-    if not cands:
+    live = [l for l in cands if not l.get("yanked")]
+    if not live:
         return None
     def key(l):
         return [int(x) for x in l["version"].split(".")]
-    return sorted(cands, key=key)[-1]
+    return sorted(live, key=key)[-1]
 
 
 def main():
