@@ -1,0 +1,233 @@
+{
+ "head": "/root/mtlm/hosted/models/mairie_mt3.head",
+ "labels": [
+  "agents",
+  "autres",
+  "changement_bacs",
+  "collecte_bio",
+  "collecte_encombrant",
+  "collecte_om",
+  "collecte_selective",
+  "colonne_apport",
+  "compostage",
+  "conteneurs_enterres",
+  "dechetterie",
+  "depot_illicite",
+  "dotation_bacs",
+  "escalate",
+  "positionnement_bacs",
+  "sacs"
+ ],
+ "abstain_classes": [
+  "escalate"
+ ],
+ "n_in": 8,
+ "n_oos": 30,
+ "summary": {
+  "in_scope_median_conf": 0.7478357553482056,
+  "oos_median_conf": 0.45258042216300964,
+  "oos_abstain_share": 0.5666666666666667,
+  "leak_curve": {
+   "0.3": 0.4,
+   "0.5": 0.2,
+   "0.7": 0.13333333333333333,
+   "0.9": 0.0
+  },
+  "coverage_curve": {
+   "0.3": 0.875,
+   "0.5": 0.875,
+   "0.7": 0.625,
+   "0.9": 0.25
+  }
+ },
+ "oos_pred_dist": {
+  "escalate": 17,
+  "collecte_encombrant": 6,
+  "changement_bacs": 3,
+  "collecte_bio": 2,
+  "colonne_apport": 1,
+  "positionnement_bacs": 1
+ },
+ "probes": [
+  {
+   "text": "carte identite renouvellement",
+   "route": "collecte_bio",
+   "conf": 0.573,
+   "leak": true
+  },
+  {
+   "text": "mariage civil prendre rendez vous",
+   "route": "escalate",
+   "conf": 0.518,
+   "leak": false
+  },
+  {
+   "text": "permis de construire abri jardin",
+   "route": "escalate",
+   "conf": 0.381,
+   "leak": false
+  },
+  {
+   "text": "inscription cantine scolaire",
+   "route": "escalate",
+   "conf": 0.497,
+   "leak": false
+  },
+  {
+   "text": "lampadaire en panne devant chez moi",
+   "route": "escalate",
+   "conf": 0.435,
+   "leak": false
+  },
+  {
+   "text": "nid de poule avenue principale",
+   "route": "collecte_encombrant",
+   "conf": 0.25,
+   "leak": true
+  },
+  {
+   "text": "bruit voisinage la nuit",
+   "route": "escalate",
+   "conf": 0.478,
+   "leak": false
+  },
+  {
+   "text": "bus scolaire horaires matin",
+   "route": "positionnement_bacs",
+   "conf": 0.318,
+   "leak": true
+  },
+  {
+   "text": "taxe habitation montant question",
+   "route": "escalate",
+   "conf": 0.523,
+   "leak": false
+  },
+  {
+   "text": "stationnement zone bleue vignette",
+   "route": "escalate",
+   "conf": 0.324,
+   "leak": false
+  },
+  {
+   "text": "creche inscription bebe",
+   "route": "collecte_bio",
+   "conf": 0.316,
+   "leak": true
+  },
+  {
+   "text": "salle des fetes louer mariage",
+   "route": "changement_bacs",
+   "conf": 0.798,
+   "leak": true
+  },
+  {
+   "text": "epave voiture quartier",
+   "route": "escalate",
+   "conf": 0.659,
+   "leak": false
+  },
+  {
+   "text": "fuite canalisation rue",
+   "route": "collecte_encombrant",
+   "conf": 0.548,
+   "leak": true
+  },
+  {
+   "text": "arbre tombe sur la route",
+   "route": "escalate",
+   "conf": 0.224,
+   "leak": false
+  },
+  {
+   "text": "acte naissance demande copie",
+   "route": "escalate",
+   "conf": 0.225,
+   "leak": false
+  },
+  {
+   "text": "logement social demande",
+   "route": "escalate",
+   "conf": 0.333,
+   "leak": false
+  },
+  {
+   "text": "piscine municipale tarif entree",
+   "route": "escalate",
+   "conf": 0.723,
+   "leak": false
+  },
+  {
+   "text": "bibliotheque emprunt carte",
+   "route": "changement_bacs",
+   "conf": 0.32,
+   "leak": true
+  },
+  {
+   "text": "chien egare trouve rue",
+   "route": "collecte_encombrant",
+   "conf": 0.801,
+   "leak": true
+  },
+  {
+   "text": "rats poubelle jardin",
+   "route": "escalate",
+   "conf": 0.31,
+   "leak": false
+  },
+  {
+   "text": "graffiti abribus nettoyage",
+   "route": "escalate",
+   "conf": 0.288,
+   "leak": false
+  },
+  {
+   "text": "feu circulation casse carrefour",
+   "route": "collecte_encombrant",
+   "conf": 0.47,
+   "leak": true
+  },
+  {
+   "text": "voisin conflit cloture litige",
+   "route": "escalate",
+   "conf": 0.255,
+   "leak": false
+  },
+  {
+   "text": "elections vote procuration",
+   "route": "colonne_apport",
+   "conf": 0.316,
+   "leak": true
+  },
+  {
+   "text": "objets trouves telephone perdu",
+   "route": "collecte_encombrant",
+   "conf": 0.489,
+   "leak": true
+  },
+  {
+   "text": "subvention club sport demande",
+   "route": "changement_bacs",
+   "conf": 0.872,
+   "leak": true
+  },
+  {
+   "text": "dechetterie pas ouverte dimanche",
+   "route": "escalate",
+   "conf": 0.31,
+   "leak": false
+  },
+  {
+   "text": "panneau publicitaire clandestin",
+   "route": "escalate",
+   "conf": 0.503,
+   "leak": false
+  },
+  {
+   "text": "terrasse cafe envahit trottoir",
+   "route": "collecte_encombrant",
+   "conf": 0.787,
+   "leak": true
+  }
+ ]
+}
