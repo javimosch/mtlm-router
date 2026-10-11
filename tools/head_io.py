@@ -8,7 +8,9 @@ Format (little-endian):
   mhd3: u8 ntaps, then ntaps x (u8 kind, u8 layer_plus1)
         kind: 1=max 2=mean (see tools/emit_civic.py writer) ;
         layer_plus1 = anvil layer + 1
-  mhd2: no tap metadata — byte 16 onward is weight data; caller supplies taps.
+  mhd2: u32 flags at byte 16 — flags = pool_kind | ((layer+1) << 4)
+        (single tap; 0 = last-token). Weights start at byte 20.
+        (spec: machin-anvil engine.src read_head)
   float32[n_classes * featdim]  W  — ROW-MAJOR (n_classes, featdim); logits = X @ W.T + b
   float32[n_classes]            b
   per class: u8 len + utf-8 name
@@ -46,9 +48,11 @@ def load_head(path, n_layers=6):
         ntaps = d[16]
         taps_meta = [struct.unpack("<BB", d[17 + 2 * i:19 + 2 * i]) for i in range(ntaps)]
         off = 17 + 2 * ntaps
-    else:  # mhd2: weights start at byte 16
-        taps_meta = []
-        off = 16
+    else:  # mhd2: u32 flags = pool_kind | ((layer+1)<<4), then weights
+        flags = struct.unpack("<I", d[16:20])[0]
+        k, lay = flags & 15, (flags >> 4) - 1
+        taps_meta = [(k, lay + 1)] if k > 0 and lay >= 0 else []
+        off = 20
     need = off + 4 * nr * fd + 4 * nr
     if len(d) < need:
         raise ValueError(f"{path}: truncated weights (need {need}, have {len(d)})")
