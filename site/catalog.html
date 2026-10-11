@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lane catalog — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style></head>
+<body class="max-w-4xl mx-auto px-6 py-14">
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
+<h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
+<p class="text-gray-400 text-sm mb-2">8 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
+<p class="text-gray-500 text-sm mb-10">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
+<div class="space-y-4">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">civic<span class="text-gray-500">@0.1.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">13 routes: animals, drains_flooding, fly_tipping, graffiti_flyposting, other, parking_vehicles, parks_green, pavement_footpath… · <span class="text-gray-500">FixMyStreet Open311 API (public citizen reports, fetched 2026-10-11); 320 council labels -&gt; 13 canonical routes; train 3751/holdout 941; tools/emit_civic.py</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>96.8%</strong> holdout (n=941) · α=.05 → 94% auto @ 0.79% err</div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic@0.1.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1907a4c8731cb5e2b6bb825a… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">civic<span class="text-gray-500">@0.2.1</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">14 routes: animals, drains_flooding, fly_tipping, graffiti_flyposting, oos, other, parking_vehicles, parks_green… · <span class="text-gray-500">civic 0.1.0 + explicit oos class: 48 council-adjacent negatives + 200 CLINC train texts; live-verified on anvil 8437; supersedes yanked 0.2.0 (label-misaligned fit)</span></p>
+    <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic@0.2.1 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: e9a656ff92a549d25c11f21e… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">civic_fr<span class="text-gray-500">@0.1.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">11 routes: activites_commerciales, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain, objets_encombrants… · <span class="text-gray-500">DansMaRue taxonomy (opendata.paris.fr) + tools/build_civic_fr.py template generation; no real free text exists publicly</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>100.0%</strong> holdout (n=330) · α=.05 → 98% auto @ 0.00% err</div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1c14200b233ffc3d8700ee3a… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">civic_fr<span class="text-gray-500">@0.1.1</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">12 routes: activites_commerciales, oos, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain… · <span class="text-gray-500">civic_fr 0.1.0 + explicit oos class (FR hard+easy negatives); live-verified</span></p>
+    <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.1 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: c0fbf627a8f86f489a23982b… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">clinc150<span class="text-gray-500">@0.1.2</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">151 routes: accept_reservations, account_blocked, alarm, application_status, apr, are_you_a_bot, balance, bill_balance… · <span class="text-gray-500">Trained on the public CLINC150 benchmark (train split only), holdout eval on untouched test split. v0.1.1: labels.txt repaired; v0.1.2: manifest status field added.</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>73.8%</strong> holdout (n=5500) · α=.05 → 38% auto @ 0.00% err</div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py clinc150@0.1.2 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 7257a15d2a2282cee754af35… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">eq_tone<span class="text-gray-500">@0.1.1</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">5 routes: confused, distressed, frustrated, neutral, positive · <span class="text-gray-500">GoEmotions (google-research, Reddit comments, Apache-2.0), 28 labels merged to 5 tone superclasses; trained on frozen m7router3s384 trunk via LR head. v0.1.1: manifest status field added.</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>51.4%</strong> holdout (n=4995) · α=.05 → 8% auto @ 11.60% err</div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py eq_tone@0.1.1 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: df3401cae3d9a27172b39b4b… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">helpdesk<span class="text-gray-500">@0.1.1</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">5 routes: file_ticket, provision_vm, reset_password, ticket_status, escalate · <span class="text-gray-500">Synthetic IT-helpdesk demo corpus (public, generated). v0.1.1: manifest status field added.</span></p>
+    <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py helpdesk@0.1.1 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: a1846154c250211b9ff26bd3… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">helpdesk<span class="text-gray-500">@0.2.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">7 routes: chat, escalate, file_ticket, oos, provision_vm, reset_password, ticket_status · <span class="text-gray-500">Synthetic IT-helpdesk corpus (2000 rows, public) + 80 hand-written OOS negatives (facilities/HR-adjacent + generic). 7 routes incl explicit oos. Live-verified + parity-checked on anvil-serve-mixed.</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>100.0%</strong> holdout</div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py helpdesk@0.2.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: dc573f8b22114b973d65dd08… · pricing: free</p>
+  </div>
+</div>
+<p class="text-center text-gray-600 text-xs mt-14">generated by tools/render_catalog.py</p>
+</body></html>
