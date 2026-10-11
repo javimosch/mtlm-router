@@ -45,6 +45,9 @@ def main():
                     help="list lanes recorded in the appliance's managed block")
     ap.add_argument("--uninstall", metavar="NAME",
                     help="remove lane NAME from the managed block and delete its head")
+    ap.add_argument("--check", action="store_true",
+                    help="compare managed-block versions against the catalog index; "
+                         "exit 1 if any installed lane is outdated (pip --outdated style)")
     a = ap.parse_args()
 
     start_sh = os.path.join(a.appliance, "start.sh")
@@ -82,8 +85,31 @@ def main():
                           "removed_head": head, "remaining": sorted(lanes)}))
         sys.exit(0)
 
+    if a.check:
+        text = open(start_sh).read() if os.path.exists(start_sh) else ""
+        installed = read_lanes(text)
+        if not installed:
+            print(json.dumps({"ok": True, "lanes": [], "note": "no managed lanes"})); sys.exit(0)
+        index = json.loads(fetch(a.index))
+        latest = {}
+        for l in index.get("lanes", []):
+            cur = latest.get(l["name"])
+            if cur is None or [int(x) for x in l["version"].split(".")] > [int(x) for x in cur.split(".")]:
+                latest[l["name"]] = l["version"]
+        rows, outdated = [], False
+        for n, kv in sorted(installed.items()):
+            inst, avail = kv.get("ver") or "-", latest.get(n)
+            st = "not-in-catalog" if avail is None else (
+                "unknown" if inst == "-" else
+                ("outdated" if [int(x) for x in inst.split(".")] < [int(x) for x in avail.split(".")]
+                 else "current"))
+            outdated = outdated or st == "outdated"
+            rows.append({"lane": n, "installed": inst, "latest": avail, "status": st})
+        print(json.dumps({"ok": not outdated, "lanes": rows}, indent=2))
+        sys.exit(1 if outdated else 0)
+
     if not a.lane:
-        ap.error("lane required (or use --list/--uninstall)")
+        ap.error("lane required (or use --list/--uninstall/--check)")
     index = json.loads(fetch(a.index))
     lane = pick(index.get("lanes", []), a.lane)
     if lane is None:
