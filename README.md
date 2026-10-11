@@ -119,6 +119,7 @@ candidates pass holdout and still regress a dominant lane live.
 <!-- lanes:start -->
 | lane | routes | status | holdout | oos recall | install |
 |---|---|---|---|---|---|
+| `banking77@0.1.0` | 51 | certified | 73.3% | yes | `lane_install banking77` |
 | `civic@0.2.1` | 14 | demo | 86.6% | 97% | `lane_install civic` |
 | `civic_fr@0.1.1` | 12 | demo | 99.7% | 91% | `lane_install civic_fr` |
 | `clinc150@0.1.4` | 151 | certified | 74.1% | 20% | `lane_install clinc150` |
