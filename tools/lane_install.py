@@ -117,6 +117,22 @@ def main():
                           "available": [f"{l['name']}@{l['version']}" for l in index["lanes"]]}))
         sys.exit(1)
 
+    def vkey(v):
+        return [int(x) for x in v.split(".")]
+    sibs = [l for l in index["lanes"] if l["name"] == lane["name"] and not l.get("yanked")]
+    newest = max(sibs, key=lambda l: vkey(l["version"]))
+    warnings = []
+    if newest["version"] != lane["version"]:
+        warnings.append(f"newer version available: {lane['name']}@{newest['version']} "
+                        f"(installing {lane['version']})")
+    installed = read_lanes(open(start_sh).read()) if os.path.exists(start_sh) else {}
+    if installed:
+        cur = {n: kv.get("ver") for n, kv in installed.items()}
+        old = cur.get(lane["name"])
+        if old and old != "-" and old != lane["version"]:
+            warnings.append(f"replaces installed {lane['name']}@{old}"
+                            + (" (upgrade)" if vkey(lane["version"]) > vkey(old) else " (downgrade!)"))
+
     blob = fetch(lane["url"])
     if hashlib.sha256(blob).hexdigest() != lane["sha256"]:
         print(json.dumps({"ok": False, "error": "tarball sha256 mismatch vs index"})); sys.exit(1)
@@ -154,6 +170,7 @@ def main():
             "ANVIL_EXPERT_QHAT_add": f"{lane['name']}:{qh}" if qh else None,
         },
         "applied_to": applied,
+        "warnings": warnings,
         "note": "restart to activate" if applied else
                 "add the ANVIL_EXPERTS entry to start.sh / systemd env (or re-run with --apply), restart",
     }
