@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pricing — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style></head>
+<body class="max-w-4xl mx-auto px-6 py-14">
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / pricing</p>
+<h1 class="text-3xl font-bold mb-2">Pricing</h1>
+<p class="text-gray-400 text-sm mb-10">The runtime, trunk, and tools are open source
+(<a href="https://github.com/javimosch/mtlm-router" class="text-cyan-400 hover:underline mono" target="_blank" rel="noopener">mtlm-router</a>,
+Apache-2.0). What is licensed are <strong class="text-gray-200">lane packs</strong> — calibrated decision
+heads plus their eval evidence and provenance. You are not buying a weight file; you are buying
+the certification around it: taxonomy design, leak-free eval, operating point, and recalibration support.</p>
+
+<div class="space-y-4 mb-10">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">free lanes</h3>
+      <span class="text-gray-200 font-bold">€0</span>
+    </div>
+    <p class="text-gray-400 text-sm">Every pack in the <a href="/catalog.html" class="text-cyan-400 hover:underline">catalog</a> —
+    certified <em>and</em> demo — is Apache-2.0. They exist as proof, not product: the format, the
+    verification tooling (<span class="mono">lane_verify</span>), and what a certified eval looks like,
+    checkable by anyone on public data. Includes lanes that <em>fail</em> certification shipped openly —
+    that is the point of the catalog.</p>
+  </div>
+  <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">custom lane</h3>
+      <span class="text-gray-200 font-bold">€149 / domain, one-off</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">Send your route table (names + a few phrasings each). You get a
+    ~7KB <span class="mono">.head</span> trained and calibrated on <em>your</em> corpus — eval report,
+    abstention threshold, one free re-train after a week of shadow traffic. 3 business days.</p>
+    <a href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head&body=Routes%20(name%3A%20example%20phrasings)%3A%0A%0A" class="inline-block bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Send your routes</a>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">commercial lane</h3>
+      <span class="text-gray-200 font-bold">per agreement</span>
+    </div>
+    <p class="text-gray-400 text-sm">A certified pack under a commercial-use license for a named domain,
+    plus a 12-month recalibration window: you monitor drift with <span class="mono">tools/monitor.py</span>,
+    and when the operating point needs refitting we recalibrate against a fresh labeled split — the
+    guarantee tracks <em>your</em> traffic, not the training set. Production use on your own
+    infrastructure, no egress, no per-call metering.</p>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">hosted API</h3>
+      <span class="text-gray-200 font-bold">metered</span>
+    </div>
+    <p class="text-gray-400 text-sm">The same <span class="mono">/v1/route</span> on
+    <span class="mono">api.mtlm-router.intrane.fr</span>, metered by
+    <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a>
+    (EUR, Stripe top-ups, signed receipt per charge). New wallets start with free credit.</p>
+  </div>
+</div>
+
+<h2 class="text-2xl font-bold mb-4">What stays private, always</h2>
+<ul class="text-gray-400 text-sm space-y-2 list-disc list-inside mb-10">
+  <li>Client-fitted heads and client-derived corpora live in a private repo — never published, never resold, never folded into a public lane.</li>
+  <li>A commercial or custom lane built for one client is exclusive to that client.</li>
+  <li>Public demo lanes exist so the format and the honesty bar are inspectable before anyone pays for anything.</li>
+</ul>
+
+<p class="text-center text-gray-600 text-xs mt-14">source of truth: <a href="https://github.com/javimosch/mtlm-heads/blob/master/PRICING.md" class="text-cyan-400 hover:underline mono" target="_blank" rel="noopener">mtlm-heads/PRICING.md</a></p>
+</body></html>
