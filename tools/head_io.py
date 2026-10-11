@@ -36,7 +36,8 @@ def load_head(path, n_layers=6):
     n_layers: model depth (anvil layers) for converting stored layer+1
     -> hf negative index. Default 6 for m7router3s384.
     """
-    d = open(path, "rb").read()
+    with open(path, "rb") as f:
+        d = f.read()
     if len(d) < 17:
         raise ValueError(f"{path}: too short for a head file")
     magic = d[:4].decode()
