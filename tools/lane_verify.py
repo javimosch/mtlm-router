@@ -108,15 +108,15 @@ def verify_pack(pack, sums=None):
                 os.unlink(tp)
             except Exception as e:
                 parsed = None
-                fail(f"head label parse failed: {e}")
+                fail(f"head label parse failed: {e}", errs)
             if parsed:
                 head_labels = set(parsed["labels"])
                 missing = tax_labels - head_labels
                 extra_names = head_labels - tax_labels - {"chat"}
                 if missing:
-                    fail(f"head lacks taxonomy labels: {sorted(missing)[:8]}")
+                    fail(f"head lacks taxonomy labels: {sorted(missing)[:8]}", errs)
                 if extra_names:
-                    fail(f"head embeds non-taxonomy labels: {sorted(extra_names)[:8]}")
+                    fail(f"head embeds non-taxonomy labels: {sorted(extra_names)[:8]}", errs)
                 # declared taps (metrics.taps) vs embedded taps — formats seen
                 # in the wild: [[-2,"mean"],...] or "mean@-2,-3,-4"/"mean@L-3"
                 decl = man.get("metrics", {}).get("taps")
@@ -130,7 +130,7 @@ def verify_pack(pack, sums=None):
                                         for l in layers.split(",") if l.strip()}
                         embedded = {(int(i), k) for i, k in parsed["taps"]}
                         if declared != embedded:
-                            fail(f"declared taps {sorted(declared)} != embedded {sorted(embedded)}")
+                            fail(f"declared taps {sorted(declared)} != embedded {sorted(embedded)}", errs)
                     except Exception as e:
                         warnings.append(f"metrics.taps unparsable ('{decl}'): {e}")
 
@@ -202,4 +202,5 @@ def main():
     sys.exit(2 if a.strict and rep.get("warnings") else 0)
 
 
-main()
+if __name__ == "__main__":
+    main()
