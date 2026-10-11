@@ -28,32 +28,29 @@ def fail(msg, errs):
     errs.append(msg)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("pack")
-    ap.add_argument("--sums", help="SHA256SUMS.txt-style file to check tarball against")
-    a = ap.parse_args()
+def verify_pack(pack, sums=None):
+    """Run all checks on one pack; return (report_dict, exit_code)."""
     errs = []
 
-    if a.sums:
+    if sums:
         want = None
-        base = os.path.basename(a.pack)
-        for line in open(a.sums):
+        base = os.path.basename(pack)
+        for line in open(sums):
             parts = line.split()
             if len(parts) >= 2 and os.path.basename(parts[-1]) == base:
                 want = parts[0]
         if want is None:
-            fail(f"{base} not listed in {a.sums}", errs)
-        elif sha256(a.pack) != want:
-            fail(f"tarball sha256 mismatch vs {a.sums}", errs)
+            fail(f"{base} not listed in {sums}", errs)
+        elif sha256(pack) != want:
+            fail(f"tarball sha256 mismatch vs {sums}", errs)
 
-    if not tarfile.is_tarfile(a.pack):
+    if not tarfile.is_tarfile(pack):
         fail("not a tar.gz", errs)
-        print(json.dumps({"pack": a.pack, "ok": False, "errors": errs}))
-        sys.exit(1)
+        return {"pack": pack, "ok": False, "errors": errs}, 1
+
 
     members = {}
-    with tarfile.open(a.pack) as t:
+    with tarfile.open(pack) as t:
         for m in t.getmembers():
             if m.isfile():
                 members[os.path.basename(m.name)] = t.extractfile(m).read()
@@ -66,8 +63,7 @@ def main():
         fail(f"expected exactly one .head, got {heads}", errs)
 
     if errs:
-        print(json.dumps({"pack": a.pack, "ok": False, "errors": errs}))
-        sys.exit(1)
+        return {"pack": pack, "ok": False, "errors": errs}, 1
 
     man = json.loads(members["manifest.json"])
     for k in ("format", "name", "version", "head_sha256", "taxonomy", "metrics", "provenance", "license"):
@@ -114,14 +110,44 @@ def main():
                         "re-pack with --live-verified after loading the head in anvil")
 
     ok = not errs
-    print(json.dumps({
-        "pack": a.pack, "ok": ok,
+    return {
+        "pack": pack, "ok": ok,
         "name": man.get("name"), "version": man.get("version"),
         "classes": len(tax_labels), "holdout_acc": metrics.get("holdout_acc"),
         "live_verified": man.get("live_verified"),
         "warnings": warnings,
-        "errors": errs}))
-    sys.exit(0 if ok else 1)
+        "errors": errs}, 0 if ok else 1
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("pack", nargs="?", help="a .lanepack.tar.gz, or omit with --dir")
+    ap.add_argument("--dir", help="verify every *.lanepack.tar.gz in DIR")
+    ap.add_argument("--sums", help="SHA256SUMS.txt-style file to check tarball against")
+    a = ap.parse_args()
+
+    if a.dir:
+        packs = sorted(os.path.join(a.dir, f) for f in os.listdir(a.dir)
+                       if f.endswith(".lanepack.tar.gz"))
+        if not packs:
+            print(json.dumps({"ok": False, "errors": [f"no packs in {a.dir}"]}))
+            sys.exit(1)
+        reports, failed = [], 0
+        for p in packs:
+            rep, code = verify_pack(p, a.sums)
+            reports.append(rep)
+            failed += code
+        print(json.dumps({
+            "ok": failed == 0, "packs": len(packs), "failed": failed,
+            "lanes": [{k: v for k, v in r.items() if k != "pack" or True} for r in reports]},
+            indent=2))
+        sys.exit(1 if failed else 0)
+
+    if not a.pack:
+        ap.error("pack required (or use --dir)")
+    rep, code = verify_pack(a.pack, a.sums)
+    print(json.dumps(rep))
+    sys.exit(code)
 
 
 main()
