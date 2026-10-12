@@ -215,8 +215,12 @@ caller → traefik (dk1, websecure)
   daemon-reload && systemctl restart mtlm-hosted` → verify
   `curl localhost:8402/readyz` (expert count) and a keyed probe per new lane.
   ~5 s of downtime; rollback is restoring the previous env + restart.
-- **Meter quirk:** it proxies `/v1/*` routes but returns `not found` for
-  `/v1/lanes` publicly — lane discovery is via the catalog site, not the API.
+- **Lane discovery:** `GET /v1/lanes` is proxied by the meter for free
+  (same posture as `/pricing`); only `POST /v1/*` is metered. The meter is
+  MFL in `~/ai/mtlm-cloud/meter` — deploy = build → scp → `sudo -n
+  systemctl stop mtlm-meter` (binary is busy while running) → swap binary
+  → start. Its demo whitelist (`/demo/route`) restricts which expert names
+  callers may pin.
 - **Gate:** `ANVIL_GATE=models/gate_biz_mt.head` decides domain admission
   before experts run; `ANVIL_SHADOW` canaries mairie→mairie_c with
   `shadow_agree_pct` in `/metrics`.
