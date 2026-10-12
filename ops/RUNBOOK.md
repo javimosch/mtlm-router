@@ -178,6 +178,22 @@ When `monitor.py` reports drift, or a lane's abstain rate creeps:
 ACI (`/_qhat`) adapts online between recalibrations; treat its drift as an
 early-warning signal, not a fix.
 
+Verified end-to-end (2026-10-12): `tools/aci_qhat.py` pushes apply without a
+restart and persist in `GET /_qhat`. Recipe:
+
+    # grade outcomes into labels.jsonl: {"expert":"lane","correct":0|1} per row
+    python3 tools/aci_qhat.py --labels labels.jsonl \
+        --router http://127.0.0.1:8402 --expert mairie_c \
+        --alpha 0.05 --gamma 0.5 --key $KEY --state aci_state.json
+
+- The lane must already have a qhat (`POST /_qhat` or `ANVIL_EXPERT_QHAT`) —
+  ACI refuses to initialize one.
+- `--state` makes reruns idempotent (consumes only new label lines).
+- Direction: err_rate > alpha tightens (lower qhat = more abstention),
+  err_rate < alpha loosens.
+- Before trusting a labels file, dry-run against a scratch lane name to
+  sanity-check direction and magnitude.
+
 ## 7. Incidents
 
 | symptom | likely cause | action |
