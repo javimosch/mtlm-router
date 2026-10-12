@@ -242,6 +242,24 @@ python3 tools/lane_install.py --uninstall helpdesk --appliance .
 </div>
 
 <div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6">
+  <h2 class="text-xl font-bold mb-3">Hosted API — api.mtlm-router.intrane.fr</h2>
+  <p class="text-gray-400 text-sm mb-4">The same runtime, metered per decision on the <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> rail (EUR). The hosted instance serves all catalog lanes; pin one with <code class="mono">"expert"</code>.</p>
+  <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># free metadata (no wallet)</span>
+curl -s https://api.mtlm-router.intrane.fr/v1/lanes        <span class="text-gray-500"># installed expert lanes</span>
+curl -s https://api.mtlm-router.intrane.fr/.well-known/api-catalog  <span class="text-gray-500"># RFC 9727 linkset</span>
+curl -s https://api.mtlm-router.intrane.fr/pricing       <span class="text-gray-500"># price contract as JSON</span>
+
+<span class="text-gray-500"># free demo (rate-limited, CORS-locked to the landing)</span>
+curl -s -X POST https://api.mtlm-router.intrane.fr/demo/route \
+  -d '{"state":"my-session","text":"my card was declined","expert":"bank77"}'
+
+<span class="text-gray-500"># metered: 1 cent = 20 decisions, X-Peage-Wallet header</span>
+curl -s -X POST https://api.mtlm-router.intrane.fr/v1/route \
+  -H 'X-Peage-Wallet: pw_…' -d '{"state":"status of ticket INC4821"}'</pre>
+  <p class="text-gray-500 text-sm mt-4">Wallets: <code class="mono">POST https://peage.intrane.fr/v1/wallets</code> (new wallets carry free starter credit). No wallet header → <code class="mono">402</code>. Idempotent bundle charges; signed receipt on every charge. Agent-facing summary: <a href="https://api.mtlm-router.intrane.fr/llms.txt" class="mono text-cyan-400 hover:underline">api…/llms.txt</a>.</p>
+</div>
+
+<div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6">
   <h2 class="text-xl font-bold mb-3">Verify a deployment</h2>
   <p class="text-gray-400 text-sm mb-4">Two self-checks ship with the product — run them against any instance (local, hosted, a client's):</p>
   <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># 12 endpoint+gate checks</span>
