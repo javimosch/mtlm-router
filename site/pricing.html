@@ -45,13 +45,24 @@ the certification around it: taxonomy design, leak-free eval, operating point, a
   </div>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
     <div class="flex items-baseline justify-between mb-2">
-      <h3 class="mono text-lg text-cyan-300">hosted API</h3>
-      <span class="text-gray-200 font-bold">metered</span>
+      <h3 class="mono text-lg text-cyan-300">hosted API <span class="text-gray-500 text-xs">— evaluation tier</span></h3>
+      <span class="text-gray-200 font-bold">metered · demo</span>
     </div>
     <p class="text-gray-400 text-sm">The same <span class="mono">/v1/route</span> on
     <span class="mono">api.mtlm-router.intrane.fr</span>, metered by
     <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a>
-    (EUR, Stripe top-ups, signed receipt per charge). New wallets start with free credit.</p>
+    (EUR, Stripe top-ups, signed receipt per charge). New wallets start with free credit.
+    <em class="text-gray-500">Shared evaluation environment — latency and capacity are not
+    representative of a dedicated deployment.</em></p>
+  </div>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">dedicated hosted</h3>
+      <span class="text-gray-200 font-bold">€99 / month</span>
+    </div>
+    <p class="text-gray-400 text-sm">A single-tenant instance on bare metal — your own endpoint,
+    every catalog lane installed, no per-call metering. Production posture; the metered API above
+    is for trying it first. <a href="mailto:javi@intrane.fr?subject=mtlm-router%20dedicated%20instance" class="text-cyan-400 hover:underline">Get an instance</a></p>
   </div>
 </div>
 
