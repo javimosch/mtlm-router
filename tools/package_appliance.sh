@@ -92,6 +92,7 @@ cp "$(dirname "$0")/lane_verify.py" "$PKG/tools/lane_verify.py" 2>/dev/null
 cp "$(dirname "$0")/lane_pack.py" "$PKG/tools/lane_pack.py" 2>/dev/null
 cp "$(dirname "$0")/../bench/api_contract.py" "$PKG/tools/api_contract.py" 2>/dev/null
 cp "$(dirname "$0")/lane_checklist.py" "$PKG/tools/lane_checklist.py" 2>/dev/null
+cp "$(dirname "$0")/verify_appliance.py" "$PKG/tools/verify_appliance.py" 2>/dev/null
 cp "$(dirname "$0")/render_llms_full.py" "$PKG/tools/render_llms_full.py" 2>/dev/null
 cp "$(dirname "$0")/mcp.src" "$PKG/tools/mcp.src" 2>/dev/null
 cp "$(dirname "$0")/../openapi.yaml" "$PKG/openapi.yaml" 2>/dev/null
@@ -123,6 +124,7 @@ no dependencies beyond a Linux x86_64 box.
     ./start.sh                 # systemd-free
     ./smoke.sh                 # verifies all endpoints + the conformal gate
     python3 tools/monitor.py logs/decisions.jsonl   # label-free drift check (exit 1 on drift)
+    python3 tools/verify_appliance.py .             # every manifest sha256 verified (exit 1 on mismatch)
     python3 tools/shadow_report.py logs/decisions.jsonl  # canary verdict: promote(0)/hold(2)/wait(3)
     # or: cp mtlm-router.service ~/.config/systemd/user/ && systemctl --user start mtlm-router
 
@@ -200,5 +202,6 @@ M="$PKG/manifest.json"
 python3 -m json.tool "$M" > /dev/null 2>&1 || { echo "manifest.json invalid"; exit 1; }
 
 tar -czf "$PKG.tar.gz" -C "$OUT" "mtlm-router-$NAME-linux-amd64"
-du -sh "$PKG.tar.gz"
+( cd "$OUT" && sha256sum "$(basename "$PKG").tar.gz" > "$(basename "$PKG").tar.gz.sha256" )
+du -sh "$PKG.tar.gz"; cat "$PKG.tar.gz.sha256"
 echo "wrote $PKG.tar.gz"
