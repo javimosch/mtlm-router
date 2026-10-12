@@ -7,6 +7,8 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-12
+
 ### Added
 - `banking77@0.1.0` lane published: 50 banking intents + `oos`, 73.3% in-scope,
   84.4% ID-OOS recall, certified + live-verified (catalog v45).
@@ -17,6 +19,15 @@ Lane packs version independently — see the
 - `emit_banking77.py`: F-feature caching, wider taps/l2 grid, valid split in
   train, balanced selection. Grid re-run confirmed the shipped config remains
   the best operating point.
+- `eq_tone@0.2.0` lane published (demo): hard-negative retrain adds an
+  explicit `oos` class — 87.9% recall on non-tone text; `eq_tone@0.1.1`
+  deprecated. Its `floors.json` entry now carries a measured `min_conf` 0.5.
+- `site/llms.txt` — agent-facing index of product, docs, registry links, and
+  measured numbers.
+- Hosted API (`api.mtlm-router.intrane.fr`) now serves all 10 certified lanes
+  with catalog floors wired as `ANVIL_EXPERT_MINCONF`; `ops/RUNBOOK.md` §9
+  documents the meter → upstream topology.
+- Appliance bundles `bank77` + upgraded `eq` (v2) heads; `start.sh` wires both.
 
 ### Changed
 - `check_docs.py` also validates the docs' route-example field names against
@@ -135,7 +146,8 @@ Lane packs version independently — see the
   `/_shutdown`, `/metrics`.
 - `docs/MODEL-CARD.md`, `PRODUCT.md`.
 
-[Unreleased]: https://github.com/javimosch/mtlm-router/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/javimosch/mtlm-router/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/javimosch/mtlm-router/releases/tag/v0.8.0
 [0.7.0]: https://github.com/javimosch/mtlm-router/releases/tag/v0.7.0
 [0.6.0]: https://github.com/javimosch/mtlm-router/releases/tag/v0.6.0
 [0.5.0]: https://github.com/javimosch/mtlm-router/releases/tag/v0.5.0
