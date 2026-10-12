@@ -1,0 +1,13 @@
+{"expert": "mairie_c", "state": "my green bin was not collected this morning", "expect": "tool_call", "in": ["collecte"]}
+{"expert": "mairie_c", "state": "je veux signaler un depot sauvage de gravats", "expect": "tool_call", "in": ["collecte", "depot", "encombrant"]}
+{"expert": "civic", "state": "there is a huge pothole on main street", "expect": "tool_call", "in": ["pothole", "voirie", "road"]}
+{"expert": "civic_fr", "state": "le lampadaire de ma rue est en panne", "expect": "tool_call", "in": ["eclai", "lampad", "voirie", "eclairage"]}
+{"expert": "bank77", "state": "i lost my card yesterday, please block it", "expect": "tool_call", "in": ["card"]}
+{"expert": "bank77", "state": "a charge appeared on my statement i do not recognize", "expect": "tool_call", "in": ["card", "charge", "payment"]}
+{"expert": "clinc", "state": "remind me to call the dentist tomorrow", "expect": "tool_call", "in": ["reminder"]}
+{"expert": "clinc", "state": "what is the exchange rate for euros today", "expect": "tool_call", "in": ["exchange"]}
+{"expert": "helpdesk2", "state": "my laptop will not connect to the office wifi", "expect": "tool_call", "in": ["oos", "ticket", "escalate", "file"]}
+{"expert": "it_helpdesk", "state": "i forgot my password and need a reset", "expect": "tool_call", "in": ["password", "reset"]}
+{"expert": "mairie", "state": "comment obtenir un acte de naissance", "expect": "tool_call", "in": ["escalate", "acte", "etat", "civil", "mairie"]}
+{"expert": "clinc2", "state": "book a table for two tonight at eight", "expect": "tool_call", "in": ["restaurant", "book", "reservation"]}
+{"expert": "eq", "state": "i am really frustrated this keeps happening", "expect": "delegate_or_tool"}
