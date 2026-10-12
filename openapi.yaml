@@ -8,7 +8,9 @@ info:
     Delegation is a first-class answer: `action: "delegate"` plus a `reason`
     means route the request to a bigger model or a human — never guess.
     Conformal-gated lanes return `set_size`/`qhat`; only singleton prediction
-    sets (`set_size: 1`) carry the coverage guarantee.
+    sets (`set_size: 1`) carry the coverage guarantee. Sets of 2-8 members also
+    return `candidates` — the prediction-set routes with probabilities, sorted
+    desc, usable as a clarification shortlist.
   version: 0.3.0
   contact:
     name: Javier Leandro Arancibia
@@ -537,6 +539,14 @@ components:
           type: integer
           description: conformal prediction-set size; 1 = singleton (automatable), 0 or >1 = abstain
         qhat: {type: number, description: lane's calibrated threshold}
+        candidates:
+          type: array
+          description: conformal set members (2-8) sorted by confidence desc — clarification shortlist
+          items:
+            type: object
+            properties:
+              route: {type: string}
+              confidence: {type: number}
         reason:
           type: string
           enum: [ok, low_confidence, low_gate_confidence, route_escalate, noul_escalate, conformal_abstain, head_trunk_disagree]
