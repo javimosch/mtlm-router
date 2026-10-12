@@ -29,6 +29,7 @@
 
 ## Machine-readable
 
+- Full corpus: https://mtlm-router.intrane.fr/llms-full.txt (README + lanes + pricing + hosted API doc in one fetch)
 - OpenAPI spec: https://github.com/javimosch/mtlm-router/blob/master/openapi.yaml
 - Repository: https://github.com/javimosch/mtlm-router
 - Lane registry (index.json): https://github.com/javimosch/mtlm-heads
