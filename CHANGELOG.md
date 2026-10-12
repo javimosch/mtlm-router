@@ -7,6 +7,8 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
 ### Added
 - Hosted API live on `api.mtlm-router.intrane.fr` with all 10 catalog lanes
   (was 4 legacy experts); `GET /v1/lanes` is meter-proxied for free.
