@@ -20,13 +20,15 @@ TEXTS = [
 ]
 
 
-def probe(url, text, expert):
+def probe(url, text, expert, key=""):
     body = {"state": text}
     if expert:
         body["expert"] = expert
     t0 = time.time()
-    req = urllib.request.Request(url, data=json.dumps(body).encode(),
-                                 headers={"content-type": "application/json"})
+    hdr = {"content-type": "application/json"}
+    if key:
+        hdr["authorization"] = "Bearer " + key
+    req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=hdr)
     r = json.loads(urllib.request.urlopen(req, timeout=30).read())
     return (time.time() - t0) * 1000, r.get("latency_ms")
 
@@ -40,12 +42,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", required=True)
     ap.add_argument("--expert")
+    ap.add_argument("--key", default="")
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--out")
     a = ap.parse_args()
     client, server = [], []
     for i in range(a.n):
-        c, s = probe(a.url, TEXTS[i % len(TEXTS)], a.expert)
+        c, s = probe(a.url, TEXTS[i % len(TEXTS)], a.expert, a.key)
         client.append(c)
         server.append(s or 0)
     out = {

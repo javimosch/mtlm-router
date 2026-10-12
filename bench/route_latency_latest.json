@@ -1,41 +1,5 @@
 {
- "bench": "bench/route_latency.py",
- "host": "rbm21 (LXC, shared CPU)",
- "date": "2026-10-11",
- "runs": {
-  "expert_civic_fr": {
-   "url": "http://localhost:8440/v1/route",
-   "expert": "civic_fr",
-   "n": 100,
-   "client_ms": {
-    "p50": 62.3,
-    "p95": 77.4,
-    "p99": 79.6,
-    "mean": 59.7
-   },
-   "server_ms": {
-    "p50": 62,
-    "p95": 77,
-    "p99": 79,
-    "mean": 58.9
-   }
-  },
-  "trunk_only": {
-   "url": "http://localhost:8440/v1/route",
-   "expert": null,
-   "n": 100,
-   "client_ms": {
-    "p50": 62.4,
-    "p95": 75.6,
-    "p99": 78.6,
-    "mean": 59.3
-   },
-   "server_ms": {
-    "p50": 62,
-    "p95": 75,
-    "p99": 78,
-    "mean": 58.6
-   }
-  }
- }
+  "note": "measured against PRODUCTION anvil on rbm21 (authed, shared CPU box under load), 100 requests each, mixed text lengths. Idle local scratch measured 61/75ms previously — the honest public range is p50 ~60-150ms, p95 ~75-420ms depending on host load.",
+  "civic_fr": {"client_ms": {"p50": 147.4, "p95": 357.0, "p99": 507.1}, "server_ms": {"p50": 139, "p95": 324, "p99": 505}},
+  "bank77": {"client_ms": {"p50": 139.8, "p95": 419.0, "p99": 792.1}, "server_ms": {"p50": 133, "p95": 345, "p99": 681}}
 }
