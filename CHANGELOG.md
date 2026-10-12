@@ -7,6 +7,13 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-10-12
+
+### Added
+- `mtlm-mcp` stdio MCP server now ships in the appliance tarball (was
+  documented in docs.html but never packaged), plus `tools/mcp.src` source.
+  `package_appliance.sh --mcp <binary>` wires it for future builds.
+
 ## [0.9.0] - 2026-10-12
 
 ### Added

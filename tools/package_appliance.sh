@@ -13,11 +13,11 @@
 # The appliance serves /v1/route + all typed endpoints on port 8097 (PORT env).
 set -e
 
-BIN="" MODEL="" TOK="" HEADS="" GATE="" EXPERTS="" EVAL="" CLI="" NAME="router" OUT=/tmp
+BIN="" MODEL="" TOK="" HEADS="" GATE="" EXPERTS="" EVAL="" CLI="" MCP="" NAME="router" OUT=/tmp
 while [ $# -gt 0 ]; do
   case "$1" in
     --bin) BIN="$2"; shift 2;; --model) MODEL="$2"; shift 2;;
-    --cli) CLI="$2"; shift 2;;
+    --cli) CLI="$2"; shift 2;; --mcp) MCP="$2"; shift 2;;
     --tok) TOK="$2"; shift 2;;  --heads) HEADS="$2"; shift 2;;
     --gate) GATE="$2"; shift 2;; --experts) EXPERTS="$2"; shift 2;;
     --eval) EVAL="$2"; shift 2;;
@@ -32,6 +32,7 @@ PKG="$OUT/mtlm-router-$NAME-linux-amd64"
 rm -rf "$PKG"; mkdir -p "$PKG/models"
 cp "$BIN" "$PKG/anvil-serve"
 if [ -n "$CLI" ]; then cp "$CLI" "$PKG/mtlm-router"; fi
+if [ -n "$MCP" ]; then cp "$MCP" "$PKG/mtlm-mcp" && chmod +x "$PKG/mtlm-mcp"; fi
 cp "$MODEL" "$PKG/models/model.bin"
 cp "$TOK" "$PKG/models/tokenizer.bin"
 HENV=""
@@ -90,6 +91,7 @@ cp "$(dirname "$0")/lane_install.py" "$PKG/tools/lane_install.py" 2>/dev/null
 cp "$(dirname "$0")/lane_verify.py" "$PKG/tools/lane_verify.py" 2>/dev/null
 cp "$(dirname "$0")/lane_pack.py" "$PKG/tools/lane_pack.py" 2>/dev/null
 cp "$(dirname "$0")/../bench/api_contract.py" "$PKG/tools/api_contract.py" 2>/dev/null
+cp "$(dirname "$0")/mcp.src" "$PKG/tools/mcp.src" 2>/dev/null
 cp "$(dirname "$0")/../openapi.yaml" "$PKG/openapi.yaml" 2>/dev/null
 mkdir -p "$PKG/ops" && cp "$(dirname "$0")/../ops/RUNBOOK.md" "$PKG/ops/RUNBOOK.md" 2>/dev/null
 
@@ -135,6 +137,13 @@ With a gate head + experts loaded, the same call answers domain/expert too:
 
 Endpoints: /v1/route (dispatcher), /v1/decide /v1/noul /v1/score /v1/assess
 (typed heads), /v1/chat/completions (generative), /health.
+
+## MCP (agent clients)
+
+`./mtlm-mcp` is a stdio MCP server exposing `route_request` and
+`typed_questions` — register it in your MCP client; it proxies the local
+instance via `ANVIL_URL` (default http://127.0.0.1:8097) / `ANVIL_KEY`.
+Source in tools/mcp.src (pure MFL; rebuild with `machin build`).
 
 manifest.json records sha256 of every shipped artifact and the eval of the
 gate/head set at packaging time — check it before trusting confidences.
