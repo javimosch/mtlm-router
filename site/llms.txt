@@ -16,6 +16,17 @@
 - [Pricing](pricing.html): free Apache-2.0 catalog, custom lane packs,
   commercial licensing, hosted API
 
+## Hosted API (pay-per-decision, peage rail)
+
+- Base: https://api.mtlm-router.intrane.fr — agent docs at
+  https://api.mtlm-router.intrane.fr/llms.txt (wallet flow, pricing, errors)
+- Free metadata: GET /v1/lanes (10 installed lanes), GET /pricing,
+  GET /.well-known/api-catalog (RFC 9727 linkset)
+- Free demo: POST /demo/route {"state","text","expert"?} — rate-limited,
+  CORS-locked to the landing
+- Metered: POST /v1/route with X-Peage-Wallet — 1 cent = 20 decisions
+- Docs section: docs.html#hosted-api
+
 ## Machine-readable
 
 - OpenAPI spec: https://github.com/javimosch/mtlm-router/blob/master/openapi.yaml

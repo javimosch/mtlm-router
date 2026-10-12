@@ -7,6 +7,24 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+### Added
+- Hosted API live on `api.mtlm-router.intrane.fr` with all 10 catalog lanes
+  (was 4 legacy experts); `GET /v1/lanes` is meter-proxied for free.
+- `/.well-known/api-catalog` on the hosted API — RFC 9727 linkset for agent
+  discovery (meter-side, mtlm-cloud).
+- `api_contract.py --public`: probes the metered surface — free GETs must
+  return 200, walletless `POST /v1/route` must return 402.
+- `docs.html` hosted-API section (free metadata, demo contract, wallet flow).
+- Landing playground: lane picker covers `bank77`/`clinc` (EN) and
+  `civic_fr`/`bank77` (FR) with per-lane chip sets including OOS phrasings.
+- Catalog page: "try a lane live" pointer to the hosted demo + `/v1/lanes`.
+
+### Changed
+- `ops/RUNBOOK.md` §9 rewritten: real hosted topology, lane-update and
+  meter-deploy procedures (stop → swap → start), `/v1/lanes` posture.
+- Meter demo whitelist covers all 10 served lanes; hosted `llms.txt`
+  documents the demo contract (`state` ≥2 chars) and the api-catalog link.
+
 ## [0.8.0] - 2026-10-12
 
 ### Added
