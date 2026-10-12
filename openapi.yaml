@@ -10,7 +10,9 @@ info:
     Conformal-gated lanes return `set_size`/`qhat`; only singleton prediction
     sets (`set_size: 1`) carry the coverage guarantee. Sets of 2-8 members also
     return `candidates` — the prediction-set routes with probabilities, sorted
-    desc, usable as a clarification shortlist.
+    desc, usable as a clarification shortlist. An empty set (`set_size: 0`)
+    returns the top-2 argmax routes in `candidates` instead — best guesses for
+    human triage, explicitly without a coverage claim.
   version: 0.3.0
   contact:
     name: Javier Leandro Arancibia
@@ -541,7 +543,7 @@ components:
         qhat: {type: number, description: lane's calibrated threshold}
         candidates:
           type: array
-          description: conformal set members (2-8) sorted by confidence desc — clarification shortlist
+          description: clarification shortlist sorted by confidence desc — conformal set members when 2 ≤ set_size ≤ 8; top-2 argmax best-guesses (no coverage claim) when set_size is 0
           items:
             type: object
             properties:
