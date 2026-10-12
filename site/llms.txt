@@ -40,11 +40,17 @@
 
 ## Measured numbers (rbm21 CPU, harnesses in repo)
 
-- Route API: 61ms p50 / 75ms p95 (`bench/route_latency.py`)
+- Route API: p50 60–150ms (idle scratch → loaded production box,
+  `bench/route_latency.py`)
 - Decode: ~470 tok/s p50 on the 7M int8 trunk (`bench/gen_speed.py`)
 - 5 lanes installed: +1.4MB RSS, ~0 added latency (`bench/` scaling run)
 - Abstention: banking77 84.4% ID-OOS recall, clinc150 abstains 20.4%
   (certified lanes, metrics in pack manifests)
+- Decision contract: `set_size`/`qhat` (conformal), `candidates[]`
+  (clarification shortlist on abstain), `margin` (top1−top2 gap) — see
+  openapi.yaml RouteDecision
+- Release verification: `tools/verify_appliance.py` checks every manifest
+  sha256 on a tarball or extracted tree; releases ship `*.tar.gz.sha256`
 
 ## Optional
 

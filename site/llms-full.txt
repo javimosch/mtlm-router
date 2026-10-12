@@ -213,7 +213,7 @@ Free Apache-2.0 packs installable via tools/lane_install.py; registry at mtlm-he
 - `civic@0.2.1` (free) — 14 labels, holdout 86.6%, floor conf>=0.5
 - `civic_fr@0.1.1` (free) — 12 labels, holdout 99.7%, argmax carries
 - `clinc150@0.1.4` (free) — 151 labels, holdout 74.1%, floor conf>=0.7
-- `eq_tone@0.2.0` (free) — 6 labels, holdout 50.3%, floor conf>=0.5
+- `eq_tone@0.2.0` (free) — 6 labels, holdout 50.3%, floor conf>=0.9
 - `helpdesk@0.2.0` (free) — 7 labels, holdout 100.0%, argmax carries
 
 ---

@@ -1,0 +1,58 @@
+# mtlm-router
+
+> A self-hosted, CPU-friendly typed decision appliance. A frozen ~7M-param
+> pure-Machin/MFL trunk converts natural-language requests into machine-readable
+> routing decisions with confidence, abstention, and delegation — specialist
+> `.head` lanes add domain classification without retraining the trunk.
+> Jev/System One-compatible interfaces. No GPU, no external calls.
+
+## Product
+
+- [Landing](index.html): what it is, measured benchmarks, download links
+- [Docs](docs.html): endpoints, decision fields, conformal gating, systemone,
+  MCP adapter, quickstart
+- [Lane catalog](catalog.html): free certified lane packs installable via
+  `tools/lane_install.py` (clinc150, banking77, civic, civic_fr, helpdesk, eq_tone)
+- [Pricing](pricing.html): free Apache-2.0 catalog, custom lane packs,
+  commercial licensing, hosted API
+
+## Hosted API (pay-per-decision, peage rail)
+
+- Base: https://api.mtlm-router.intrane.fr — agent docs at
+  https://api.mtlm-router.intrane.fr/llms.txt (wallet flow, pricing, errors)
+- Free metadata: GET /v1/lanes (10 installed lanes), GET /pricing,
+  GET /.well-known/api-catalog (RFC 9727 linkset)
+- Free demo: POST /demo/route {"state","text","expert"?} — rate-limited,
+  CORS-locked to the landing
+- Metered: POST /v1/route with X-Peage-Wallet — 1 cent = 20 decisions
+- Docs section: docs.html#hosted-api
+
+## Machine-readable
+
+- Full corpus: https://mtlm-router.intrane.fr/llms-full.txt (README + lanes + pricing + hosted API doc in one fetch)
+- Agent card: https://mtlm-router.intrane.fr/.well-known/agent.json (A2A-style skills + capabilities)
+- MCP server card: https://mtlm-router.intrane.fr/.well-known/mcp/server.json (MCP registry manifest)
+- OpenAPI spec: https://github.com/javimosch/mtlm-router/blob/master/openapi.yaml
+- Repository: https://github.com/javimosch/mtlm-router
+- Lane registry (index.json): https://github.com/javimosch/mtlm-heads
+- Changelog: https://github.com/javimosch/mtlm-router/blob/master/CHANGELOG.md
+- Latest release: https://github.com/javimosch/mtlm-router/releases/latest
+
+## Measured numbers (rbm21 CPU, harnesses in repo)
+
+- Route API: p50 60–150ms (idle scratch → loaded production box,
+  `bench/route_latency.py`)
+- Decode: ~470 tok/s p50 on the 7M int8 trunk (`bench/gen_speed.py`)
+- 5 lanes installed: +1.4MB RSS, ~0 added latency (`bench/` scaling run)
+- Abstention: banking77 84.4% ID-OOS recall, clinc150 abstains 20.4%
+  (certified lanes, metrics in pack manifests)
+- Decision contract: `set_size`/`qhat` (conformal), `candidates[]`
+  (clarification shortlist on abstain), `margin` (top1−top2 gap) — see
+  openapi.yaml RouteDecision
+- Release verification: `tools/verify_appliance.py` checks every manifest
+  sha256 on a tarball or extracted tree; releases ship `*.tar.gz.sha256`
+
+## Optional
+
+- [Français](fr.html): French landing page
+- [Municipal demo](municipal.html): worked example on a civic routing corpus
