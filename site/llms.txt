@@ -30,6 +30,8 @@
 ## Machine-readable
 
 - Full corpus: https://mtlm-router.intrane.fr/llms-full.txt (README + lanes + pricing + hosted API doc in one fetch)
+- Agent card: https://mtlm-router.intrane.fr/.well-known/agent.json (A2A-style skills + capabilities)
+- MCP server card: https://mtlm-router.intrane.fr/.well-known/mcp/server.json (MCP registry manifest)
 - OpenAPI spec: https://github.com/javimosch/mtlm-router/blob/master/openapi.yaml
 - Repository: https://github.com/javimosch/mtlm-router
 - Lane registry (index.json): https://github.com/javimosch/mtlm-heads

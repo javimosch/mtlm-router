@@ -1,0 +1,29 @@
+{
+  "name": "mtlm-router",
+  "description": "Typed decision layer for agent routing: free text in, typed route/tool_call + calibrated confidence out, with first-class abstention (conformal prediction sets + clarification candidates) and delegation. Pure-MFL CPU runtime (~7M-param frozen trunk + kilobyte specialist .head lanes). Apache-2.0 appliance; shared evaluation endpoint plus dedicated hosted tier.",
+  "url": "https://mtlm-router.intrane.fr",
+  "provider": { "organization": "javimosch", "url": "https://github.com/javimosch/mtlm-router" },
+  "version": "0.10.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "structuredDecisions": true,
+    "conformalAbstention": true,
+    "clarificationCandidates": true
+  },
+  "skills": [
+    { "id": "route", "name": "Typed routing", "description": "POST /v1/route — {state} -> action|route|confidence|reason|set_size|candidates" },
+    { "id": "decide", "name": "Head decision", "description": "POST /v1/decide — raw head probabilities for a state" },
+    { "id": "lanes", "name": "Lane discovery", "description": "GET /v1/lanes — live expert lanes with per-lane qhat/minconf" }
+  ],
+  "endpoints": {
+    "api": "https://api.mtlm-router.intrane.fr",
+    "docs": "https://api.mtlm-router.intrane.fr/llms.txt",
+    "openapi": "https://mtlm-router.intrane.fr/mtlm-router/openapi.yaml",
+    "mcp": "https://mtlm-router.intrane.fr/.well-known/mcp/server.json"
+  },
+  "interfaces": [
+    { "type": "http", "url": "https://api.mtlm-router.intrane.fr" },
+    { "type": "stdio-mcp", "package": "mtlm-router-linux-amd64 appliance tarball (./mtlm-mcp)" }
+  ]
+}
