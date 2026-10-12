@@ -188,3 +188,35 @@ early-warning signal, not a fix.
 conf, reason, set_size, gate, expert, `shadow{}` when canarying. This is the
 audit trail AND the input to `monitor.py` / `shadow_report.py`. Rotate with
 logrotate; keep enough history for `--baseline` comparisons (≥ 2× window).
+
+## 9. Hosted API (api.mtlm-router.intrane.fr)
+
+The pay-per-decision public endpoint — same runtime, different deployment:
+
+```
+caller → traefik (dk1, websecure)
+       → mtlm-meter  dk1:8786   (peage wallet metering; /opt/mtlm-meter,
+                                 systemd mtlm-meter.service,
+                                 env /etc/mtlm-meter/mtlm-meter.env)
+       → mtlm-hosted rbm21:8402 (anvil-serve-mixed, upstream is
+                                 tailscale 100.123.0.125;
+                                 unit /etc/systemd/system/mtlm-hosted.service)
+```
+
+- **Keys:** callers authenticate to anvil with `ANVIL_KEYS` (in the unit env).
+  The meter injects its upstream key (`UPSTREAM_KEY` in its env). Peage
+  wallet token goes in `X-Peage-Wallet`; pricing is PRICE_CENTS/BUNDLE in the
+  meter env.
+- **Lanes:** the served expert set lives in the unit's `ANVIL_EXPERTS` — keep
+  it aligned with the latest non-yanked catalog lanes. Heads stage into
+  `/root/mtlm/hosted/models/` (sha256 must match the pack manifest).
+  Catalog floors go in `ANVIL_EXPERT_MINCONF`.
+- **Update procedure:** copy head → patch unit env → `systemctl
+  daemon-reload && systemctl restart mtlm-hosted` → verify
+  `curl localhost:8402/readyz` (expert count) and a keyed probe per new lane.
+  ~5 s of downtime; rollback is restoring the previous env + restart.
+- **Meter quirk:** it proxies `/v1/*` routes but returns `not found` for
+  `/v1/lanes` publicly — lane discovery is via the catalog site, not the API.
+- **Gate:** `ANVIL_GATE=models/gate_biz_mt.head` decides domain admission
+  before experts run; `ANVIL_SHADOW` canaries mairie→mairie_c with
+  `shadow_agree_pct` in `/metrics`.
