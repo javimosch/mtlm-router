@@ -55,11 +55,50 @@ def post(url, path, body):
             return e.code, {}
 
 
+def get(url, path):
+    try:
+        with urllib.request.urlopen(url + path, timeout=30) as resp:
+            body = resp.read()
+            try:
+                return resp.status, json.loads(body)
+            except Exception:
+                return resp.status, {}
+    except urllib.error.HTTPError as e:
+        try:
+            return e.code, json.loads(e.read())
+        except Exception:
+            return e.code, {}
+
+
+def check_public(url):
+    """Probe the metered public surface: free metadata endpoints must be 200,
+    POST /v1/* without a wallet must be 402 (metered, not accidentally free)."""
+    drifts = []
+    for path in ("/health", "/pricing", "/llms.txt", "/v1/lanes"):
+        st, _ = get(url, path)
+        if st != 200:
+            drifts.append(f"GET {path}: HTTP {st}, want 200 (free)")
+    st, res = get(url, "/v1/lanes")
+    if st == 200 and not isinstance(res.get("lanes"), list):
+        drifts.append("GET /v1/lanes: no lanes array in body")
+    st, _ = post(url, "/v1/route", {"state": "probe"})
+    if st != 402:
+        drifts.append(f"POST /v1/route without wallet: HTTP {st}, want 402 (metered)")
+    return drifts
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", default="http://localhost:8097")
     ap.add_argument("--spec", default=SPEC)
+    ap.add_argument("--public", action="store_true",
+                    help="probe the public metered surface instead of the upstream schema checks")
     a = ap.parse_args()
+    if a.public:
+        drifts = check_public(a.url)
+        print(json.dumps({"url": a.url, "surface": "public",
+                          "drift": drifts, "ok": not drifts}, indent=1))
+        sys.exit(1 if drifts else 0)
     spec = yaml.safe_load(open(a.spec))
     drifts, checked = [], 0
     for path, bodies in PROBES.items():

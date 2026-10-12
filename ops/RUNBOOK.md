@@ -159,6 +159,12 @@ outside the spec. Run it after touching a route handler — spec drift found
 sat unshipped until this check existed. Endpoints that 400 on a lane-pinned
 instance (no noul/score heads) are skipped.
 
+`--public --url https://api.mtlm-router.intrane.fr` probes the metered
+surface instead: free metadata endpoints (`/health`, `/pricing`, `/llms.txt`,
+`/v1/lanes`) must return 200 and a wallet-less `POST /v1/route` must return
+402. Guards both directions — a proxy regression hiding `/v1/lanes` again,
+and a metering bug leaking free POSTs.
+
 ## 6. Recalibration (conformal)
 
 When `monitor.py` reports drift, or a lane's abstain rate creeps:
