@@ -541,6 +541,9 @@ components:
           type: integer
           description: conformal prediction-set size; 1 = singleton (automatable), 0 or >1 = abstain
         qhat: {type: number, description: lane's calibrated threshold}
+        margin:
+          type: number
+          description: "top1 − top2 probability gap. Small margin = torn decision even on a singleton set — usable as a client-side policy signal (e.g. require margin ≥ 0.3 to auto-execute)."
         candidates:
           type: array
           description: clarification shortlist sorted by confidence desc — conformal set members when 2 ≤ set_size ≤ 8; top-2 argmax best-guesses (no coverage claim) when set_size is 0
