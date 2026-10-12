@@ -1,9 +1,11 @@
+GRID=[((-2,"mean"),(-3,"mean"),(-4,"mean")),((-1,"mean"),(-2,"mean"),(-3,"mean"),(-4,"mean")),((-2,"mean"),(-3,"mean"),(-4,"mean"),(-5,"mean")),((-3,"mean"),(-4,"mean"),(-5,"mean")),((-2,"mean"),(-3,"mean"),(-4,"mean"),(-2,"max")),((-1,"max"),(-2,"mean"),(-3,"mean"),(-4,"mean")),((-2,"max"),(-3,"mean"),(-4,"mean")),((-1,"mean"),(-2,"mean"),(-3,"mean"))]
 import sys, json
 sys.path.insert(0, "/root/mtlm/tools")
 import numpy as np
 import head_probe as hp
 
 tr=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/root/mtlm/data/b77/bank77_train.jsonl")]
+tr+=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/root/mtlm/data/b77/bank77_valid.jsonl")]
 tr+=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/root/mtlm/data/b77/bank77_idoos_train.jsonl")]
 ho=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/root/mtlm/data/b77/bank77_test.jsonl")]
 hn=[(hp.DECIDE_SYS,c,u[:300],y) for s,c,u,y in hp.load("/root/mtlm/data/b77/bank77_idoos_test.jsonl")]
@@ -13,9 +15,9 @@ oos_i=lab["oos"]
 print("extracting",len(tr)+len(ho)+len(hn),"rows",flush=True)
 F=hp.features("/root/mtlm/hf/router3s384", tr+ho+hn)
 n=len(tr); nh=len(ho); best=None
-for taps in ([(-4,"max"),(-2,"max"),(-3,"max")],[(-3,"mean"),(-2,"mean")],[(-2,"mean"),(-3,"mean"),(-4,"mean")],[(-2,"max"),(-3,"max")]):
+for taps in [t for t in GRID if all(k in F for k in t)]:
     X=np.concatenate([F[t] for t in taps],axis=1); Xtr,Xho,Xhn=X[:n],X[n:n+nh],X[n+nh:]
-    for l2 in (1e-2,1e-1):
+    for l2 in (3e-3,1e-2,3e-2):
         mu=Xtr.mean(0); sd=hp.feat_sd(Xtr); W,b=hp.fit_lr((Xtr-mu)/sd,ytr,len(labels),l2)
         Z=((Xho-mu)/sd)@W+b; pred=Z.argmax(1)
         insc=yho!=oos_i
@@ -23,8 +25,9 @@ for taps in ([(-4,"max"),(-2,"max"),(-3,"max")],[(-3,"mean"),(-2,"mean")],[(-2,"
         oos_rec=(pred[~insc]==oos_i).mean()
         Zhn=((Xhn-mu)/sd)@W+b; hn_rec=(Zhn.argmax(1)==oos_i).mean()
         print(json.dumps({"taps":taps,"l2":l2,"in_scope":round(float(acc),4),"oos_recall":round(float(oos_rec),4),"hn_recall":round(float(hn_rec),4)}),flush=True)
-        if best is None or oos_rec>best[0]: best=(oos_rec,taps,l2,X,mu,sd,W,b)
-oos_rec,taps,l2,X,mu,sd,W,b=best
+        score=(0.0 if hn_rec!=hn_rec else hn_rec)*0.5 + acc
+        if best is None or score>best[0]: best=(score,taps,l2,X,mu,sd,W,b)
+score,taps,l2,X,mu,sd,W,b=best
 n=len(tr)
 Zho=((X[n:n+nh]-mu)/sd)@W+b
 temp,bn=1.0,1e18
