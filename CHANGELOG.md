@@ -7,6 +7,27 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-12
+
+### Added
+- `candidates` on `/v1/route`: when a conformal-gated lane's prediction set
+  has 2-8 members the abstain now returns the set members (route +
+  confidence, prob-sorted) — a clarification shortlist clients can use to
+  ask "did you mean X or Y?" (CICC-style). Sets >8 stay a bare abstain.
+- `tools/lane_checklist.py`: cross-surface drift check — every registry lane
+  must have a floor decision, hosted parity coverage, and a README row.
+- `tools/render_llms_full.py` + live `/llms-full.txt`: generated full-corpus
+  companion to llms.txt.
+- `server.json` (MCP registry manifest) at repo root.
+
+### Changed
+- `route_request` MCP tool description names all 10 lanes and points agents
+  at `GET /v1/lanes`.
+- pricing page + `GET /pricing`: hosted endpoint is labeled an evaluation
+  tier; new dedicated hosted tier (EUR 99/mo single-tenant).
+- Hosted meter `llms.txt` advertises measured latency (~35ms compute,
+  ~100ms p50 metered path) instead of a stale ~15ms claim.
+
 ## [0.9.1] - 2026-10-12
 
 ### Added

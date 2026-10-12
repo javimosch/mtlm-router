@@ -91,6 +91,8 @@ cp "$(dirname "$0")/lane_install.py" "$PKG/tools/lane_install.py" 2>/dev/null
 cp "$(dirname "$0")/lane_verify.py" "$PKG/tools/lane_verify.py" 2>/dev/null
 cp "$(dirname "$0")/lane_pack.py" "$PKG/tools/lane_pack.py" 2>/dev/null
 cp "$(dirname "$0")/../bench/api_contract.py" "$PKG/tools/api_contract.py" 2>/dev/null
+cp "$(dirname "$0")/lane_checklist.py" "$PKG/tools/lane_checklist.py" 2>/dev/null
+cp "$(dirname "$0")/render_llms_full.py" "$PKG/tools/render_llms_full.py" 2>/dev/null
 cp "$(dirname "$0")/mcp.src" "$PKG/tools/mcp.src" 2>/dev/null
 cp "$(dirname "$0")/../openapi.yaml" "$PKG/openapi.yaml" 2>/dev/null
 mkdir -p "$PKG/ops" && cp "$(dirname "$0")/../ops/RUNBOOK.md" "$PKG/ops/RUNBOOK.md" 2>/dev/null
