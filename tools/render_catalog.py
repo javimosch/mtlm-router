@@ -124,7 +124,8 @@ def main():
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
 <h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
 <p class="text-gray-400 text-sm mb-2">{len(live)} lanes · {len(lanes)} packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
-<p class="text-gray-500 text-sm mb-10">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="{INDEX}" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
+<p class="text-gray-500 text-sm mb-3">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="{INDEX}" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
+<p class="text-gray-500 text-sm mb-10">Try a lane before installing — every lane below is also live on the hosted API: <span class="mono text-gray-400">POST https://api.mtlm-router.intrane.fr/demo/route {{"state":"…","text":"…","expert":"&lt;lane&gt;"}}</span> (rate-limited demo wallet, no signup) or pin <span class="mono">"expert"</span> on metered <span class="mono">/v1/route</span>. Lane list: <a href="https://api.mtlm-router.intrane.fr/v1/lanes" class="mono text-cyan-400 hover:underline">/v1/lanes</a>.</p>
 <div class="space-y-4">{cards}
 </div>{superseded}
 <div class="mt-10 bg-gray-900 border border-cyan-800 rounded-xl p-6">
