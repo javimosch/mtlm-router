@@ -123,7 +123,7 @@ candidates pass holdout and still regress a dominant lane live.
 | `civic@0.2.1` | 14 | demo | 86.6% | 97% | `lane_install civic` |
 | `civic_fr@0.1.1` | 12 | demo | 99.7% | 91% | `lane_install civic_fr` |
 | `clinc150@0.1.4` | 151 | certified | 74.1% | 20% | `lane_install clinc150` |
-| `eq_tone@0.1.1` | 5 | demo | 51.4% | — | `lane_install eq_tone` |
+| `eq_tone@0.2.0` | 6 | demo | 50.3% | 88% | `lane_install eq_tone` |
 | `helpdesk@0.2.0` | 7 | demo | 100.0% | 90% | `lane_install helpdesk` |
 <!-- lanes:end -->
 

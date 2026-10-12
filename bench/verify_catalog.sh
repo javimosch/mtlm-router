@@ -23,7 +23,7 @@ clinc2:$MODELS2/clinc150_v2.head,\
 helpdesk1:$HOSTED/models/helpdesk_pool_L-3_mean.head,\
 helpdesk2:$MODELS2/helpdesk_v2_mt.head,\
 mairie:$HOSTED/models/mairie_mt3.head,\
-eq:$MODELS2/eq_tone_mt.head,\
+eq:$MODELS2/eq_tone_v2.head,\
 bank77:$MODELS2/banking77_mt.head"
 
 echo "[verify_catalog] starting scratch anvil on :$PORT" >&2
