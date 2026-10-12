@@ -74,7 +74,8 @@ def check_public(url):
     """Probe the metered public surface: free metadata endpoints must be 200,
     POST /v1/* without a wallet must be 402 (metered, not accidentally free)."""
     drifts = []
-    for path in ("/health", "/pricing", "/llms.txt", "/v1/lanes"):
+    for path in ("/health", "/pricing", "/llms.txt", "/v1/lanes",
+                 "/.well-known/api-catalog"):
         st, _ = get(url, path)
         if st != 200:
             drifts.append(f"GET {path}: HTTP {st}, want 200 (free)")
