@@ -7,6 +7,34 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-13
+
+### Added
+- `margin` on every `/v1/route` response (and decision log): top1 − top2
+  probability gap — a client-side margin-policy signal (`action=tool_call
+  AND margin ≥ 0.3` pattern).
+- `tools/verify_appliance.py`: verifies every sha256 in the shipped
+  `manifest.json` against a tarball or extracted tree (16/16 on v0.11.0).
+- `tools/release_gate.py` + `tools/golden_probes.jsonl`: golden-set routing
+  regression check that goes beyond smoke — replays labeled probes per lane,
+  exit 1 on misses.
+- `tools/set_cluster.py`: confusion-cluster analysis over cached conformal
+  probs (measured 72.6% of clinc abstentions are intra-cluster — hierarchy
+  feasible there, not on bank77).
+- `bench/catalog_parity.py`: runtime→catalog lane map; lane_checklist gate.
+- Releases now ship a `*.tar.gz.sha256` sidecar.
+
+### Changed
+- A singleton `oos` route now `delegate`s with `reason: route_oos` instead
+  of `tool_call` — `oos` is an abstention-path class like `escalate`; a
+  confident-wrong-oos becomes human triage rather than an automated wrong
+  rejection.
+- Site: llms.txt v2 discovery (`rel=describedby`, `/.well-known/llms.txt`),
+  refreshed contract fields, honest ~100ms latency claims (p50 measured
+  60–150ms on a loaded production box, `bench/route_latency.py --key`).
+- ACI qhat hook verified end-to-end live (runbook recipe; actor-based
+  qhat/feedback state fixed in machin-anvil `da3874c`).
+
 ## [0.10.0] - 2026-10-12
 
 ### Added
