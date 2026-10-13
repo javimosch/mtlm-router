@@ -444,7 +444,7 @@
     </table>
   </div>
   <p class="text-center mt-6 text-sm text-gray-500">
-    Catalog + install: <a href="/catalog.html" class="text-cyan-400 hover:underline mono">browse the lane catalog</a> · <a href="https://github.com/javimosch/mtlm-heads" target="_blank" rel="noopener" class="text-cyan-400 hover:underline mono">github.com/javimosch/mtlm-heads</a>
+    Catalog + install: <a data-track="cta_catalog" href="/catalog.html" class="text-cyan-400 hover:underline mono">browse the lane catalog</a> · <a href="https://github.com/javimosch/mtlm-heads" target="_blank" rel="noopener" class="text-cyan-400 hover:underline mono">github.com/javimosch/mtlm-heads</a>
     — a lane fitted on <em>your</em> routes is the custom-head offer below.<br>
     <span class="text-gray-400">3 lanes ship an explicit <span class="mono">oos</span> class (civic 0.2.1, civic_fr 0.1.1, helpdesk 0.2.0) — abstention is a feature, not a gap.</span>
   </p>
@@ -462,21 +462,21 @@
       <div class="text-3xl font-bold mb-1">Free</div>
       <p class="text-gray-500 text-sm mb-4">Apache-2.0, forever.</p>
       <p class="text-gray-400 text-sm flex-1">The v0.11.0 tarball (~8MB): mhd3 multi-tap engine, int8 model, tools/helpdesk/municipal heads, systemd unit, smoke.sh + monitor.py + openapi.yaml. Runs on any x86-64 box, no GPU, no Python. Your data never leaves your network.</p>
-      <a href="{{.github}}/releases/tag/v0.11.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Download v0.11.0</a>
+      <a data-track="cta_release" href="{{.github}}/releases/tag/v0.11.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Download v0.11.0</a>
     </div>
     <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6 flex flex-col accent-glow">
       <div class="mono text-cyan-300 text-sm mb-2">HOSTED API</div>
       <div class="text-3xl font-bold mb-1">€0.01 <span class="text-lg text-gray-400 font-normal">/ 20 decisions</span></div>
       <p class="text-gray-500 text-sm mb-4">Pay per decision, prepaid wallet, no subscription.</p>
       <p class="text-gray-400 text-sm flex-1">The same <span class="mono">/v1/route</span> on <span class="mono">api.mtlm-router.intrane.fr</span>, metered by <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> (EUR, Stripe top-ups). New wallets start with free credit, so the first decisions cost nothing. Signed receipt on every charge.</p>
-      <a href="https://api.mtlm-router.intrane.fr/llms.txt" target="_blank" rel="noopener" class="mt-5 inline-block text-center hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Get a wallet and call it</a>
+      <a data-track="cta_wallet" href="https://api.mtlm-router.intrane.fr/llms.txt" target="_blank" rel="noopener" class="mt-5 inline-block text-center hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Get a wallet and call it</a>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col">
       <div class="mono text-cyan-300 text-sm mb-2">CUSTOM HEAD</div>
       <div class="text-3xl font-bold mb-1">€149 <span class="text-lg text-gray-400 font-normal">/ domain, one-off</span></div>
       <p class="text-gray-500 text-sm mb-4">Your routes, trained and calibrated, in 3 business days.</p>
       <p class="text-gray-400 text-sm flex-1">Send us your route table (names plus a few example phrasings each). You get a ~7KB <span class="mono">.head</span> for the appliance or the hosted API, an eval report with holdout accuracy and calibration, and one free re-train after a week of shadow traffic.</p>
-      <a href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head&body=Routes%20(name%3A%20example%20phrasings)%3A%0A%0A" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Send your routes</a>
+      <a data-track="cta_custom_lane" href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head&body=Routes%20(name%3A%20example%20phrasings)%3A%0A%0A" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Send your routes</a>
     </div>
   </div>
   <p class="text-gray-600 text-xs text-center mt-6">Prices in EUR excl. VAT. Hosted API decisions are served from EU infrastructure; hosted traffic is logged for calibration only and never used to train other customers' heads.</p>
@@ -524,10 +524,10 @@
     Read the product doc, audit the evals, ship your first head.
   </p>
   <div class="flex flex-wrap justify-center gap-4">
-    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">
+    <a data-track="cta_github" href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">
       github.com/javimosch/mtlm-router
     </a>
-    <a href="{{.article}}" target="_blank" rel="noopener" class="bg-gray-800 border border-gray-700 text-gray-200 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-700 transition-colors">
+    <a data-track="cta_article" href="{{.article}}" target="_blank" rel="noopener" class="bg-gray-800 border border-gray-700 text-gray-200 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-700 transition-colors">
       Read the story
     </a>
   </div>
@@ -547,7 +547,7 @@
     fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
     .then(function(r){return r.json().then(function(j){return [r.status,j]})})
     .then(function(x){var st=x[0],d=x[1];
-      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');return;}
+      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');if(window.vigie&&vigie.track)vigie.track('playground_error',{http:st});return;}
       var c=Math.round((d.confidence||0)*100);
       txt('pg-route',d.route||'?');txt('pg-conf',c+'%');
       var a=d.action||'?';txt('pg-action',a);
@@ -558,7 +558,7 @@
       var raw=document.getElementById('pg-raw');raw.textContent=JSON.stringify(d);raw.classList.remove('hidden');
       o.classList.remove('hidden');
       if(window.vigie&&vigie.track)vigie.track('playground',{action:a,domain:d.domain||'',route:d.route||''});
-    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');});
+    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');if(window.vigie&&vigie.track)vigie.track('playground_error',{http:0});});
   }
   f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
   var CHIP_SETS={'':['status of ticket INC4821','remind me to call the dentist tomorrow','provision a staging VM for the new intern',"what's the weather in Lyon",'book a meeting room for friday'],
@@ -568,7 +568,7 @@
   var chipbox=document.getElementById('pg-chips');
   function setChips(set){chipbox.innerHTML='';Array.prototype.forEach.call(set,function(t){var b=document.createElement('button');b.type='button';b.className='pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700';b.textContent=t;b.addEventListener('click',function(){i.value=t;run(t);});chipbox.appendChild(b);});}
   Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
-  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
+  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';if(window.vigie&&vigie.track)vigie.track('lane_select',{lane:lane||'auto'});setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
   if(location.hash.indexOf('mairie')>=0){var lb=document.querySelector('.pg-lane[data-lane="mairie"]');if(lb)lb.click();}
   // lead form
   var lf=document.getElementById('lead-form');

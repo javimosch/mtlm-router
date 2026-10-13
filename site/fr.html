@@ -449,7 +449,7 @@
     </table>
   </div>
   <p class="text-center mt-6 text-sm text-gray-500">
-    Catalogue + installation : <a href="/catalog.html" class="text-cyan-400 hover:underline mono">parcourir le catalogue</a> · <a href="https://github.com/javimosch/mtlm-heads" target="_blank" rel="noopener" class="text-cyan-400 hover:underline mono">github.com/javimosch/mtlm-heads</a>
+    Catalogue + installation : <a data-track="cta_catalog" href="/catalog.html" class="text-cyan-400 hover:underline mono">parcourir le catalogue</a> · <a href="https://github.com/javimosch/mtlm-heads" target="_blank" rel="noopener" class="text-cyan-400 hover:underline mono">github.com/javimosch/mtlm-heads</a>
     — une voie ajustée sur <em>vos</em> routes, c'est l'offre « tête sur mesure » ci-dessous.<br>
     <span class="text-gray-400">3 voies livrent une classe <span class="mono">oos</span> explicite (civic 0.2.1, civic_fr 0.1.1, helpdesk 0.2.0) — l'abstention est une fonctionnalité, pas une lacune.</span>
   </p>
@@ -467,14 +467,14 @@
       <div class="text-3xl font-bold mb-1">Gratuit</div>
       <p class="text-gray-500 text-sm mb-4">Apache-2.0, pour toujours.</p>
       <p class="text-gray-400 text-sm flex-1">L'archive v0.11.0 (~8 Mo) : moteur mhd3 multi-tap, modèle int8, têtes outils/helpdesk/mairie, unité systemd, smoke.sh + monitor.py + openapi.yaml. Tourne sur n'importe quelle machine x86-64, sans GPU ni Python. Vos données ne quittent jamais votre réseau.</p>
-      <a href="{{.github}}/releases/tag/v0.11.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Télécharger v0.11.0</a>
+      <a data-track="cta_release" href="{{.github}}/releases/tag/v0.11.0" target="_blank" rel="noopener" class="mt-5 inline-block text-center bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">Télécharger v0.11.0</a>
     </div>
     <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6 flex flex-col accent-glow">
       <div class="mono text-cyan-300 text-sm mb-2">API HÉBERGÉE</div>
       <div class="text-3xl font-bold mb-1">0,01 € <span class="text-lg text-gray-400 font-normal">/ 20 décisions</span></div>
       <p class="text-gray-500 text-sm mb-4">Paiement à la décision, portefeuille prépayé, sans abonnement.</p>
       <p class="text-gray-400 text-sm flex-1">Le même <span class="mono">/v1/route</span> sur <span class="mono">api.mtlm-router.intrane.fr</span>, facturé via <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> (EUR, recharges Stripe). Les nouveaux portefeuilles démarrent avec un crédit offert : les premières décisions ne coûtent rien. Reçu signé à chaque débit.</p>
-      <a href="https://api.mtlm-router.intrane.fr/llms.txt" target="_blank" rel="noopener" class="mt-5 inline-block text-center hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Créer un portefeuille et appeler</a>
+      <a data-track="cta_wallet" href="https://api.mtlm-router.intrane.fr/llms.txt" target="_blank" rel="noopener" class="mt-5 inline-block text-center hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Créer un portefeuille et appeler</a>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col">
       <div class="mono text-cyan-300 text-sm mb-2">TÊTE SUR MESURE</div>
@@ -530,10 +530,10 @@
     Lisez le doc produit, auditez les évals, livrez votre première tête.
   </p>
   <div class="flex flex-wrap justify-center gap-4">
-    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">
+    <a data-track="cta_github" href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">
       github.com/javimosch/mtlm-router
     </a>
-    <a href="{{.article}}" target="_blank" rel="noopener" class="bg-gray-800 border border-gray-700 text-gray-200 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-700 transition-colors">
+    <a data-track="cta_article" href="{{.article}}" target="_blank" rel="noopener" class="bg-gray-800 border border-gray-700 text-gray-200 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-700 transition-colors">
       Lire l'histoire
     </a>
   </div>
@@ -553,7 +553,7 @@
     fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
     .then(function(r){return r.json().then(function(j){return [r.status,j]})})
     .then(function(x){var st=x[0],d=x[1];
-      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');return;}
+      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');if(window.vigie&&vigie.track)vigie.track('playground_error',{http:st});return;}
       var c=Math.round((d.confidence||0)*100);
       txt('pg-route',d.route||'?');txt('pg-conf',c+'%');
       var a=d.action||'?';txt('pg-action',a);
@@ -564,7 +564,7 @@
       var raw=document.getElementById('pg-raw');raw.textContent=JSON.stringify(d);raw.classList.remove('hidden');
       o.classList.remove('hidden');
       if(window.vigie&&vigie.track)vigie.track('playground',{action:a,domain:d.domain||'',route:d.route||''});
-    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');});
+    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');if(window.vigie&&vigie.track)vigie.track('playground_error',{http:0});});
   }
   f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
   var CHIP_SETS={'':['status of ticket INC4821','remind me to call the dentist tomorrow','provision a staging VM for the new intern',"what's the weather in Lyon",'book a meeting room for friday'],
@@ -574,7 +574,7 @@
   var chipbox=document.getElementById('pg-chips');
   function setChips(set){chipbox.innerHTML='';Array.prototype.forEach.call(set,function(t){var b=document.createElement('button');b.type='button';b.className='pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700';b.textContent=t;b.addEventListener('click',function(){i.value=t;run(t);});chipbox.appendChild(b);});}
   Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
-  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
+  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';if(window.vigie&&vigie.track)vigie.track('lane_select',{lane:lane||'auto'});setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
   if(location.hash.indexOf('mairie')>=0){var lb=document.querySelector('.pg-lane[data-lane="mairie"]');if(lb)lb.click();}
   // lead form
   var lf=document.getElementById('lead-form');

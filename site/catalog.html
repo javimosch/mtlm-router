@@ -1,10 +1,11 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lane catalog — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script>
 <style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style></head>
 <body class="max-w-4xl mx-auto px-6 py-14">
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
 <h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
-<p class="text-gray-400 text-sm mb-2">6 lanes · 12 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
+<p class="text-gray-400 text-sm mb-2">6 lanes · 13 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
 <p class="text-gray-500 text-sm mb-3">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
 <p class="text-gray-500 text-sm mb-10">Try a lane before installing — every lane below is also live on the hosted API: <span class="mono text-gray-400">POST https://api.mtlm-router.intrane.fr/demo/route {"state":"…","text":"…","expert":"&lt;lane&gt;"}</span> (rate-limited demo wallet, no signup) or pin <span class="mono">"expert"</span> on metered <span class="mono">/v1/route</span>. Lane list: <a href="https://api.mtlm-router.intrane.fr/v1/lanes" class="mono text-cyan-400 hover:underline">/v1/lanes</a>.</p>
 <div class="space-y-4">
@@ -32,13 +33,13 @@
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
     <div class="flex items-baseline justify-between mb-2">
-      <h3 class="mono text-lg text-cyan-300">civic_fr<span class="text-gray-500">@0.1.1</span></h3>
+      <h3 class="mono text-lg text-cyan-300">civic_fr<span class="text-gray-500">@0.2.0</span></h3>
       <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
     </div>
-    <p class="text-gray-400 text-sm mb-3">12 routes: activites_commerciales, oos, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain… · <span class="text-gray-500">civic_fr 0.1.0 + explicit oos class (FR hard+easy negatives); live-verified</span></p>
-    <div class="text-sm text-gray-300 mb-4"><strong>99.7%</strong> holdout (n=330) · OOS recall <strong>91%</strong></div>
-    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.1 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: c0fbf627a8f86f489a23982b… · pricing: free</p>
+    <p class="text-gray-400 text-sm mb-3">12 routes: activites_commerciales, oos, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain… · <span class="text-gray-500">Synthetic civic corpus + hand-written natural phrasings (Apache-2.0 compatible)</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>98.8%</strong> holdout (n=330) · OOS recall <strong>68%</strong></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.2.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: edf31ea7c0b73e0f0dbefbd2… · pricing: free</p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -58,7 +59,7 @@
       <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
     </div>
     <p class="text-gray-400 text-sm mb-3">6 routes: confused, distressed, frustrated, neutral, oos, positive · <span class="text-gray-500">GoEmotions (google-research, Reddit comments, Apache-2.0), 28 labels merged to 5 tone superclasses + explicit oos class (hard negatives: clinc hn, banking77). Trained on frozen m7router3s384 trunk via LR head. v0.2.0: oo</span></p>
-    <div class="text-sm text-gray-300 mb-4"><strong>50.3%</strong> holdout (n=4995) · OOS recall <strong>88%</strong> · recommended floor <strong>conf≥0.5</strong></div>
+    <div class="text-sm text-gray-300 mb-4"><strong>50.3%</strong> holdout (n=4995) · OOS recall <strong>88%</strong> · recommended floor <strong>conf≥0.9</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py eq_tone@0.2.0 --apply --appliance .</pre>
     <p class="text-gray-600 text-xs mt-2 mono">sha256: 2e2c608b1935731c0553a35b… · pricing: free</p>
   </div>
@@ -75,7 +76,7 @@
   </div>
 </div>
 <details class="mt-8">
-  <summary class="cursor-pointer text-gray-500 text-sm hover:text-gray-300">other versions (6) — older or yanked packs, installable by exact pin</summary>
+  <summary class="cursor-pointer text-gray-500 text-sm hover:text-gray-300">other versions (7) — older or yanked packs, installable by exact pin</summary>
   <div class="space-y-4 mt-4">
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -96,6 +97,16 @@
     <div class="text-sm text-gray-300 mb-4"><strong>100.0%</strong> holdout (n=330) · α=.05 → 98% auto @ 0.00% err</div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.0 --apply --appliance .</pre>
     <p class="text-gray-600 text-xs mt-2 mono">sha256: 1c14200b233ffc3d8700ee3a… · pricing: free · superseded by <strong>civic_fr@0.1.1</strong></p>
+  </div> 
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">civic_fr<span class="text-gray-500">@0.1.1</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">12 routes: activites_commerciales, oos, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain… · <span class="text-gray-500">civic_fr 0.1.0 + explicit oos class (FR hard+easy negatives); live-verified</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>99.7%</strong> holdout (n=330) · OOS recall <strong>91%</strong></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.1 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: c0fbf627a8f86f489a23982b… · pricing: free</p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -123,7 +134,7 @@
       <span class="mono text-xs px-2 py-1 rounded border text-red-300 border-red-800 bg-red-950">yanked</span>
     </div>
     <p class="text-gray-400 text-sm mb-3">5 routes: confused, distressed, frustrated, neutral, positive · <span class="text-gray-500">GoEmotions (google-research, Reddit comments, Apache-2.0), 28 labels merged to 5 tone superclasses; trained on frozen m7router3s384 trunk via LR head. v0.1.1: manifest status field added.</span></p>
-    <div class="text-sm text-gray-300 mb-4"><strong>51.4%</strong> holdout (n=4995) · α=.05 → 8% auto @ 11.60% err · recommended floor <strong>conf≥0.5</strong></div>
+    <div class="text-sm text-gray-300 mb-4"><strong>51.4%</strong> holdout (n=4995) · α=.05 → 8% auto @ 11.60% err · recommended floor <strong>conf≥0.9</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py eq_tone@0.1.1 --apply --appliance .</pre>
     <p class="text-gray-600 text-xs mt-2 mono">sha256: df3401cae3d9a27172b39b4b… · pricing: free · superseded by <strong>eq_tone@0.2.0</strong></p>
   </div> 
@@ -141,8 +152,9 @@
 <div class="mt-10 bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">CUSTOM LANE — paid</div>
   <p class="text-gray-400 text-sm mb-4">None of these routes are yours? Send your route table (names + a few phrasings each): you get a ~7KB <span class="mono">.head</span> trained and calibrated on your corpus — eval report, abstention threshold, one free re-train after a week of shadow traffic. €149 / domain, one-off, 3 business days.</p>
-  <a href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head&body=Routes%20(name%3A%20example%20phrasings)%3A%0A%0A" class="inline-block bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Send your routes</a>
-  <a href="/pricing.html" class="inline-block text-cyan-400 text-sm hover:underline ml-4">pricing →</a>
+  <a data-track="cta_custom_lane" href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head&body=Routes%20(name%3A%20example%20phrasings)%3A%0A%0A" class="inline-block bg-gray-800 border border-gray-700 text-gray-200 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Send your routes</a>
+  <a data-track="cta_pricing" href="/pricing.html" class="inline-block text-cyan-400 text-sm hover:underline ml-4">pricing →</a>
 </div>
+<script>document.addEventListener('click',function(e){var t=e.target.closest('[data-track]');if(t&&window.vigie&&vigie.track)vigie.track(t.getAttribute('data-track'),{href:t.getAttribute('href')||'',page:location.pathname});});</script>
 <p class="text-center text-gray-600 text-xs mt-14">generated by tools/render_catalog.py</p>
 </body></html>
