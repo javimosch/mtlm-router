@@ -554,7 +554,7 @@ components:
               confidence: {type: number}
         reason:
           type: string
-          enum: [ok, low_confidence, low_gate_confidence, route_escalate, noul_escalate, conformal_abstain, head_trunk_disagree]
+          enum: [ok, low_confidence, low_gate_confidence, route_escalate, route_oos, noul_escalate, conformal_abstain, head_trunk_disagree]
         via: {type: string}
         tier: {type: string}
         call:
