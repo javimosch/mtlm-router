@@ -1,0 +1,18 @@
+{
+  "generated": "2026-10-13",
+  "method": "label-free drift on prod hosted-decisions.jsonl; conformal-era rows only (set_size present), dogfood-replay burst excluded; first-half vs second-half split per lane; KS on confidence distributions (alpha=0.01) + route-mix PSI + auto%/set_size deltas",
+  "organic_conformal_rows": 345,
+  "span": "2026-10-10 to 2026-10-13",
+  "lanes": {
+    "civic_fr": {"n": 105, "auto_first": 0.85, "auto_last": 0.81, "set_size": "1.15->1.15", "conf_ks": [0.223, 0.318, false], "route_psi": 0.021, "verdict": "STABLE — no drift (incl. post-v3w window)"},
+    "bank77": {"n": 175, "auto_first": 0.03, "auto_last": 0.03, "set_size": "2.18->2.91", "conf_ks": [0.487, 0.246, true], "route_psi": 16.95, "verdict": "INPUT-MIX SHIFT — confidence dist and route mix changed between traffic batches; automation rate stable. Model decay NOT indicated (auto% flat); monitor correctly detects input drift"},
+    "mairie": {"n": 5, "verdict": "insufficient conformal-era organic traffic"},
+    "others": {"verdict": "insufficient data (<40 rows each)"}
+  },
+  "confounds_documented": [
+    "monitor.py baseline-vs-recent flags are polluted by contract changes (pre-conformal rows have set_size=null) — only same-contract windows are comparable",
+    "dogfood replays append to the same log — replay bursts must be filtered before drift analysis (1421 rows on 2026-10-13 excluded)",
+    "pre-launch 'organic' traffic is partly eval/test traffic, not real customer mix — drift conclusions apply to the observed distribution, not a hypothetical customer one"
+  ],
+  "verdict": "No model-decay drift observed on civic_fr (the actively-updated lane). bank77 shows input-mix shift between traffic batches — the monitor detects it correctly. Insufficient organic volume elsewhere; drift story is 'evidence exists and tooling catches real shifts', not 'proven stable at scale'."
+}
