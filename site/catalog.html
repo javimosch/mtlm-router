@@ -17,7 +17,7 @@
     <p class="text-gray-400 text-sm mb-3">51 routes: Refund_not_showing_up, activate_my_card, apple_pay_or_google_pay, automatic_top_up, balance_not_updated_after_bank_transfer, balance_not_updated_after_cheque_or_cash_deposit, beneficiary_not_allowed, cancel_transfer… · <span class="text-gray-500">BANKING77-OOS (jianguoz/Few-Shot-Intent-Detection, PolyAI-LDN/task-specific-datasets): 5905 train / 2062 id-oos train; m7router3s384 frozen trunk; emit tools/emit_banking77.py</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>73.3%</strong> holdout (n=2000) · recommended floor <strong>conf≥0.7</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py banking77@0.1.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: 2a1b5ad93558a3b5c0c13b33… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 2a1b5ad93558a3b5c0c13b33… · pricing: free · <a data-track="lane_page" href="/lanes/banking77.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -28,7 +28,7 @@
     <p class="text-gray-400 text-sm mb-3">14 routes: animals, drains_flooding, fly_tipping, graffiti_flyposting, oos, other, parking_vehicles, parks_green… · <span class="text-gray-500">civic 0.1.0 + explicit oos class: 48 council-adjacent negatives + 200 CLINC train texts; live-verified on anvil 8437; supersedes yanked 0.2.0 (label-misaligned fit)</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>86.6%</strong> holdout (n=941) · OOS recall <strong>97%</strong> · recommended floor <strong>conf≥0.5</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic@0.2.1 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: e9a656ff92a549d25c11f21e… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: e9a656ff92a549d25c11f21e… · pricing: free · <a data-track="lane_page" href="/lanes/civic.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -39,7 +39,7 @@
     <p class="text-gray-400 text-sm mb-3">12 routes: activites_commerciales, oos, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain… · <span class="text-gray-500">Synthetic civic corpus + hand-written natural phrasings (Apache-2.0 compatible)</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>98.8%</strong> holdout (n=330) · OOS recall <strong>68%</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.2.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: edf31ea7c0b73e0f0dbefbd2… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: edf31ea7c0b73e0f0dbefbd2… · pricing: free · <a data-track="lane_page" href="/lanes/civic_fr.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -50,7 +50,7 @@
     <p class="text-gray-400 text-sm mb-3">151 routes: accept_reservations, account_blocked, alarm, application_status, apr, are_you_a_bot, balance, bill_balance… · <span class="text-gray-500">Trained on the public CLINC150 benchmark (train split only) + 200 hand-written intent-adjacent hard negatives; holdout eval on untouched test split. v0.1.4: retrained with hard-negative OOS corpus - argmax abstain 15.5%-</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>74.1%</strong> holdout (n=5500) · OOS recall <strong>20%</strong> · conf≥0.7 → 7.8% leak / 69% cov · α=.05 → 38% auto @ 0.00% err · recommended floor <strong>conf≥0.7</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py clinc150@0.1.4 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: c5862061595c081e23d4a42c… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: c5862061595c081e23d4a42c… · pricing: free · <a data-track="lane_page" href="/lanes/clinc150.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -61,7 +61,7 @@
     <p class="text-gray-400 text-sm mb-3">6 routes: confused, distressed, frustrated, neutral, oos, positive · <span class="text-gray-500">GoEmotions (google-research, Reddit comments, Apache-2.0), 28 labels merged to 5 tone superclasses + explicit oos class (hard negatives: clinc hn, banking77). Trained on frozen m7router3s384 trunk via LR head. v0.2.0: oo</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>50.3%</strong> holdout (n=4995) · OOS recall <strong>88%</strong> · recommended floor <strong>conf≥0.9</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py eq_tone@0.2.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: 2e2c608b1935731c0553a35b… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 2e2c608b1935731c0553a35b… · pricing: free · <a data-track="lane_page" href="/lanes/eq_tone.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -72,7 +72,7 @@
     <p class="text-gray-400 text-sm mb-3">7 routes: chat, escalate, file_ticket, oos, provision_vm, reset_password, ticket_status · <span class="text-gray-500">Synthetic IT-helpdesk corpus (2000 rows, public) + 80 hand-written OOS negatives (facilities/HR-adjacent + generic). 7 routes incl explicit oos. Live-verified + parity-checked on anvil-serve-mixed.</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>100.0%</strong> holdout · OOS recall <strong>90%</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py helpdesk@0.2.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: dc573f8b22114b973d65dd08… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: dc573f8b22114b973d65dd08… · pricing: free · <a data-track="lane_page" href="/lanes/helpdesk.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 </div>
 <details class="mt-8">
@@ -86,7 +86,7 @@
     <p class="text-gray-400 text-sm mb-3">13 routes: animals, drains_flooding, fly_tipping, graffiti_flyposting, other, parking_vehicles, parks_green, pavement_footpath… · <span class="text-gray-500">FixMyStreet Open311 API (public citizen reports, fetched 2026-10-11); 320 council labels -&gt; 13 canonical routes; train 3751/holdout 941; tools/emit_civic.py</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>96.8%</strong> holdout (n=941) · α=.05 → 94% auto @ 0.79% err · recommended floor <strong>conf≥0.5</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic@0.1.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1907a4c8731cb5e2b6bb825a… · pricing: free · superseded by <strong>civic@0.2.1</strong></p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1907a4c8731cb5e2b6bb825a… · pricing: free · superseded by <strong>civic@0.2.1</strong> · <a data-track="lane_page" href="/lanes/civic.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -96,7 +96,7 @@
     <p class="text-gray-400 text-sm mb-3">11 routes: activites_commerciales, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain, objets_encombrants… · <span class="text-gray-500">DansMaRue taxonomy (opendata.paris.fr) + tools/build_civic_fr.py template generation; no real free text exists publicly</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>100.0%</strong> holdout (n=330) · α=.05 → 98% auto @ 0.00% err</div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1c14200b233ffc3d8700ee3a… · pricing: free · superseded by <strong>civic_fr@0.1.1</strong></p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1c14200b233ffc3d8700ee3a… · pricing: free · superseded by <strong>civic_fr@0.1.1</strong> · <a data-track="lane_page" href="/lanes/civic_fr.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
     <div class="flex items-baseline justify-between mb-2">
@@ -106,7 +106,7 @@
     <p class="text-gray-400 text-sm mb-3">12 routes: activites_commerciales, oos, arbres_vegetation, autre, eau, eclairage, graffiti_affiches, mobilier_urbain… · <span class="text-gray-500">civic_fr 0.1.0 + explicit oos class (FR hard+easy negatives); live-verified</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>99.7%</strong> holdout (n=330) · OOS recall <strong>91%</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.1.1 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: c0fbf627a8f86f489a23982b… · pricing: free</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: c0fbf627a8f86f489a23982b… · pricing: free · <a data-track="lane_page" href="/lanes/civic_fr.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -116,7 +116,7 @@
     <p class="text-gray-400 text-sm mb-3">151 routes: accept_reservations, account_blocked, alarm, application_status, apr, are_you_a_bot, balance, bill_balance… · <span class="text-gray-500">Trained on the public CLINC150 benchmark (train split only), holdout eval on untouched test split. v0.1.1: labels.txt repaired; v0.1.2: manifest status field added.</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>73.8%</strong> holdout (n=5500) · α=.05 → 38% auto @ 0.00% err · recommended floor <strong>conf≥0.7</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py clinc150@0.1.2 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: 7257a15d2a2282cee754af35… · pricing: free · superseded by <strong>clinc150@0.1.4</strong></p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 7257a15d2a2282cee754af35… · pricing: free · superseded by <strong>clinc150@0.1.4</strong> · <a data-track="lane_page" href="/lanes/clinc150.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -126,7 +126,7 @@
     <p class="text-gray-400 text-sm mb-3">151 routes: accept_reservations, account_blocked, alarm, application_status, apr, are_you_a_bot, balance, bill_balance… · <span class="text-gray-500">Trained on the public CLINC150 benchmark (train split only), holdout eval on untouched test split. v0.1.1: labels.txt repaired; v0.1.2: manifest status field added. v0.1.3: eval.json gains measured oos_recall + leak/cove</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>73.8%</strong> holdout (n=5500) · OOS recall <strong>15%</strong> · conf≥0.7 → 7.5% leak / 70% cov · α=.05 → 38% auto @ 0.00% err · recommended floor <strong>conf≥0.7</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py clinc150@0.1.3 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: d46f14e1f6e6f3095ff3871d… · pricing: free · superseded by <strong>clinc150@0.1.4</strong></p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: d46f14e1f6e6f3095ff3871d… · pricing: free · superseded by <strong>clinc150@0.1.4</strong> · <a data-track="lane_page" href="/lanes/clinc150.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -136,7 +136,7 @@
     <p class="text-gray-400 text-sm mb-3">5 routes: confused, distressed, frustrated, neutral, positive · <span class="text-gray-500">GoEmotions (google-research, Reddit comments, Apache-2.0), 28 labels merged to 5 tone superclasses; trained on frozen m7router3s384 trunk via LR head. v0.1.1: manifest status field added.</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>51.4%</strong> holdout (n=4995) · α=.05 → 8% auto @ 11.60% err · recommended floor <strong>conf≥0.9</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py eq_tone@0.1.1 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: df3401cae3d9a27172b39b4b… · pricing: free · superseded by <strong>eq_tone@0.2.0</strong></p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: df3401cae3d9a27172b39b4b… · pricing: free · superseded by <strong>eq_tone@0.2.0</strong> · <a data-track="lane_page" href="/lanes/eq_tone.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
@@ -146,7 +146,7 @@
     <p class="text-gray-400 text-sm mb-3">5 routes: file_ticket, provision_vm, reset_password, ticket_status, escalate · <span class="text-gray-500">Synthetic IT-helpdesk demo corpus (public, generated). v0.1.1: manifest status field added.</span></p>
     <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py helpdesk@0.1.1 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: a1846154c250211b9ff26bd3… · pricing: free · superseded by <strong>helpdesk@0.2.0</strong></p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: a1846154c250211b9ff26bd3… · pricing: free · superseded by <strong>helpdesk@0.2.0</strong> · <a data-track="lane_page" href="/lanes/helpdesk.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div></div>
 </details>
 <div class="mt-10 bg-gray-900 border border-cyan-800 rounded-xl p-6">

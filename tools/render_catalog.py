@@ -10,6 +10,9 @@ import argparse, json, html, urllib.request, sys
 
 INDEX = "https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json"
 
+# lane families that have a generated /lanes/<name>.html demo page (render_lanes.py)
+LANE_PAGES = {"banking77", "civic", "civic_fr", "clinc150", "eq_tone", "helpdesk"}
+
 def esc(s): return html.escape(str(s), quote=True)
 
 def card(l):
@@ -55,7 +58,7 @@ def card(l):
     <p class="text-gray-400 text-sm mb-3">{tline}{' · <span class="text-gray-500">' + prov + '</span>' if prov else ''}</p>
     <div class="text-sm text-gray-300 mb-4">{' · '.join(metrics) if metrics else '<span class="text-gray-600">no holdout metrics</span>'}</div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py {name}@{ver} --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: {esc(l.get('sha256',''))[:24]}… · pricing: {esc(pricing)}{(' · superseded by <strong>' + esc(l['superseded_by']) + '</strong>') if l.get('superseded_by') else ''}</p>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: {esc(l.get('sha256',''))[:24]}… · pricing: {esc(pricing)}{(' · superseded by <strong>' + esc(l['superseded_by']) + '</strong>') if l.get('superseded_by') else ''}{' · <a data-track="lane_page" href="/lanes/' + name + '.html" class="text-cyan-400 hover:underline">try live →</a>' if name in LANE_PAGES else ''}</p>
   </div>"""
 
 MD_START, MD_END = "<!-- lanes:start -->", "<!-- lanes:end -->"
