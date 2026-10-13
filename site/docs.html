@@ -111,6 +111,21 @@ python3 tools/shadow_report.py logs/decisions.jsonl  <span class="text-gray-500"
 </div>
 
 <div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">The clarification loop</h2>
+  <div class="rounded-xl border border-gray-800 bg-gray-900 p-5 text-sm text-gray-400 space-y-3">
+    <p>How a client should drive a delegate response. Reference implementation: <code class="mono text-cyan-300">examples/clarify_loop.py</code>.</p>
+    <pre class="mono text-xs text-gray-300 bg-black/40 rounded-lg p-4 overflow-x-auto">tool_call + margin &gt;= 0.3        -&gt; execute route
+tool_call + margin &lt; 0.3         -&gt; confirm with user, then execute
+delegate + candidates[]           -&gt; "did you mean…" (order as returned —
+                                     already most-probable first), execute the pick
+delegate + reason=route_oos       -&gt; polite rejection — the lane can't help
+delegate, no candidates           -&gt; hand off to a human / bigger model</pre>
+    <p><strong class="text-gray-300">Loop discipline:</strong> ask at most <em>one</em> clarifying question, then hand off — an agent that keeps asking trains users to ignore it, and a wrong automated route is worse than a handoff. Candidates from a <code class="mono">set_size=0</code> response are best guesses with <em>no coverage claim</em>: fine to show in a pick-list, never auto-execute them. Always offer a "none of these" option — that's the correct signal to hand off.</p>
+    <p class="text-gray-500">On wide-taxonomy lanes (bank77, clinc) this loop is the common interaction, not an edge case: measured 41–91% of real production traffic lands in <code class="mono">delegate+candidates</code> (see <code class="mono">bench/dogfood_report.json</code>).</p>
+  </div>
+</div>
+
+<div class="mb-14">
   <h2 class="text-2xl font-bold mb-4">Conformal gating</h2>
   <div class="grid md:grid-cols-2 gap-6">
     <div class="text-sm text-gray-400 space-y-3">
