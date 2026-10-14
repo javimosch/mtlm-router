@@ -239,6 +239,7 @@ def main():
     open(os.path.join(a.outdir, "index.html"), "w").write(hub(sorted(latest)))
     base = "https://mtlm-router.intrane.fr"
     urls = ["/", "/fr.html", "/docs.html", "/catalog.html", "/pricing.html",
+            "/vs-llm-routing.html",
             "/inbox.html", "/inbox-fr.html", "/municipal.html", "/municipal-fr.html",
             "/lanes/index.html"] + ["/lanes/%s.html" % n for n in sorted(latest)]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

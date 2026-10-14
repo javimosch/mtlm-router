@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mtlm-router vs LLM function-calling — an honest comparison</title><script src="https://cdn.tailwindcss.com"></script>
+<meta name="description" content="A 7M-param typed router with calibrated abstention vs routing with GPT-4-class function calling: measured latency, marginal cost, privacy, and where each approach actually wins.">
+<link rel="canonical" href="https://mtlm-router.intrane.fr/vs-llm-routing.html">
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style><script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script></head>
+<body class="max-w-4xl mx-auto px-6 py-14">
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / vs llm function-calling</p>
+<h1 class="text-3xl font-bold mb-2">Routing with an LLM vs a 7M typed router</h1>
+<p class="text-gray-400 text-sm mb-10">The common way to turn natural language into a route is prompt a big model and parse JSON or a tool call. It works — and for some teams it's the right answer. This page is the honest trade-off, with our numbers where we have them and gaps marked where we don't.</p>
+
+<div class="overflow-x-auto bg-gray-900 border border-gray-800 rounded-xl mb-10">
+<table class="w-full text-sm">
+<thead><tr class="border-b border-gray-800 text-gray-400"><td class="px-5 py-3"></td><td class="px-5 py-3 mono text-cyan-300">mtlm-router</td><td class="px-5 py-3 mono">LLM function-calling</td></tr></thead>
+<tbody class="text-gray-300">
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">latency</td><td class="px-5 py-3 mono">p50 ~180ms on CPU <span class="text-gray-500">(<a href="/docs.html" class="text-cyan-400 hover:underline">measured, disclosed</a>)</span></td><td class="px-5 py-3 mono">~1–5s typical; TTFT varies by load</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">marginal cost / call</td><td class="px-5 py-3 mono">~€0 — runs on your CPU</td><td class="px-5 py-3 mono">per-token; a 51-way route costs the full prompt + output every time</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">data leaves your network?</td><td class="px-5 py-3">no — single binary, air-gap OK</td><td class="px-5 py-3">yes, unless you self-host a large model</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">"I don't know" behavior</td><td class="px-5 py-3">calibrated: conformal prediction sets, per-lane qhat — abstains with <em>measured</em> coverage, returns candidates to clarify</td><td class="px-5 py-3">prompted: "say oos if unsure" — uncalibrated, drifts silently, refuses or guesses per model mood</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">changing the taxonomy</td><td class="px-5 py-3">retrain a ~KB head (hours, CPU); trunk stays frozen</td><td class="px-5 py-3">edit a prompt (minutes) — but re-validating behavior is on you</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">eval evidence</td><td class="px-5 py-3">per-lane eval.json + <a href="/catalog.html" class="text-cyan-400 hover:underline">re-runnable samples</a> — claims you can falsify</td><td class="px-5 py-3">your own harness; provider model upgrades can shift results under you</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">open-domain knowledge</td><td class="px-5 py-3 text-amber-300">none — it routes, it doesn't know things</td><td class="px-5 py-3">strong — this is what LLMs are for</td></tr>
+<tr class="border-b border-gray-800"><td class="px-5 py-3 text-gray-400">day-one coverage of a new domain</td><td class="px-5 py-3 text-amber-300">needs a few dozen phrasings per route</td><td class="px-5 py-3">zero-shot — works immediately, quality unmeasured</td></tr>
+<tr><td class="px-5 py-3 text-gray-400">accuracy ceiling</td><td class="px-5 py-3 text-amber-300">73–99% by lane width — honest numbers per lane, some lanes triage-only</td><td class="px-5 py-3">high on easy taxonomies, but opaque error modes on boundary cases</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="grid md:grid-cols-2 gap-4 mb-10">
+<div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
+<h2 class="text-lg font-bold mb-3 text-cyan-300">Pick the router when</h2>
+<ul class="text-gray-300 text-sm space-y-2 list-disc list-inside">
+<li>Volume is high and marginal cost matters — 100k routing calls/day on an LLM bill is real money; on a 7M head it's a CPU that was already on.</li>
+<li>Requests contain personal data and can't egress (municipal, banking, support tickets).</li>
+<li>A wrong route is worse than no route — you need measured abstention, not a prompt that says "be careful".</li>
+<li>The taxonomy is stable enough to invest an afternoon in — then it runs for ~€0 forever.</li>
+</ul>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+<h2 class="text-lg font-bold mb-3 text-gray-200">Stick with the LLM when</h2>
+<ul class="text-gray-300 text-sm space-y-2 list-disc list-inside">
+<li>Routes change weekly — prompt edits beat retraining cadence.</li>
+<li>You need the model to <em>answer</em>, not just route (summarize, draft, extract) — the router deliberately delegates those.</li>
+<li>Volume is low and the vendor bill is noise.</li>
+<li>Nobody owns the taxonomy yet — explore with an LLM first, freeze it into a lane when it stabilizes.</li>
+</ul>
+</div>
+</div>
+
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-10">
+<h2 class="text-lg font-bold mb-3">The hybrid we actually recommend</h2>
+<p class="text-gray-300 text-sm">The router isn't competing with your LLM — it sits in front of it. Every route decision can <span class="mono">delegate</span> upstream (<span class="mono">ANVIL_DELEGATE_URL</span>): confident in-scope → cheap tool call; uncertain/out-of-scope → your LLM, where a big model's knowledge is genuinely needed. You pay LLM prices only for the fraction of traffic that deserves it — typically the clarification tail, not the routed bulk.</p>
+</div>
+
+<div class="text-center">
+<a data-track="cta_demo" href="/" class="inline-block bg-gray-800 border border-gray-700 text-gray-200 px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 mr-3">Try the live demo</a>
+<a data-track="cta_pricing" href="/pricing.html" class="inline-block text-cyan-400 hover:underline text-sm">Pricing →</a>
+</div>
+<script>document.addEventListener('click',function(e){var t=e.target.closest('[data-track]');if(t&&window.vigie)vigie(t.getAttribute('data-track'),{href:t.getAttribute('href')||'',page:location.pathname});});</script>
+</body></html>
