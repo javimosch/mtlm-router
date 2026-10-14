@@ -1,0 +1,58 @@
+{
+ "date": "2026-10-14",
+ "method": "bench/route_latency.py --n 120 loopback on prod host (rbm21, shared LXC, load ~2-3 during run); client_ms ~= server_ms (loopback ~1ms)",
+ "note": "6-text mix incl. FR/EN, short+long; sequential, no warmup exclusion needed (steady-state)",
+ "runs": [
+  {
+   "url": "http://localhost:8402/v1/route",
+   "expert": "civic_fr",
+   "n": 120,
+   "client_ms": {
+    "p50": 185.1,
+    "p95": 263.7,
+    "p99": 300.1,
+    "mean": 177.4
+   },
+   "server_ms": {
+    "p50": 184,
+    "p95": 263,
+    "p99": 298,
+    "mean": 175.7
+   }
+  },
+  {
+   "url": "http://localhost:8402/v1/route",
+   "expert": "bank77",
+   "n": 120,
+   "client_ms": {
+    "p50": 171.4,
+    "p95": 265.4,
+    "p99": 302.0,
+    "mean": 176.9
+   },
+   "server_ms": {
+    "p50": 169,
+    "p95": 262,
+    "p99": 301,
+    "mean": 174.7
+   }
+  },
+  {
+   "url": "http://localhost:8402/v1/route",
+   "expert": "clinc",
+   "n": 120,
+   "client_ms": {
+    "p50": 181.7,
+    "p95": 272.3,
+    "p99": 310.7,
+    "mean": 177.9
+   },
+   "server_ms": {
+    "p50": 180,
+    "p95": 272,
+    "p99": 310,
+    "mean": 176.3
+   }
+  }
+ ]
+}

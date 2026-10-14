@@ -17,7 +17,7 @@
       <div class="text-xs text-gray-500">parameters</div>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
-      <div class="stat-num text-2xl font-bold text-cyan-300">~100ms</div>
+      <div class="stat-num text-2xl font-bold text-cyan-300">~180ms</div>
       <div class="text-xs text-gray-500">CPU inference</div>
     </div>
     <div class="bg-gray-900 border border-gray-800 rounded-lg px-6 py-3">
@@ -288,7 +288,7 @@
     <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">−0.2%</div><div class="text-xs text-gray-500 mt-1">shadow-canary scoring overhead, interleaved A/B (bench/shadow_overhead)</div></div>
     <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">96.8%</div><div class="text-xs text-gray-500 mt-1">OOS recall — civic 0.2.1's explicit out-of-scope class (bench/oos_eval)</div></div>
     <div class="bg-gray-900 border border-gray-800 rounded-lg p-4"><div class="mono text-xl text-cyan-300">~470 tok/s</div><div class="text-xs text-gray-500 mt-1">decode throughput, 7M int8 trunk, plain CPU (bench/gen_speed)</div></div>
-    <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 col-span-2 sm:col-span-1"><div class="mono text-xl text-cyan-300">60–150ms</div><div class="text-xs text-gray-500 mt-1">route API p50 on CPU — idle scratch to loaded production box (bench/route_latency)</div></div>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 col-span-2 sm:col-span-1"><div class="mono text-xl text-cyan-300">171–185ms</div><div class="text-xs text-gray-500 mt-1">route API p50 measured on loaded prod, n=120/lane, 2026-10-14 (bench/latency_2026-10-14.json)</div></div>
   </div>
   <p class="text-center mt-3 text-xs text-gray-600">Every number ships with its harness in the repo — rerun it, don't trust it.</p>
 </div>
@@ -309,7 +309,7 @@
       <tbody class="text-gray-300">
         <tr class="border-b border-gray-800/50">
           <td class="px-6 py-3 font-semibold">mtlm-router</td>
-          <td class="px-6 py-3 text-cyan-300">CPU, ~100ms, air-gap OK</td>
+          <td class="px-6 py-3 text-cyan-300">CPU, ~180ms, air-gap OK</td>
           <td class="px-6 py-3">Flat — one appliance</td>
           <td class="px-6 py-3">route + confidence + fill</td>
           <td class="px-6 py-3 text-cyan-300">escalate, calibrated</td>

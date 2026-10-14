@@ -212,6 +212,22 @@ ANVIL_URL=http://127.0.0.1:8097 ./mtlm-mcp
 </div>
 
 <div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Measured latency</h2>
+  <p class="text-gray-400 text-sm mb-4">Disclosed run, not a marketing number: <code class="mono">bench/route_latency.py --n 120</code> per lane, loopback on the loaded production box (shared LXC, load ~2–3 during the run), 6-text FR/EN mix, 2026-10-14. Raw output: <code class="mono">bench/latency_2026-10-14.json</code> in the repo.</p>
+  <div class="overflow-x-auto bg-gray-900 border border-gray-800 rounded-xl mb-4">
+    <table class="w-full text-sm">
+      <thead><tr class="border-b border-gray-800 text-gray-400"><td class="px-5 py-3">lane</td><td class="px-5 py-3">p50</td><td class="px-5 py-3">p95</td><td class="px-5 py-3">p99</td><td class="px-5 py-3">mean</td></tr></thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">bank77 (51 routes)</td><td class="px-5 py-3 mono">171ms</td><td class="px-5 py-3 mono">265ms</td><td class="px-5 py-3 mono">302ms</td><td class="px-5 py-3 mono">177ms</td></tr>
+        <tr class="border-b border-gray-800"><td class="px-5 py-3 mono text-cyan-300">clinc (151 routes)</td><td class="px-5 py-3 mono">182ms</td><td class="px-5 py-3 mono">272ms</td><td class="px-5 py-3 mono">311ms</td><td class="px-5 py-3 mono">178ms</td></tr>
+        <tr><td class="px-5 py-3 mono text-cyan-300">civic_fr (12 routes)</td><td class="px-5 py-3 mono">185ms</td><td class="px-5 py-3 mono">264ms</td><td class="px-5 py-3 mono">300ms</td><td class="px-5 py-3 mono">177ms</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-gray-500 text-sm">Lane width barely matters (~10ms across 12→151 routes) — the frozen trunk prefill dominates; each head is a ~1ms matmul. An idle box shows lower p50; this is the honest loaded number. Your deployment will differ — re-run <code class="mono">bench/route_latency.py</code> against your appliance.</p>
+</div>
+
+<div class="mb-14">
   <h2 class="text-2xl font-bold mb-4">Environment</h2>
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
 <pre class="mono text-xs md:text-sm overflow-x-auto"><span class="text-cyan-300">ANVIL_HEAD|NOUL|SCORE|GATE</span>=file.head      <span class="text-gray-500"># the four core heads</span>
