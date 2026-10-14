@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mtlm-router.intrane.fr/sitemap.xml

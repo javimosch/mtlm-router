@@ -553,7 +553,7 @@
     fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
     .then(function(r){return r.json().then(function(j){return [r.status,j]})})
     .then(function(x){var st=x[0],d=x[1];
-      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');if(window.vigie&&vigie.track)vigie.track('playground_error',{http:st});return;}
+      if(st!==200){e.textContent=(d&&d.error)||('HTTP '+st);e.classList.remove('hidden');if(window.vigie)vigie('playground_error',{http:st});return;}
       var c=Math.round((d.confidence||0)*100);
       txt('pg-route',d.route||'?');txt('pg-conf',c+'%');
       var a=d.action||'?';txt('pg-action',a);
@@ -563,8 +563,8 @@
       txt('pg-note',note[a]||'');
       var raw=document.getElementById('pg-raw');raw.textContent=JSON.stringify(d);raw.classList.remove('hidden');
       o.classList.remove('hidden');
-      if(window.vigie&&vigie.track)vigie.track('playground',{action:a,domain:d.domain||'',route:d.route||''});
-    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');if(window.vigie&&vigie.track)vigie.track('playground_error',{http:0});});
+      if(window.vigie)vigie('playground',{action:a,domain:d.domain||'',route:d.route||''});
+    }).catch(function(){e.textContent=L?'Le routeur ne répond pas.':'The router did not answer.';e.classList.remove('hidden');if(window.vigie)vigie('playground_error',{http:0});});
   }
   f.addEventListener('submit',function(ev){ev.preventDefault();var s=i.value.trim();if(s.length>1)run(s);});
   var CHIP_SETS={'':['status of ticket INC4821','remind me to call the dentist tomorrow','provision a staging VM for the new intern',"what's the weather in Lyon",'book a meeting room for friday'],
@@ -574,7 +574,7 @@
   var chipbox=document.getElementById('pg-chips');
   function setChips(set){chipbox.innerHTML='';Array.prototype.forEach.call(set,function(t){var b=document.createElement('button');b.type='button';b.className='pg-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700';b.textContent=t;b.addEventListener('click',function(){i.value=t;run(t);});chipbox.appendChild(b);});}
   Array.prototype.forEach.call(document.querySelectorAll('.pg-chip'),function(b){b.addEventListener('click',function(){i.value=b.textContent;run(b.textContent);});});
-  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';if(window.vigie&&vigie.track)vigie.track('lane_select',{lane:lane||'auto'});setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
+  Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(b){b.addEventListener('click',function(){lane=b.dataset.lane||'';if(window.vigie)vigie('lane_select',{lane:lane||'auto'});setChips(CHIP_SETS[lane]||CHIP_SETS['']);Array.prototype.forEach.call(document.querySelectorAll('.pg-lane'),function(x){x.className='pg-lane text-xs rounded-full px-3 py-1 '+(x===b?'bg-cyan-900 border border-cyan-700 text-cyan-200':'bg-gray-800 border border-gray-700 text-gray-300');});});});
   if(location.hash.indexOf('mairie')>=0){var lb=document.querySelector('.pg-lane[data-lane="mairie"]');if(lb)lb.click();}
   // lead form
   var lf=document.getElementById('lead-form');
@@ -583,7 +583,7 @@
     msg.textContent=L?'Envoi…':'Sending…';
     fetch('https://bkn.intrane.fr/v1/hooks/forms',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({form:'mtlm-leads',fields:fields})})
     .then(function(r){return r.json()}).then(function(d){
-      if(d&&d.ok){msg.textContent=L?'Merci — nous revenons vers vous sous 48 h avec votre rapport.':'Thanks — you will hear from us within 48 h with your report.';lf.reset();if(window.vigie&&vigie.track)vigie.track('lead',{form:'mtlm-leads'});}
+      if(d&&d.ok){msg.textContent=L?'Merci — nous revenons vers vous sous 48 h avec votre rapport.':'Thanks — you will hear from us within 48 h with your report.';lf.reset();if(window.vigie)vigie('lead',{form:'mtlm-leads'});}
       else{msg.textContent=(d&&d.error)||(L?'Échec de l’envoi.':'Could not send.');}
     }).catch(function(){msg.textContent=L?'Échec de l’envoi — écrivez à javi@intrane.fr':'Could not send — email javi@intrane.fr';});
   });}
