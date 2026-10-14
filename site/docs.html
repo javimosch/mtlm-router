@@ -294,6 +294,8 @@ ANVIL_LOG=logs/decisions.jsonl
 # confident-wrong tool calls are the thing you're de-risking.</span>
 
 <span class="text-gray-500"># weekly — drift watch (5 min, cron-able)</span>
+<span class="text-gray-500"># prod runs this daily via cron: /root/mtlm/bin/drift_watch.sh,
+# appends to logs/drift_status.jsonl, latest in drift_status.json</span>
 python3 tools/monitor.py logs/decisions.jsonl --baseline 1000
 <span class="text-gray-500">#   → exit 1 when the recent window drifts from the first-1000-row
 #     baseline: set_size climbing = coverage aging | delegate share
