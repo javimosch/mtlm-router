@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Custom lane intake — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
+<meta name="description" content="Start a custom routing lane: send your route table and get a calibrated .head for your domain in ~3 business days.">
+<link rel="canonical" href="https://mtlm-router.intrane.fr/custom-lane.html">
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style><script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script></head>
+<body class="max-w-3xl mx-auto px-6 py-14">
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/pricing.html" class="text-cyan-400 hover:underline">pricing</a> / custom lane</p>
+<h1 class="text-3xl font-bold mb-2">Custom lane intake</h1>
+<p class="text-gray-400 text-sm mb-8">€149 one-off · ~3 business days · you get a <span class="mono">.head</span> trained on your corpus + eval report + calibrated abstention threshold + one free re-train after a week of shadow traffic. Filling this replaces the first two email round-trips — answer these well and the next step is a lane, not a questionnaire.</p>
+
+<div class="bg-gray-900 border border-cyan-800 rounded-xl p-4 mb-8 text-sm text-gray-300">
+  <strong class="text-cyan-300">What makes a good route table:</strong> 5–50 routes, each a <em>decision</em> not a topic ("reset_password", not "passwords"), with 3–10 real phrasings per route — the uglier the better, they teach the boundary. Everything below stays private; client corpora are never folded into public lanes.
+</div>
+
+<form id="cl-form" class="bg-gray-900 border border-gray-800 rounded-xl p-5 grid gap-4">
+  <div class="grid md:grid-cols-2 gap-4">
+    <input name="email" type="email" required placeholder="you@company.com *" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="company" type="text" placeholder="Company / integrator" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+  </div>
+  <input name="domain" type="text" required placeholder="Lane domain — e.g. 'insurance claims triage', 'IT tickets v2' *" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+  <div>
+    <label class="text-xs text-gray-500 mb-1 block">Route table — one per line, <span class="mono">route_name: example phrasings</span> *</label>
+    <textarea name="routes" required rows="8" placeholder="reset_password: I forgot my password; can't log in; locked out again&#10;billing_question: where is my invoice; why was I charged; explain this fee&#10;oos: (leave empty — we build it)" class="mono text-xs bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600 w-full"></textarea>
+  </div>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="text-xs text-gray-500 mb-1 block">Requests / day (rough)</label>
+      <select name="volume" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
+        <option value="">&lt; 100</option><option>100–1k</option><option>1k–10k</option><option>10k+</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mb-1 block">Deployment</label>
+      <select name="deployment" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
+        <option value="">self-hosted appliance</option><option>hosted API</option><option>undecided</option>
+      </select>
+    </div>
+  </div>
+  <div>
+    <label class="text-xs text-gray-500 mb-1 block">What happens on a wrong route? (helps set the abstention target)</label>
+    <select name="risk" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
+      <option value="">ticket lands in the wrong queue — annoying, recoverable</option>
+      <option>customer-visible action fires — needs high abstention</option>
+      <option>regulated / contractual — needs per-class bounds + audit trail</option>
+    </select>
+  </div>
+  <textarea name="notes" rows="3" placeholder="Anything else — languages, existing taxonomy file, deadline" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600 w-full"></textarea>
+  <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+  <input type="hidden" name="src" id="cl-src" value="">
+  <button type="submit" class="bg-cyan-700 hover:bg-cyan-600 text-white font-medium px-6 py-3 rounded-lg">Send the intake</button>
+  <p id="cl-msg" class="text-gray-400 text-sm text-center"></p>
+</form>
+
+<p class="text-gray-500 text-sm mt-6 text-center">Prefer email? Same info to <a data-track="cta_custom_lane" href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head" class="text-cyan-400 hover:underline">javi@intrane.fr</a> — the form just skips the back-and-forth.</p>
+
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.vigie)vigie('custom_lane_view',{page:location.pathname});
+var src=new URLSearchParams(location.search);var l=src.get('lane');if(l){document.getElementById('cl-src').value='lane:'+l;var d=document.querySelector('input[name=domain]');if(d&&!d.value)d.value=l;}
+var f=document.getElementById('cl-form'),msg=document.getElementById('cl-msg');
+f.addEventListener('submit',function(ev){ev.preventDefault();var fd=new FormData(f),fields={};fd.forEach(function(v,k){fields[k]=v;});
+msg.textContent='Sending…';
+fetch('https://bkn.intrane.fr/v1/hooks/forms',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({form:'mtlm-custom-lane',fields:fields})})
+.then(function(r){return r.json()}).then(function(d){
+if(d&&d.ok){msg.textContent='Received — you will hear from us within 1 business day with a lane proposal or clarifying questions.';f.reset();if(window.vigie)vigie('custom_lane_submit',{domain:(fields.domain||'').slice(0,40)});}
+else{msg.textContent=(d&&d.error)||'Could not send.';if(window.vigie)vigie('custom_lane_error',{err:'rejected'});}})
+.catch(function(){msg.textContent='Could not send — email javi@intrane.fr';if(window.vigie)vigie('custom_lane_error',{err:'network'});});});});
+document.addEventListener('click',function(e){var t=e.target.closest('[data-track]');if(t&&window.vigie)vigie(t.getAttribute('data-track'),{href:t.getAttribute('href')||'',page:location.pathname});});
+</script>
+</body></html>
