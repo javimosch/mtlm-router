@@ -8,8 +8,8 @@
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
  "description":"Routes banking customer-service messages into 50 typed intents (card issues, transfers, top-ups, FX) plus a calibrated out-of-scope refusal. Trained on the public banking77 corpus \u2014 the free proof lane for the format.",
  "url":"https://mtlm-router.intrane.fr/lanes/banking77.html",
- "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/banking77-0.1.0.lanepack.tar.gz",
- "softwareVersion":"0.1.0","license":"Apache-2.0",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/banking77-0.1.1.lanepack.tar.gz",
+ "softwareVersion":"0.1.1","license":"Apache-2.0",
  "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
 }</script>
 <script type="application/ld+json">{
@@ -28,7 +28,7 @@
   <h1 class="text-3xl font-bold">Banking support intent routing</h1>
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
-<p class="mono text-gray-500 text-sm mb-6">banking77@0.1.0 · 51 routes</p>
+<p class="mono text-gray-500 text-sm mb-6">banking77@0.1.1 · 51 routes</p>
 <p class="text-gray-400 text-sm mb-4">Routes banking customer-service messages into 50 typed intents (card issues, transfers, top-ups, FX) plus a calibrated out-of-scope refusal. Trained on the public banking77 corpus — the free proof lane for the format.</p>
 <p class="text-gray-300 text-sm mb-8">holdout <strong>73.3%</strong> (n=2000) · floor conf≥0.7 · qhat 0.938</p>
 
@@ -61,8 +61,9 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py banking77@0.1.0 --apply --appliance .</pre>
-  <p class="text-gray-600 text-xs mt-2 mono">sha256: 2a1b5ad93558a3b5c0c13b33… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/banking77-0.1.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py banking77@0.1.1 --apply --appliance .
+python3 tools/lane_repro.py banking77-0.1.1.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: 1d84e6fafa525e66a380e27e… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/banking77-0.1.1.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>

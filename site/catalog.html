@@ -5,19 +5,19 @@
 <body class="max-w-4xl mx-auto px-6 py-14">
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
 <h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
-<p class="text-gray-400 text-sm mb-2">6 lanes · 13 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
+<p class="text-gray-400 text-sm mb-2">6 lanes · 14 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
 <p class="text-gray-500 text-sm mb-3">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
 <p class="text-gray-500 text-sm mb-10">Try a lane before installing — every lane below is also live on the hosted API: <span class="mono text-gray-400">POST https://api.mtlm-router.intrane.fr/demo/route {"state":"…","text":"…","expert":"&lt;lane&gt;"}</span> (rate-limited demo wallet, no signup) or pin <span class="mono">"expert"</span> on metered <span class="mono">/v1/route</span>. Lane list: <a href="https://api.mtlm-router.intrane.fr/v1/lanes" class="mono text-cyan-400 hover:underline">/v1/lanes</a>.</p>
 <div class="space-y-4">
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
     <div class="flex items-baseline justify-between mb-2">
-      <h3 class="mono text-lg text-cyan-300">banking77<span class="text-gray-500">@0.1.0</span></h3>
+      <h3 class="mono text-lg text-cyan-300">banking77<span class="text-gray-500">@0.1.1</span></h3>
       <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
     </div>
     <p class="text-gray-400 text-sm mb-3">51 routes: Refund_not_showing_up, activate_my_card, apple_pay_or_google_pay, automatic_top_up, balance_not_updated_after_bank_transfer, balance_not_updated_after_cheque_or_cash_deposit, beneficiary_not_allowed, cancel_transfer… · <span class="text-gray-500">BANKING77-OOS (jianguoz/Few-Shot-Intent-Detection, PolyAI-LDN/task-specific-datasets): 5905 train / 2062 id-oos train; m7router3s384 frozen trunk; emit tools/emit_banking77.py</span></p>
     <div class="text-sm text-gray-300 mb-4"><strong>73.3%</strong> holdout (n=2000) · recommended floor <strong>conf≥0.7</strong></div>
-    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py banking77@0.1.0 --apply --appliance .</pre>
-    <p class="text-gray-600 text-xs mt-2 mono">sha256: 2a1b5ad93558a3b5c0c13b33… · pricing: free · <a data-track="lane_page" href="/lanes/banking77.html" class="text-cyan-400 hover:underline">try live →</a></p>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py banking77@0.1.1 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 1d84e6fafa525e66a380e27e… · pricing: free · <a data-track="lane_page" href="/lanes/banking77.html" class="text-cyan-400 hover:underline">try live →</a></p>
   </div>
 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
@@ -76,8 +76,18 @@
   </div>
 </div>
 <details class="mt-8">
-  <summary class="cursor-pointer text-gray-500 text-sm hover:text-gray-300">other versions (7) — older or yanked packs, installable by exact pin</summary>
+  <summary class="cursor-pointer text-gray-500 text-sm hover:text-gray-300">other versions (8) — older or yanked packs, installable by exact pin</summary>
   <div class="space-y-4 mt-4">
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">banking77<span class="text-gray-500">@0.1.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">51 routes: Refund_not_showing_up, activate_my_card, apple_pay_or_google_pay, automatic_top_up, balance_not_updated_after_bank_transfer, balance_not_updated_after_cheque_or_cash_deposit, beneficiary_not_allowed, cancel_transfer… · <span class="text-gray-500">BANKING77-OOS (jianguoz/Few-Shot-Intent-Detection, PolyAI-LDN/task-specific-datasets): 5905 train / 2062 id-oos train; m7router3s384 frozen trunk; emit tools/emit_banking77.py</span></p>
+    <div class="text-sm text-gray-300 mb-4"><strong>73.3%</strong> holdout (n=2000) · recommended floor <strong>conf≥0.7</strong></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py banking77@0.1.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 2a1b5ad93558a3b5c0c13b33… · pricing: free · <a data-track="lane_page" href="/lanes/banking77.html" class="text-cyan-400 hover:underline">try live →</a></p>
+  </div> 
   <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 opacity-50">
     <div class="flex items-baseline justify-between mb-2">
       <h3 class="mono text-lg text-cyan-300">civic<span class="text-gray-500">@0.1.0</span></h3>

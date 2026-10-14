@@ -182,7 +182,8 @@ document.getElementById('lp-form').addEventListener('submit',function(e){{
 </div>
 <div class="{CARD_STYLE} mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py {fam}@{ver} --apply --appliance .</pre>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py {fam}@{ver} --apply --appliance .
+{'python3 tools/lane_repro.py ' + fam + '-' + ver + '.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself' if lane.get('eval_sample') else ''}</pre>
   <p class="text-gray-600 text-xs mt-2 mono">sha256: {esc(lane.get('sha256',''))[:24]}… · Apache-2.0 · <a data-track="lane_pack_dl" href="{esc(lane.get('url',''))}" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
