@@ -7,18 +7,28 @@
     "url": "https://github.com/javimosch/mtlm-router",
     "source": "github"
   },
-  "version": "0.3.0",
+  "version": "0.11.0",
   "websiteUrl": "https://mtlm-router.intrane.fr",
   "packages": [
     {
       "registry_type": "generic",
       "identifier": "mtlm-router-linux-amd64",
-      "version": "0.9.1",
-      "transport": { "type": "stdio" },
+      "version": "0.11.0",
+      "transport": {
+        "type": "stdio"
+      },
       "runtime_hint": "binary ships inside the appliance tarball as ./mtlm-mcp",
       "environment_variables": [
-        { "name": "ANVIL_URL", "description": "appliance base URL", "default": "http://127.0.0.1:8097" },
-        { "name": "ANVIL_KEY", "description": "optional bearer key", "is_secret": true }
+        {
+          "name": "ANVIL_URL",
+          "description": "appliance base URL",
+          "default": "http://127.0.0.1:8097"
+        },
+        {
+          "name": "ANVIL_KEY",
+          "description": "optional bearer key",
+          "is_secret": true
+        }
       ]
     }
   ]
