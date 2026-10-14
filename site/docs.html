@@ -274,6 +274,48 @@ python3 tools/lane_install.py --uninstall helpdesk --appliance .
   <p class="text-gray-500 text-sm mt-3">The managed block in <code class="mono">start.sh</code> (<code class="mono"># &gt;&gt;&gt; mtlm-lanes … # &lt;&lt;&lt;</code>) is regenerated from <code class="mono"># lane</code> records on every operation — installs accumulate, reinstalls update in place. Everything outside the markers is untouched.</p>
 </div>
 
+<div class="mb-14">
+  <h2 class="text-2xl font-bold mb-4">Operating a lane — the lifecycle runbook</h2>
+  <p class="text-gray-400 text-sm mb-4">A lane pack is certified against <em>its</em> eval split, not your traffic. The guarantee holds only while your input distribution looks like the calibration set — this is the loop that keeps it true.</p>
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-4">
+<pre class="mono text-xs md:text-sm overflow-x-auto"><span class="text-gray-500"># day 0 — install + baseline</span>
+python3 tools/lane_install.py mylane@1.0.0 --apply --appliance .
+python3 tools/lane_repro.py lanes/mylane-1.0.0.lanepack.tar.gz --url http://localhost:8097
+<span class="text-gray-500">#   → replays the pack's eval_sample against YOUR instance; every published
+#     number either reproduces or you know before clients do</span>
+./smoke.sh && python3 tools/release_gate.py --url http://localhost:8097
+<span class="text-gray-500"># enable the decision log — this is your recalibration corpus</span>
+ANVIL_LOG=logs/decisions.jsonl
+
+<span class="text-gray-500"># day 1+ — shadow first on risky lanes</span>
+<span class="text-gray-500"># run the new lane alongside prod traffic, grade a sample by hand,
+# THEN point tool calls at it. Delegations are safe by construction;
+# confident-wrong tool calls are the thing you're de-risking.</span>
+
+<span class="text-gray-500"># weekly — drift watch (5 min, cron-able)</span>
+python3 tools/monitor.py logs/decisions.jsonl --baseline 1000
+<span class="text-gray-500">#   → exit 1 when the recent window drifts from the first-1000-row
+#     baseline: set_size climbing = coverage aging | delegate share
+#     climbing = input mix shifting</span>
+
+<span class="text-gray-500"># when monitor fires — recalibrate, don't panic-retrain</span>
+<span class="text-gray-500"># 1. grade recent logged decisions (route-correct? y/n) into labels.jsonl</span>
+python3 tools/aci_qhat.py --expert mylane --labels labels.jsonl --alpha 0.05 --dry-run
+<span class="text-gray-500">#   → adaptive conformal refits qhat on YOUR distribution; usually a
+#     calibration fix, not a retrain — the head still separates fine,
+#     the threshold aged. Drop --dry-run to apply.</span>
+<span class="text-gray-500"># 2. if graded accuracy itself collapsed → retrain the head on
+#     logged data + phrasings; the trunk never changes, so a retrain
+#     is hours on CPU, not a GPU project</span>
+
+<span class="text-gray-500"># rollback — lanes are files, not state</span>
+python3 tools/lane_install.py mylane@0.9.0 --apply --appliance .
+<span class="text-gray-500">#   → previous version back in seconds; index keeps superseded packs
+#     installable by exact pin for exactly this reason</span></pre>
+  </div>
+  <p class="text-gray-500 text-sm">The paid-lane version of this runbook is the product: a custom lane ships with its calibration already fit to your corpus, and the 12-month window exists because <em>your</em> drift, not our training set, decides when qhat needs refitting.</p>
+</div>
+
 <div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6" id="hosted-api">
   <h2 class="text-xl font-bold mb-3">Hosted API — api.mtlm-router.intrane.fr</h2>
   <p class="text-gray-400 text-sm mb-4">The same runtime, metered per decision on the <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> rail (EUR). The hosted instance serves all catalog lanes; pin one with <code class="mono">"expert"</code>.</p>
