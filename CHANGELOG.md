@@ -7,6 +7,17 @@ Lane packs version independently — see the
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-10-14
+
+### Fixed
+- The v0.11.0 appliance tarball shipped the defective
+  `civic_fr_v2_mt.head` (natural-language eval 7/22) while production had
+  already moved to the corrected `civic_fr_v3w_mt.head` (22/22, qhat 0.746,
+  lanepack `civic_fr@0.2.0`). v0.11.1 repacks the appliance with the v3w
+  head and matching `start.sh`/`mtlm-router.service` expert mapping and
+  `ANVIL_EXPERT_QHAT` default (`civic_fr:0.746`). All other heads,
+  binaries, and files are byte-identical to v0.11.0.
+
 ## [0.11.0] - 2026-10-13
 
 ### Added
