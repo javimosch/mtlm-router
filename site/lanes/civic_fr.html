@@ -8,8 +8,8 @@
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
  "description":"Trie les signalements citoyens en fran\u00e7ais \u2014 lampadaire en panne, nid de poule, d\u00e9p\u00f4t sauvage, encombrants \u2014 vers une taxonomie d'actions municipales, avec refus calibr\u00e9 hors-scope.",
  "url":"https://mtlm-router.intrane.fr/lanes/civic_fr.html",
- "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/civic_fr-0.2.0.lanepack.tar.gz",
- "softwareVersion":"0.2.0","license":"Apache-2.0",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/civic_fr-0.2.1.lanepack.tar.gz",
+ "softwareVersion":"0.2.1","license":"Apache-2.0",
  "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
 }</script>
 <script type="application/ld+json">{
@@ -28,7 +28,7 @@
   <h1 class="text-3xl font-bold">Signalement municipal (français)</h1>
   <span class="mono text-xs px-2 py-1 rounded border text-amber-300 border-amber-800 bg-amber-950">free · demo</span>
 </div>
-<p class="mono text-gray-500 text-sm mb-6">civic_fr@0.2.0 · 12 routes</p>
+<p class="mono text-gray-500 text-sm mb-6">civic_fr@0.2.1 · 12 routes</p>
 <p class="text-gray-400 text-sm mb-4">Trie les signalements citoyens en français — lampadaire en panne, nid de poule, dépôt sauvage, encombrants — vers une taxonomie d&#x27;actions municipales, avec refus calibré hors-scope.</p>
 <p class="text-gray-300 text-sm mb-8">holdout <strong>98.8%</strong> (n=330) · qhat 0.746 · oos recall 68%</p>
 
@@ -61,9 +61,9 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.2.0 --apply --appliance .
-</pre>
-  <p class="text-gray-600 text-xs mt-2 mono">sha256: edf31ea7c0b73e0f0dbefbd2… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/civic_fr-0.2.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py civic_fr@0.2.1 --apply --appliance .
+python3 tools/lane_repro.py civic_fr-0.2.1.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: 12e6803c49b9a9760ddad68a… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/civic_fr-0.2.1.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>
