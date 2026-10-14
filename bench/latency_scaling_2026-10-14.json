@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-14",
+ "method": "15 sequential probes per length on prod 8402 civic_fr, loopback, median",
+ "points_ms": [
+  {"label": "tiny", "chars": 2, "p50": 25.2},
+  {"label": "short", "chars": 38, "p50": 41.6},
+  {"label": "medium", "chars": 118, "p50": 78.3},
+  {"label": "long", "chars": 326, "p50": 170.6}
+ ],
+ "model": "latency_ms ~= 25 + 0.45*chars (~2ms/token forwarded; template+system prefix-cached)"
+}

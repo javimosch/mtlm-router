@@ -225,6 +225,7 @@ ANVIL_URL=http://127.0.0.1:8097 ./mtlm-mcp
     </table>
   </div>
   <p class="text-gray-500 text-sm">Lane width barely matters (~10ms across 12→151 routes) — the frozen trunk prefill dominates; each head is a ~1ms matmul. An idle box shows lower p50; this is the honest loaded number. Your deployment will differ — re-run <code class="mono">bench/route_latency.py</code> against your appliance.</p>
+  <p class="text-gray-500 text-sm mt-3"><strong class="text-gray-300">Cost model (measured, same run):</strong> latency ≈ <span class="mono">25ms + ~0.45ms/char</span> of input text. The 25ms floor is tokenize+head+HTTP overhead; the chat template and system prompt are prefix-cached so only user tokens forward (~2ms/token). Short commands like "lost my card" route in ~30–50ms — the ~180ms p50 above reflects a benchmark mix that includes 300-char complaints, not typical short inputs.</p>
 </div>
 
 <div class="mb-14">
