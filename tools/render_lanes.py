@@ -56,6 +56,13 @@ LANES_META = {
         "examples": ["unlock carol's account, she can't log in", "my vpn keeps dropping every hour", "provision a laptop for the new intern"],
         "honest": "Small synthetic taxonomy, live-verified. Good narrow-lane demo: high automation when the domain matches.",
     },
+    "pii": {
+        "expert": "pii",
+        "title": "PII & contact-detail detection",
+        "desc": "Flags personal data in user content — emails, phone numbers (incl. 'at dot com' and spelled digits), IBANs, card numbers, French SSN — plus off-platform handoff attempts (Telegram/WhatsApp/Insta handles). GDPR-flavored lane for forums, comments and marketplace uploads.",
+        "examples": ["call me on 06 12 34 56 78 please", "my email is jane dot doe at gmail dot com", "add me on telegram @nightowl99", "order 458721 shipped yesterday"],
+        "honest": "Synthetic-injection corpus (PII patterns in real comment text) + hand-written eval incl. obfuscation. 85.8% in-scope / 95.7% OOS on holdout, 90% on natural phrasings. Surface-pattern lane — semantic harm categories (hate, harassment) were evaluated and deliberately NOT shipped: the trunk ceiling is ~60% there.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
