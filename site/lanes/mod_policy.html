@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Moderation policy layer (score-consumer) — mtlm-router lane mod_policy</title>
+<meta name="description" content="The decision layer over YOUR scorer: post category scores {nudity, violence, drugs, self_harm, scam} from any upstream model — SightEngine, SigLIP, openmod">
+<link rel="canonical" href="https://mtlm-router.intrane.fr/lanes/mod_policy.html">
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"SoftwareApplication",
+ "name":"mtlm-router mod_policy lane","applicationCategory":"DeveloperApplication",
+ "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
+ "description":"The decision layer over YOUR scorer: post category scores {nudity, violence, drugs, self_harm, scam} from any upstream model \u2014 SightEngine, SigLIP, openmod, your own ONNX \u2014 and get a calibrated publish/review/remove/unchecked verdict. Threshold policy is a rules file you own; absent inputs escalate ",
+ "url":"https://mtlm-router.intrane.fr/lanes/mod_policy.html",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_policy-0.1.0.lanepack.tar.gz",
+ "softwareVersion":"0.1.0","license":"Apache-2.0",
+ "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
+}</script>
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"BreadcrumbList",
+ "itemListElement":[{"@type":"ListItem","position":1,"name":"mtlm-router","item":"https://mtlm-router.intrane.fr/"},
+ {"@type":"ListItem","position":2,"name":"catalog","item":"https://mtlm-router.intrane.fr/catalog.html"},
+ {"@type":"ListItem","position":3,"name":"mod_policy","item":"https://mtlm-router.intrane.fr/lanes/mod_policy.html"}]
+}</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script>
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style></head>
+<body class="max-w-4xl mx-auto px-6 py-14">
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.vigie)vigie('lane_page_view',{lane:"mod_policy"});});</script>
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/catalog.html" class="text-cyan-400 hover:underline">catalog</a> / mod_policy</p>
+<div class="flex items-baseline justify-between mb-2">
+  <h1 class="text-3xl font-bold">Moderation policy layer (score-consumer)</h1>
+  <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+</div>
+<p class="mono text-gray-500 text-sm mb-6">mod_policy@0.1.0 · 4 routes</p>
+<p class="text-gray-400 text-sm mb-4">The decision layer over YOUR scorer: post category scores {nudity, violence, drugs, self_harm, scam} from any upstream model — SightEngine, SigLIP, openmod, your own ONNX — and get a calibrated publish/review/remove/unchecked verdict. Threshold policy is a rules file you own; absent inputs escalate instead of silently passing.</p>
+<p class="text-gray-300 text-sm mb-8"></p>
+
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8" id="try">
+  <h2 class="text-lg font-bold mb-1">Try it live — pinned to <span class="mono text-cyan-300">expert:"mod_policy"</span></h2>
+  <p class="text-gray-500 text-sm mb-4">Free demo endpoint, no signup. Same call your agent would make.</p>
+  <form id="lp-form" class="flex gap-2">
+    <input id="lp-in" type="text" maxlength="300" placeholder="scores: nudity 0.82 -&gt; remove" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600" autocomplete="off">
+    <button type="submit" class="bg-cyan-700 text-white px-5 py-3 rounded-lg font-medium hover:opacity-90">Decide</button>
+  </form>
+  <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">scores: nudity 0.82 -&gt; remove</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">scores: nudity 0.4, violence 0.1 -&gt; review</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">scores: violence 0.05, nudity 0.02 -&gt; publish</button></div>
+  <div id="lp-out" class="mt-4 hidden">
+    <div class="grid sm:grid-cols-4 gap-3 text-center">
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">route</div><div id="lp-route" class="mono text-cyan-300 text-lg"></div></div>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">confidence</div><div id="lp-conf" class="mono text-lg"></div></div>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">action</div><div id="lp-action" class="mono text-lg"></div></div>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">set · ms</div><div id="lp-meta" class="mono text-lg"></div></div>
+    </div>
+    <p id="lp-note" class="text-gray-500 text-xs mt-3 text-center"></p>
+  </div>
+  <p id="lp-err" class="text-red-400 text-sm mt-3 hidden"></p>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+  <h2 class="text-lg font-bold mb-2">Taxonomy (4 routes)</h2>
+  <p class="mono text-gray-400 text-sm">publish, review, remove, unchecked</p>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+  <h2 class="text-lg font-bold mb-2">Honest limits</h2>
+  <p class="text-gray-400 text-sm">Demo thresholds are hand-authored — production deployments tune the rule file to their own scorer&#x27;s score distribution (that&#x27;s the €149 custom-lane job). This is the honest image-moderation path: your scorer does pixels, mtlm owns the typed verdict.</p>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+  <h2 class="text-lg font-bold mb-2">Install</h2>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_policy@0.1.0 --apply --appliance .
+python3 tools/lane_repro.py mod_policy-0.1.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: 6c16cb900b03a880bdc14156… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_policy-0.1.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+</div>
+<div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
+  <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>
+  <p class="text-gray-400 text-sm mb-4">A private lane on your taxonomy — trained, calibrated, exclusive. €149 / domain, 3 business days.</p>
+  <a data-track="cta_custom_lane" href="/custom-lane.html?lane=mod_policy" class="inline-block bg-cyan-700 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-cyan-600">Get a lane like this</a>
+  <a data-track="cta_pricing" href="/pricing.html" class="inline-block text-cyan-400 text-sm hover:underline ml-4">pricing →</a>
+</div>
+<p class="text-center text-gray-600 text-xs mt-14">generated by tools/render_lanes.py · source: <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a></p>
+<script>document.addEventListener('click',function(e){var t=e.target.closest('[data-track]');if(t&&window.vigie)vigie(t.getAttribute('data-track'),{href:t.getAttribute('href')||'',page:location.pathname});});</script>
+
+<script>
+var LP_EXPERT="mod_policy",LP_LANE="mod_policy";
+function lpTrack(ev,props){if(window.vigie){props.lane=LP_LANE;vigie(ev,props);}}
+document.querySelectorAll('.lp-chip').forEach(function(b){b.addEventListener('click',function(){document.getElementById('lp-in').value=b.textContent;lpTrack('lane_demo_chip',{chip:b.textContent});});});
+document.getElementById('lp-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var s=document.getElementById('lp-in').value.trim();if(!s)return;
+  lpTrack('lane_demo_try',{});
+  fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({state:s,expert:LP_EXPERT})})
+   .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+   .then(function(res){
+     var d=res.d;
+     if(!res.ok||d.error){var m=(d.error&&d.error.message)||('http '+res.status);document.getElementById('lp-err').textContent=m;document.getElementById('lp-err').classList.remove('hidden');lpTrack('lane_demo_error',{error:m});return;}
+     document.getElementById('lp-err').classList.add('hidden');
+     document.getElementById('lp-out').classList.remove('hidden');
+     document.getElementById('lp-route').textContent=d.route||'—';
+     document.getElementById('lp-conf').textContent=(d.confidence!=null?d.confidence.toFixed(2):'—');
+     document.getElementById('lp-action').textContent=d.action||'—';
+     document.getElementById('lp-meta').textContent=(d.set_size!=null?'set '+d.set_size:'—')+' · '+(d.latency_ms!=null?d.latency_ms+'ms':'');
+     var cands=(d.candidates||[]).map(function(c){return c.route;}).slice(0,3).join(', ');
+     document.getElementById('lp-note').textContent=d.action==='delegate'&&cands?('clarify: '+cands):(d.action==='delegate'?'delegated — out of scope or low confidence':'automated — singleton set, tool-fill ready');
+     lpTrack('lane_demo_result',{action:d.action,route:d.route,set_size:d.set_size});
+   })
+   .catch(function(err){document.getElementById('lp-err').textContent='network error — demo may be rate-limited';document.getElementById('lp-err').classList.remove('hidden');lpTrack('lane_demo_error',{error:'network'});});
+});
+</script>
+</body></html>

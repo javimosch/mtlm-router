@@ -77,6 +77,13 @@ LANES_META = {
         "examples": ["click http://phishing.test to verify your account", "visit casino-online.example for free spins", "my site is example.com", "order shipped via colissimo.fr"],
         "honest": "Demo blocklist ships ~7 domains — production deployments fetch HaGeZi feeds at install time (GPL, never shipped in a pack). Covers the link surface, not semantic toxicity.",
     },
+    "mod_policy": {
+        "expert": "mod_policy",
+        "title": "Moderation policy layer (score-consumer)",
+        "desc": "The decision layer over YOUR scorer: post category scores {nudity, violence, drugs, self_harm, scam} from any upstream model — SightEngine, SigLIP, openmod, your own ONNX — and get a calibrated publish/review/remove/unchecked verdict. Threshold policy is a rules file you own; absent inputs escalate instead of silently passing.",
+        "examples": ["scores: nudity 0.82 -> remove", "scores: nudity 0.4, violence 0.1 -> review", "scores: violence 0.05, nudity 0.02 -> publish"],
+        "honest": "Demo thresholds are hand-authored — production deployments tune the rule file to their own scorer's score distribution (that's the €149 custom-lane job). This is the honest image-moderation path: your scorer does pixels, mtlm owns the typed verdict.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
