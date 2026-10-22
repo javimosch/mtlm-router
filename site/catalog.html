@@ -5,7 +5,7 @@
 <body class="max-w-4xl mx-auto px-6 py-14">
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / catalog</p>
 <h1 class="text-3xl font-bold mb-2">Lane catalog</h1>
-<p class="text-gray-400 text-sm mb-2">6 lanes · 15 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
+<p class="text-gray-400 text-sm mb-2">9 lanes · 18 packs · every tarball sha256-pinned · <span class="mono">lane_install</span> verifies before installing.</p>
 <p class="text-gray-500 text-sm mb-3">Certified = leak-free holdout eval stands behind the number. Demo = synthetic/partial corpus, live-verified but not a production claim. Generated from <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a> — regenerated, never hand-edited.</p>
 <p class="text-gray-500 text-sm mb-10">Try a lane before installing — every lane below is also live on the hosted API: <span class="mono text-gray-400">POST https://api.mtlm-router.intrane.fr/demo/route {"state":"…","text":"…","expert":"&lt;lane&gt;"}</span> (rate-limited demo wallet, no signup) or pin <span class="mono">"expert"</span> on metered <span class="mono">/v1/route</span>. Lane list: <a href="https://api.mtlm-router.intrane.fr/v1/lanes" class="mono text-cyan-400 hover:underline">/v1/lanes</a>.</p>
 <div class="space-y-4">
@@ -73,6 +73,39 @@
     <div class="text-sm text-gray-300 mb-4"><strong>100.0%</strong> holdout · OOS recall <strong>90%</strong></div>
     <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py helpdesk@0.2.0 --apply --appliance .</pre>
     <p class="text-gray-600 text-xs mt-2 mono">sha256: dc573f8b22114b973d65dd08… · pricing: free · <a data-track="lane_page" href="/lanes/helpdesk.html" class="text-cyan-400 hover:underline">try live →</a></p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">link_safety<span class="text-gray-500">@0.1.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">5 routes: safe, link_unsafe, link_adult, link_gambling, link_phishing · <span class="text-gray-500">hand-written patterns + curated demo blocklist; runtime: anvil-serve rules lanes (machin-anvil 249de6a+)</span></p>
+    <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py link_safety@0.1.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: debf0eadd2b2a57c3210fa8d… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">pii<span class="text-gray-500">@0.1.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">8 routes: none, pii_email, pii_phone, pii_iban, pii_card, pii_ssn, handoff, oos · <span class="text-gray-500">synthetic injection into civil_comments safe carriers + textdetox multilingual bases; obfuscated variants (at dot com, spelled digits); m7router3s384 frozen trunk</span></p>
+    <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py pii@0.1.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: b61687a5de48082372def1bf… · pricing: free</p>
+  </div>
+
+  <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 ">
+    <div class="flex items-baseline justify-between mb-2">
+      <h3 class="mono text-lg text-cyan-300">pii_rules<span class="text-gray-500">@0.1.0</span></h3>
+      <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+    </div>
+    <p class="text-gray-400 text-sm mb-3">6 routes: none, pii_email, pii_phone, pii_card, pii_iban, link_adult · <span class="text-gray-500">hand-written rule spec + HaGeZi-style demo domain list; runtime: anvil-serve with rules-lane support (machin-anvil 63175e3)</span></p>
+    <div class="text-sm text-gray-300 mb-4"><span class="text-gray-600">no holdout metrics</span></div>
+    <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py pii_rules@0.1.0 --apply --appliance .</pre>
+    <p class="text-gray-600 text-xs mt-2 mono">sha256: 27bf5293eb23db2bf01ccacc… · pricing: free</p>
   </div>
 </div>
 <details class="mt-8">

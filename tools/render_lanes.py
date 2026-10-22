@@ -63,6 +63,20 @@ LANES_META = {
         "examples": ["call me on 06 12 34 56 78 please", "my email is jane dot doe at gmail dot com", "add me on telegram @nightowl99", "order 458721 shipped yesterday"],
         "honest": "Synthetic-injection corpus (PII patterns in real comment text) + hand-written eval incl. obfuscation. 85.8% in-scope / 95.7% OOS on holdout, 90% on natural phrasings. Surface-pattern lane — semantic harm categories (hate, harassment) were evaluated and deliberately NOT shipped: the trunk ceiling is ~60% there.",
     },
+    "pii_rules": {
+        "expert": "piirules",
+        "title": "PII detection — deterministic rules",
+        "desc": "Model-free PII lane: IBAN mod-97, Luhn-validated card numbers, 9+-digit phone runs, email regex, domain blocklists. Deterministic verdicts at ~zero inference cost — no forward pass at all. On prod it's wired as a hybrid: rules fire first, the `pii` head handles the fuzzy phrasings.",
+        "examples": ["call me on 06 12 34 56 78 please", "virement FR14 2004 1010 0505 0001 3M02 606", "card 4111 1111 1111 1111 declined", "order 458721 shipped yesterday"],
+        "honest": "Rules pack, not a learned head — exact patterns are provable, but fuzzy/obfuscated phrasing ('jane dot doe at gmail dot com') falls through to the fallback head or to none. Ship both `pii` (head) + `pii_rules` (rules) together: rules catch the exact shapes, the head catches the fuzz.",
+    },
+    "link_safety": {
+        "expert": "link_safety",
+        "title": "Unsafe-link detection",
+        "desc": "Flags risky links in user content: phishing phrasing, adult/gambling patterns, and a domain blocklist. Zero model cost — a pure rules lane that scales to million-row blocklists via hash-set lookup. GDPR-friendly: everything stays on your box.",
+        "examples": ["click http://phishing.test to verify your account", "visit casino-online.example for free spins", "my site is example.com", "order shipped via colissimo.fr"],
+        "honest": "Demo blocklist ships ~7 domains — production deployments fetch HaGeZi feeds at install time (GPL, never shipped in a pack). Covers the link surface, not semantic toxicity.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
