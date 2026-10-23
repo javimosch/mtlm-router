@@ -119,6 +119,13 @@ LANES_META = {
         "examples": ["kill the infidels", "praise isis forever", "white power slogans", "i love my community"],
         "honest": "No canonical public extremism wordlist exists — this pack is hand-authored call-to-violence patterns plus a curated term list. It catches explicit phrasing; coded/dogwhistle language is a model problem, not a rules one. Multiword terms now catch via the 'phrases' kind.",
     },
+    "self_harm": {
+        "expert": "self_harm",
+        "title": "Self-harm & distress signals",
+        "desc": "Flags explicit self-harm / suicidal-ideation phrasing as 'self_harm' vs 'clean' at ~0ms. Context-anchored patterns — 'suicide squad' and colloquial use stay clean while 'i want to die' and 'thinking about suicide methods' flag.",
+        "examples": ["i want to die", "thinking about suicide methods", "im going to end it all tonight", "i want to watch suicide squad"],
+        "honest": "A triage signal, never an autonomous verdict on someone's welfare — every hit should escalate for human review. Coverage is explicit anchored phrasing; implicit or veiled distress is a different problem. Carefully tuned against colloquial false positives.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
