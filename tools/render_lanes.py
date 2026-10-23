@@ -126,6 +126,13 @@ LANES_META = {
         "examples": ["i want to die", "thinking about suicide methods", "im going to end it all tonight", "i want to watch suicide squad"],
         "honest": "A triage signal, never an autonomous verdict on someone's welfare — every hit should escalate for human review. Coverage is explicit anchored phrasing; implicit or veiled distress is a different problem. Carefully tuned against colloquial false positives.",
     },
+    "spam": {
+        "expert": "spam",
+        "title": "Spam / promo-blast detection",
+        "desc": "Flags pharma/casino/SEO/promo spam shapes at ~0ms — regexes for pharma/casino/SEO formulas plus a classic spam-phrase list; the leet fold catches 'v1agra'-style evasion.",
+        "examples": ["buy cheap v1agra online no prescription", "free money work from home now", "claim your casino bonus free spins", "nice article, very helpful"],
+        "honest": "Classic keyword/phrase coverage — catches formulaic spam; sophisticated spam is a model problem. Phrase tier at 0.75 flags softer promo-speak.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
