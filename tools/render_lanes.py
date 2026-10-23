@@ -91,6 +91,13 @@ LANES_META = {
         "examples": ["this is a clean comment", "you absolute asshole", "what the f u c k", "have a nice day"],
         "honest": "Single-token wordlist matching — obfuscation-normalized, but morphological variants that aren't in the list ('fucking', 'phuck') can miss. Multiword list entries can't fire yet. Wordlist = transparent coverage: you can see and extend every term it checks.",
     },
+    "scam_detect": {
+        "expert": "scam_detect",
+        "title": "Scam & fraud phrasing detection",
+        "desc": "Classifies messages as 'clean', 'suspicious' or 'scam' over classic fraud shapes: lottery/prize, crypto-doubling, gift-card demands, IRS/impersonation, advance-fee openers. 'suspicious' is the honest middle tier — soft signals like urgency language escalate rather than convict.",
+        "examples": ["CONGRATULATIONS you have WON the lottery prize", "send 0.5 BTC to double your bitcoin", "pay the irs warrant fee in gift cards", "your package arrived, track it here"],
+        "honest": "Pattern detection, not semantic fraud analysis — formulaic scams catch at 0.9+, novel phrasing can miss (that's what 'suspicious' + the abstention path are for). Complements, doesn't replace, real anti-fraud tooling.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
