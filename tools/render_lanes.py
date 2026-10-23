@@ -98,6 +98,13 @@ LANES_META = {
         "examples": ["CONGRATULATIONS you have WON the lottery prize", "send 0.5 BTC to double your bitcoin", "pay the irs warrant fee in gift cards", "your package arrived, track it here"],
         "honest": "Pattern detection, not semantic fraud analysis — formulaic scams catch at 0.9+, novel phrasing can miss (that's what 'suspicious' + the abstention path are for). Complements, doesn't replace, real anti-fraud tooling.",
     },
+    "disposable_email": {
+        "expert": "disposable_email",
+        "title": "Disposable-email detection",
+        "desc": "Flags throwaway/temp-mail addresses — the signup-fraud lane. 9,925-domain public blocklist; the email's domain is extracted from the text and matched (with parent-suffix walk), so 'bob@mailinator.com' flags while real providers pass.",
+        "examples": ["signup bob@mailinator.com now", "register alice@gmail.com", "contact me at x@10minutemail.com"],
+        "honest": "Coverage = the public blocklist's coverage — new disposable providers appear weekly and the list lags. Refresh it like any feed; a miss here is a list gap, not a model error.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
