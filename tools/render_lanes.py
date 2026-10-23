@@ -206,6 +206,7 @@ document.getElementById('lp-form').addEventListener('submit',function(e){{
 <body class="max-w-4xl mx-auto px-6 py-14">
 <script>document.addEventListener('DOMContentLoaded',function(){{if(window.vigie)vigie('lane_page_view',{{lane:{json.dumps(name)}}});}});</script>
 <p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/catalog.html" class="text-cyan-400 hover:underline">catalog</a> / {fam}</p>
+<p class="mono text-xs text-gray-600 mb-2">a lane is a rules.json or .head pack — <a href="https://github.com/javimosch/machin-anvil/blob/master/RULEPACK.md" class="text-cyan-500 hover:underline">write your own (RULEPACK.md)</a></p>
 <div class="flex items-baseline justify-between mb-2">
   <h1 class="text-3xl font-bold">{esc(meta['title'])}</h1>
   <span class="mono text-xs px-2 py-1 rounded border {badge[1]}">{badge[0]}</span>
