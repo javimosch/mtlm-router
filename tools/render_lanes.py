@@ -84,6 +84,13 @@ LANES_META = {
         "examples": ["scores: nudity 0.82 -> remove", "scores: nudity 0.4, violence 0.1 -> review", "scores: violence 0.05, nudity 0.02 -> publish"],
         "honest": "Demo thresholds are hand-authored — production deployments tune the rule file to their own scorer's score distribution (that's the €149 custom-lane job). This is the honest image-moderation path: your scorer does pixels, mtlm owns the typed verdict.",
     },
+    "profanity": {
+        "expert": "profanity",
+        "title": "Profanity / obscene-term detection",
+        "desc": "Wordlist lane over 403 terms (LDNOOBW public list): 'clean' vs 'profane' in ~0ms with zero model cost. The deobfuscation layer catches obfuscation for free — 'f u c k', 'sh1t', 'FvCk', 'a$$hole' all resolve to the listed term before matching.",
+        "examples": ["this is a clean comment", "you absolute asshole", "what the f u c k", "have a nice day"],
+        "honest": "Single-token wordlist matching — obfuscation-normalized, but morphological variants that aren't in the list ('fucking', 'phuck') can miss. Multiword list entries can't fire yet. Wordlist = transparent coverage: you can see and extend every term it checks.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
