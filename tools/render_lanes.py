@@ -133,6 +133,13 @@ LANES_META = {
         "examples": ["buy cheap v1agra online no prescription", "free money work from home now", "claim your casino bonus free spins", "nice article, very helpful"],
         "honest": "Classic keyword/phrase coverage — catches formulaic spam; sophisticated spam is a model problem. Phrase tier at 0.75 flags softer promo-speak.",
     },
+    "harassment": {
+        "expert": "harassment",
+        "title": "Harassment & directed abuse",
+        "desc": "Flags directed abuse — you-anchored insults ('you are stupid'), threats ('i will kill you'), dismissal ('shut up') — distinct from profanity's vocabulary focus: harassment is target-directed. ~0ms.",
+        "examples": ["you are stupid and pathetic", "i will kill you", "shut up loser", "have a great day"],
+        "honest": "Covers direct second-person abuse formulas — the most common harassment shape in comment spam. Sarcasm, context-dependent abuse, and third-person targeting are model problems; this is the deterministic first pass.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
