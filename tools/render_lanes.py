@@ -112,6 +112,13 @@ LANES_META = {
         "examples": ["call me 0612345678", "you absolute asshole", "send 0.5 BTC to double your bitcoin", "a perfectly normal comment"],
         "honest": "Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable) and doesn't pretend to understand context the way a big guard model does. That's the honest contract.",
     },
+    "extremism": {
+        "expert": "extremism",
+        "title": "Extremist content & calls to violence",
+        "desc": "Flags explicit extremist shapes — calls to violence, glorification, coded term lists — as 'extremist' vs 'clean' at ~0ms. Regex for kill/bomb/praise shapes, a curated term list for org names, and the 'phrases' kind catches multiword terms like 'white power'.",
+        "examples": ["kill the infidels", "praise isis forever", "white power slogans", "i love my community"],
+        "honest": "No canonical public extremism wordlist exists — this pack is hand-authored call-to-violence patterns plus a curated term list. It catches explicit phrasing; coded/dogwhistle language is a model problem, not a rules one. Multiword terms now catch via the 'phrases' kind.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
