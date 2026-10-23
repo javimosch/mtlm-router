@@ -105,6 +105,13 @@ LANES_META = {
         "examples": ["signup bob@mailinator.com now", "register alice@gmail.com", "contact me at x@10minutemail.com"],
         "honest": "Coverage = the public blocklist's coverage — new disposable providers appear weekly and the list lags. Refresh it like any feed; a miss here is a list gap, not a model error.",
     },
+    "mod_text": {
+        "expert": "mod_text",
+        "title": "All-in-one text moderation",
+        "desc": "One request → the full text-moderation verdict: PII (email/phone/IBAN/card/crypto), profanity, scam phrasing, unsafe links — in a single ~0ms call. 'matched_rule' names the firing check for auditability.",
+        "examples": ["call me 0612345678", "you absolute asshole", "send 0.5 BTC to double your bitcoin", "a perfectly normal comment"],
+        "honest": "Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable) and doesn't pretend to understand context the way a big guard model does. That's the honest contract.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"

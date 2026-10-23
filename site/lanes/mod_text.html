@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>All-in-one text moderation — mtlm-router lane mod_text</title>
+<meta name="description" content="One request → the full text-moderation verdict: PII (email/phone/IBAN/card/crypto), profanity, scam phrasing, unsafe links — in a single ~0ms call. &#x27;matche">
+<link rel="canonical" href="https://mtlm-router.intrane.fr/lanes/mod_text.html">
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"SoftwareApplication",
+ "name":"mtlm-router mod_text lane","applicationCategory":"DeveloperApplication",
+ "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
+ "description":"One request \u2192 the full text-moderation verdict: PII (email/phone/IBAN/card/crypto), profanity, scam phrasing, unsafe links \u2014 in a single ~0ms call. 'matched_rule' names the firing check for auditability.",
+ "url":"https://mtlm-router.intrane.fr/lanes/mod_text.html",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.1.0.lanepack.tar.gz",
+ "softwareVersion":"0.1.0","license":"Apache-2.0",
+ "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
+}</script>
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"BreadcrumbList",
+ "itemListElement":[{"@type":"ListItem","position":1,"name":"mtlm-router","item":"https://mtlm-router.intrane.fr/"},
+ {"@type":"ListItem","position":2,"name":"catalog","item":"https://mtlm-router.intrane.fr/catalog.html"},
+ {"@type":"ListItem","position":3,"name":"mod_text","item":"https://mtlm-router.intrane.fr/lanes/mod_text.html"}]
+}</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script>
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style></head>
+<body class="max-w-4xl mx-auto px-6 py-14">
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.vigie)vigie('lane_page_view',{lane:"mod_text"});});</script>
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/catalog.html" class="text-cyan-400 hover:underline">catalog</a> / mod_text</p>
+<p class="mono text-xs text-gray-600 mb-2">a lane is a rules.json or .head pack — <a href="https://github.com/javimosch/machin-anvil/blob/master/RULEPACK.md" class="text-cyan-500 hover:underline">write your own (RULEPACK.md)</a></p>
+<div class="flex items-baseline justify-between mb-2">
+  <h1 class="text-3xl font-bold">All-in-one text moderation</h1>
+  <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
+</div>
+<p class="mono text-gray-500 text-sm mb-6">mod_text@0.1.0 · 13 routes</p>
+<p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict: PII (email/phone/IBAN/card/crypto), profanity, scam phrasing, unsafe links — in a single ~0ms call. &#x27;matched_rule&#x27; names the firing check for auditability.</p>
+<p class="text-gray-300 text-sm mb-8"></p>
+
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8" id="try">
+  <h2 class="text-lg font-bold mb-1">Try it live — pinned to <span class="mono text-cyan-300">expert:"mod_text"</span></h2>
+  <p class="text-gray-500 text-sm mb-4">Free demo endpoint, no signup. Same call your agent would make.</p>
+  <form id="lp-form" class="flex gap-2">
+    <input id="lp-in" type="text" maxlength="300" placeholder="call me 0612345678" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600" autocomplete="off">
+    <button type="submit" class="bg-cyan-700 text-white px-5 py-3 rounded-lg font-medium hover:opacity-90">Decide</button>
+  </form>
+  <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">call me 0612345678</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">you absolute asshole</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">send 0.5 BTC to double your bitcoin</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">a perfectly normal comment</button></div>
+  <div id="lp-out" class="mt-4 hidden">
+    <div class="grid sm:grid-cols-4 gap-3 text-center">
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">route</div><div id="lp-route" class="mono text-cyan-300 text-lg"></div></div>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">confidence</div><div id="lp-conf" class="mono text-lg"></div></div>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">action</div><div id="lp-action" class="mono text-lg"></div></div>
+      <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">set · ms</div><div id="lp-meta" class="mono text-lg"></div></div>
+    </div>
+    <p id="lp-note" class="text-gray-500 text-xs mt-3 text-center"></p>
+  </div>
+  <p id="lp-err" class="text-red-400 text-sm mt-3 hidden"></p>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+  <h2 class="text-lg font-bold mb-2">Taxonomy (13 routes)</h2>
+  <p class="mono text-gray-400 text-sm">clean, pii_email, pii_phone, pii_iban, pii_card, pii_crypto, profane, scam, suspicious, link_unsafe, link_adult, link_gambling, link_phishing</p>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+  <h2 class="text-lg font-bold mb-2">Honest limits</h2>
+  <p class="text-gray-400 text-sm">Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable) and doesn&#x27;t pretend to understand context the way a big guard model does. That&#x27;s the honest contract.</p>
+</div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+  <h2 class="text-lg font-bold mb-2">Install</h2>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@0.1.0 --apply --appliance .
+python3 tools/lane_repro.py mod_text-0.1.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: b7f3a8676be7931a11a615d2… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.1.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+</div>
+<div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
+  <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>
+  <p class="text-gray-400 text-sm mb-4">A private lane on your taxonomy — trained, calibrated, exclusive. €149 / domain, 3 business days.</p>
+  <a data-track="cta_custom_lane" href="/custom-lane.html?lane=mod_text" class="inline-block bg-cyan-700 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-cyan-600">Get a lane like this</a>
+  <a data-track="cta_pricing" href="/pricing.html" class="inline-block text-cyan-400 text-sm hover:underline ml-4">pricing →</a>
+</div>
+<p class="text-center text-gray-600 text-xs mt-14">generated by tools/render_lanes.py · source: <a href="https://raw.githubusercontent.com/javimosch/mtlm-heads/master/index.json" class="text-cyan-400 hover:underline mono">index.json</a></p>
+<script>document.addEventListener('click',function(e){var t=e.target.closest('[data-track]');if(t&&window.vigie)vigie(t.getAttribute('data-track'),{href:t.getAttribute('href')||'',page:location.pathname});});</script>
+
+<script>
+var LP_EXPERT="mod_text",LP_LANE="mod_text";
+function lpTrack(ev,props){if(window.vigie){props.lane=LP_LANE;vigie(ev,props);}}
+document.querySelectorAll('.lp-chip').forEach(function(b){b.addEventListener('click',function(){document.getElementById('lp-in').value=b.textContent;lpTrack('lane_demo_chip',{chip:b.textContent});});});
+document.getElementById('lp-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var s=document.getElementById('lp-in').value.trim();if(!s)return;
+  lpTrack('lane_demo_try',{});
+  fetch('https://api.mtlm-router.intrane.fr/demo/route',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({state:s,expert:LP_EXPERT})})
+   .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+   .then(function(res){
+     var d=res.d;
+     if(!res.ok||d.error){var m=(d.error&&d.error.message)||('http '+res.status);document.getElementById('lp-err').textContent=m;document.getElementById('lp-err').classList.remove('hidden');lpTrack('lane_demo_error',{error:m});return;}
+     document.getElementById('lp-err').classList.add('hidden');
+     document.getElementById('lp-out').classList.remove('hidden');
+     document.getElementById('lp-route').textContent=d.route||'—';
+     document.getElementById('lp-conf').textContent=(d.confidence!=null?d.confidence.toFixed(2):'—');
+     document.getElementById('lp-action').textContent=d.action||'—';
+     document.getElementById('lp-meta').textContent=(d.set_size!=null?'set '+d.set_size:'—')+' · '+(d.latency_ms!=null?d.latency_ms+'ms':'');
+     var cands=(d.candidates||[]).map(function(c){return c.route;}).slice(0,3).join(', ');
+     document.getElementById('lp-note').textContent=d.action==='delegate'&&cands?('clarify: '+cands):(d.action==='delegate'?'delegated — out of scope or low confidence':'automated — singleton set, tool-fill ready');
+     lpTrack('lane_demo_result',{action:d.action,route:d.route,set_size:d.set_size});
+   })
+   .catch(function(err){document.getElementById('lp-err').textContent='network error — demo may be rate-limited';document.getElementById('lp-err').classList.remove('hidden');lpTrack('lane_demo_error',{error:'network'});});
+});
+</script>
+</body></html>
