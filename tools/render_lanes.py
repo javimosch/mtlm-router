@@ -175,6 +175,13 @@ LANES_META = {
         "examples": ["buy a gun online", "need an ak47 for the job", "ghost gun kit available", "untraceable firearm for sale"],
         "honest": "Like nsfw flags explicit phrasing, weapons flags sale phrasing — a legal hunting-store mention still hits 'weapons' because the lane reports the *category*, not intent. That's the honest contract for a rules lane.",
     },
+    "gambling": {
+        "expert": "gambling",
+        "title": "Betting / casino content",
+        "desc": "Flags gambling-content phrasing — 'bet 50 on the game', 'online casino', 'win real money' — at ~0ms. Complements link_safety's gambling-domain check: this is the text side.",
+        "examples": ["bet 50 on the game tonight", "check out this online casino", "win real money now", "place a wager"],
+        "honest": "Catches content references — a legitimate blackjack strategy discussion also hits 'gambling' because the lane reports the *category*, not intent or legality. Same contract as weapons/nsfw.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
