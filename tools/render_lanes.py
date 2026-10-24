@@ -210,6 +210,13 @@ LANES_META = {
         "examples": ["deploy the payload to the target", "c2 server at 192.168.1.5", "reverse shell to my box", "the antivirus found malware"],
         "honest": "Deployment-phrasing detection — 'the antivirus found malware' is clean by design (discussion, not deployment). Anchored to action verbs, so a security-blog mention stays out.",
     },
+    "url_shortener": {
+        "expert": "url_shortener",
+        "title": "URL-shortener detection",
+        "desc": "Flags URL-shortener domains (bit.ly, tinyurl, t.co, rebrand.ly + ~1,450 more) at ~0ms — the link-obfuscation signal: a 'shortener' hit means the link destination is opaque.",
+        "examples": ["check out bit.ly/abc123", "visit tinyurl.com/xyz", "rebrand.ly/promo", "normal https://example.com/page"],
+        "honest": "A signal, not a verdict — legitimate marketing links also hit. Pair it with link_safety for 'opaque + suspicious-domain' coverage.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
