@@ -231,6 +231,13 @@ LANES_META = {
         "examples": ["youre so pathetic", "nobody likes you", "go cry to mommy", "have a nice day"],
         "honest": "Covers the direct-insult shape — sarcasm, in-group banter, and context-dependent cruelty are model problems. This is the deterministic first pass.",
     },
+    "romance_scam": {
+        "expert": "romance_scam",
+        "title": "Romance-fraud detection",
+        "desc": "Flags romance-scam phrasing — 'send me a steam gift card', 'my deployed boyfriend needs money', 'wire via western union' — the emotional-manipulation fraud lane.",
+        "examples": ["send me a steam gift card", "my deployed soldier boyfriend needs money", "wire via western union", "i love my wife"],
+        "honest": "Covers the direct-ask shape — subtler emotional grooming needs a semantic lane, not regex. This is the deterministic first pass on the known fraud shapes.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
