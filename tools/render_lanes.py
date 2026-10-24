@@ -217,6 +217,13 @@ LANES_META = {
         "examples": ["check out bit.ly/abc123", "visit tinyurl.com/xyz", "rebrand.ly/promo", "normal https://example.com/page"],
         "honest": "A signal, not a verdict — legitimate marketing links also hit. Pair it with link_safety for 'opaque + suspicious-domain' coverage.",
     },
+    "perspective": {
+        "expert": "mod_text",
+        "title": "Perspective API drop-in",
+        "desc": "POST /v1/comments:analyze — Perspective-shaped attributeScores from the mod_text composite (TOXICITY/INSULT/THREAT/IDENTITY_ATTACK/PROFANITY/SEXUALLY_EXPLICIT/SPAM + matched_rule evidence). For clients migrating off the sunsetting Perspective API.",
+        "examples": ["you are stupid and pathetic", "a perfectly normal comment"],
+        "honest": "The attributes are derived from the 29-class composite, not an independent scorer — Perspective clients get the *shape* plus the evidence it never emitted. FLIRTATION is honestly 0 (no coverage).",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
@@ -398,6 +405,13 @@ def main():
         path = os.path.join(a.outdir, name + ".html")
         open(path, "w").write(lane_page(name, latest[name], LANES_META[name]))
         written.append(path)
+    # meta-only entries (e.g. perspective) — emit a page reusing the expert's lane data
+    for name, meta in LANES_META.items():
+        if name in latest or meta.get("expert") not in latest:
+            continue
+        open(os.path.join(a.outdir, name + ".html"), "w").write(lane_page(name, latest[meta["expert"]], meta))
+        latest[name] = latest[meta["expert"]]
+        written.append(os.path.join(a.outdir, name + ".html"))
     open(os.path.join(a.outdir, "index.html"), "w").write(hub(sorted(latest)))
     base = "https://mtlm-router.intrane.fr"
     urls = ["/", "/fr.html", "/docs.html", "/catalog.html", "/pricing.html",
