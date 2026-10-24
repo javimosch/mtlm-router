@@ -245,6 +245,13 @@ LANES_META = {
         "examples": ["dont tell your parents about us", "are you home alone", "send me a pic", "the weather is nice today"],
         "honest": "Covers the explicit-phrase shape — subtle emotional grooming, coded language, and context-dependent signals need a semantic lane. This is a safety tripwire, not a full detector.",
     },
+    "sextortion": {
+        "expert": "sextortion",
+        "title": "Extortion via intimate content",
+        "desc": "Flags sextortion phrasing — 'i have your pics pay or i share', 'send bitcoin or i post', 'your family will see' — the extortion lane.",
+        "examples": ["i have your nudes pay or i share", "send bitcoin or i will post your photos", "your family will see the video", "i have a nice photo of the beach"],
+        "honest": "Covers the explicit-threat shape — implied extortion and coded threats need a semantic lane. This is the deterministic tripwire on the known patterns.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
