@@ -280,6 +280,13 @@ LANES_META = {
         "examples": ["bleach cures autism", "vaccines cause autism", "drink colloidal silver daily", "my doctor said to get vaccinated"],
         "honest": "Anchored on claim-as-fact and imperative forms — 'the article about vaccine safety' stays clean. Debunking-style mentions can hit (a 'X causes Y' statement is the pattern, not the author's stance).",
     },
+    "fake_review": {
+        "expert": "fake_review",
+        "title": "Review manipulation",
+        "desc": "Flags fake-review phrasing — '5 stars great seller fast shipping', 'paid to write this review', 'write a review for a free gift' — the astroturfing lane.",
+        "examples": ["5 stars great seller fast shipping", "paid to write this review", "write a review for a free gift", "i bought this product and it broke"],
+        "honest": "Genuine enthusiasm can hit — the patterns describe the astroturfed shape, not a legitimacy verdict. Review fraud at scale needs behavior signals (velocity, account age), not text alone.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
