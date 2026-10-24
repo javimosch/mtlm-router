@@ -1,15 +1,15 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>All-in-one text moderation — mtlm-router lane mod_text</title>
-<meta name="description" content="One request → the full text-moderation verdict across 17 classes: self-harm, extremism, scam, harassment, PII (email/phone/IBAN/card/crypto), unsafe links,">
+<meta name="description" content="One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, pira">
 <link rel="canonical" href="https://mtlm-router.intrane.fr/lanes/mod_text.html">
 <script type="application/ld+json">{
  "@context":"https://schema.org","@type":"SoftwareApplication",
  "name":"mtlm-router mod_text lane","applicationCategory":"DeveloperApplication",
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
- "description":"One request \u2192 the full text-moderation verdict across 17 classes: self-harm, extremism, scam, harassment, PII (email/phone/IBAN/card/crypto), unsafe links, spam, profanity \u2014 severity-ordered so the worst violation wins. 'matched_rule' names the firing check.",
+ "description":"One request \u2192 the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity \u2014 severity-ordered so th",
  "url":"https://mtlm-router.intrane.fr/lanes/mod_text.html",
- "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.5.0.lanepack.tar.gz",
- "softwareVersion":"0.5.0","license":"Apache-2.0",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.6.0.lanepack.tar.gz",
+ "softwareVersion":"0.6.0","license":"Apache-2.0",
  "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
 }</script>
 <script type="application/ld+json">{
@@ -29,8 +29,8 @@
   <h1 class="text-3xl font-bold">All-in-one text moderation</h1>
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
-<p class="mono text-gray-500 text-sm mb-6">mod_text@0.5.0 · 25 routes</p>
-<p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict across 17 classes: self-harm, extremism, scam, harassment, PII (email/phone/IBAN/card/crypto), unsafe links, spam, profanity — severity-ordered so the worst violation wins. &#x27;matched_rule&#x27; names the firing check.</p>
+<p class="mono text-gray-500 text-sm mb-6">mod_text@0.6.0 · 29 routes</p>
+<p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. &#x27;matched_rule&#x27; names the firing check.</p>
 <p class="text-gray-300 text-sm mb-8"></p>
 
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8" id="try">
@@ -40,7 +40,7 @@
     <input id="lp-in" type="text" maxlength="300" placeholder="i want to die" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600" autocomplete="off">
     <button type="submit" class="bg-cyan-700 text-white px-5 py-3 rounded-lg font-medium hover:opacity-90">Decide</button>
   </form>
-  <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">i want to die</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">white power slogans</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">send 0.5 BTC to double your bitcoin</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">call me 0612345678</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">a perfectly normal comment</button></div>
+  <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">i want to die</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">send your seed phrase</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">buy a gun online</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">check out bit.ly/abc123</button><button type="button" class="lp-chip text-xs bg-gray-800 border border-gray-700 text-gray-300 rounded-full px-3 py-1 hover:border-cyan-700">a perfectly normal comment</button></div>
   <div id="lp-out" class="mt-4 hidden">
     <div class="grid sm:grid-cols-4 gap-3 text-center">
       <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">route</div><div id="lp-route" class="mono text-cyan-300 text-lg"></div></div>
@@ -53,8 +53,8 @@
   <p id="lp-err" class="text-red-400 text-sm mt-3 hidden"></p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
-  <h2 class="text-lg font-bold mb-2">Taxonomy (25 routes)</h2>
-  <p class="mono text-gray-400 text-sm">clean, self_harm, extremist, hate, violent, weapons, scam, suspicious, phish, harassment, pii_email, pii_phone, pii_iban, pii_card, pii_crypto, pii_french_id …</p>
+  <h2 class="text-lg font-bold mb-2">Taxonomy (29 routes)</h2>
+  <p class="mono text-gray-400 text-sm">clean, self_harm, extremist, hate, violent, weapons, malware, scam, suspicious, crypto_scam, phish, piracy, harassment, pii_email, pii_phone, pii_iban …</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Honest limits</h2>
@@ -62,9 +62,9 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@0.5.0 --apply --appliance .
-python3 tools/lane_repro.py mod_text-0.5.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
-  <p class="text-gray-600 text-xs mt-2 mono">sha256: 40bd1e0e22c477b345e9a339… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.5.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@0.6.0 --apply --appliance .
+python3 tools/lane_repro.py mod_text-0.6.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: 195d13888cc3c11db500372c… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.6.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>

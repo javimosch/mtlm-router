@@ -108,8 +108,8 @@ LANES_META = {
     "mod_text": {
         "expert": "mod_text",
         "title": "All-in-one text moderation",
-        "desc": "One request → the full text-moderation verdict across 17 classes: self-harm, extremism, scam, harassment, PII (email/phone/IBAN/card/crypto), unsafe links, spam, profanity — severity-ordered so the worst violation wins. 'matched_rule' names the firing check.",
-        "examples": ["i want to die", "white power slogans", "send 0.5 BTC to double your bitcoin", "call me 0612345678", "a perfectly normal comment"],
+        "desc": "One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. 'matched_rule' names the firing check.",
+        "examples": ["i want to die", "send your seed phrase", "buy a gun online", "check out bit.ly/abc123", "a perfectly normal comment"],
         "honest": "Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable) and doesn't pretend to understand context the way a big guard model does. That's the honest contract.",
     },
     "extremism": {
