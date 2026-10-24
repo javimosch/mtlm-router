@@ -273,6 +273,13 @@ LANES_META = {
         "examples": ["earn 500 per week from home", "pay a small fee to start", "no experience needed guaranteed income", "apply for the engineering job"],
         "honest": "FTC-tracked fraud shape — legit work-from-home postings can hit (the patterns are the promise, not the legitimacy). This is the deterministic tripwire.",
     },
+    "medical_misinfo": {
+        "expert": "medical_misinfo",
+        "title": "Dangerous health claims",
+        "desc": "Flags dangerous health-claim phrasing — 'bleach cures autism', 'vaccines cause autism', 'drink colloidal silver', 'covid is a hoax' — the misinfo lane.",
+        "examples": ["bleach cures autism", "vaccines cause autism", "drink colloidal silver daily", "my doctor said to get vaccinated"],
+        "honest": "Anchored on claim-as-fact and imperative forms — 'the article about vaccine safety' stays clean. Debunking-style mentions can hit (a 'X causes Y' statement is the pattern, not the author's stance).",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
