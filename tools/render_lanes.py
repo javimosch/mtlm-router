@@ -140,6 +140,13 @@ LANES_META = {
         "examples": ["you are stupid and pathetic", "i will kill you", "shut up loser", "have a great day"],
         "honest": "Covers direct second-person abuse formulas — the most common harassment shape in comment spam. Sarcasm, context-dependent abuse, and third-person targeting are model problems; this is the deterministic first pass.",
     },
+    "drugs": {
+        "expert": "drugs",
+        "title": "Drug-deal / slang detection",
+        "desc": "Flags acquisition and sale-context drug phrasing — 'buy weed', 'need a plug', 'score some molly' — while medical use ('prescribed', 'medication') stays clean. ~0ms.",
+        "examples": ["buy weed online cheap", "need a plug for the weekend", "my doctor prescribed xanax", "pickup some molly for the party"],
+        "honest": "Catches deal/sale phrasing, not pharmacology discussion — 'my doctor prescribed xanax' is clean by design. The hard part is distinguishing context; that's why it's anchored to transaction verbs, not drug names alone.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
