@@ -224,6 +224,13 @@ LANES_META = {
         "examples": ["you are stupid and pathetic", "a perfectly normal comment"],
         "honest": "The attributes are derived from the 29-class composite, not an independent scorer — Perspective clients get the *shape* plus the evidence it never emitted. FLIRTATION is honestly 0 (no coverage).",
     },
+    "bullying": {
+        "expert": "bullying",
+        "title": "Peer-targeted bullying",
+        "desc": "Flags peer-targeted abuse — 'youre so pathetic', 'nobody likes you', 'go cry to mommy' — at ~0ms. Distinct from harassment (generic abuse): bullying is the relational schoolyard/comment-section shape.",
+        "examples": ["youre so pathetic", "nobody likes you", "go cry to mommy", "have a nice day"],
+        "honest": "Covers the direct-insult shape — sarcasm, in-group banter, and context-dependent cruelty are model problems. This is the deterministic first pass.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
