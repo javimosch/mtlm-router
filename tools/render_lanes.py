@@ -220,7 +220,7 @@ LANES_META = {
     "perspective": {
         "expert": "mod_text",
         "title": "Perspective API drop-in",
-        "desc": "POST /v1/comments:analyze — Perspective-shaped attributeScores from the mod_text composite (TOXICITY/INSULT/THREAT/IDENTITY_ATTACK/PROFANITY/SEXUALLY_EXPLICIT/SPAM + matched_rule evidence). For clients migrating off the sunsetting Perspective API.",
+        "desc": "POST /v1/comments:analyze — full Perspective shape: attributeScores + spanScores (per-sentence), batch via {texts:[]}, honors requestedAttributes. For clients migrating off the sunsetting Perspective API.",
         "examples": ["you are stupid and pathetic", "a perfectly normal comment"],
         "honest": "The attributes are derived from the 29-class composite, not an independent scorer — Perspective clients get the *shape* plus the evidence it never emitted. FLIRTATION is honestly 0 (no coverage).",
     },

@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Perspective API drop-in — mtlm-router lane perspective</title>
-<meta name="description" content="POST /v1/comments:analyze — Perspective-shaped attributeScores from the mod_text composite (TOXICITY/INSULT/THREAT/IDENTITY_ATTACK/PROFANITY/SEXUALLY_EXPLI">
+<meta name="description" content="POST /v1/comments:analyze — full Perspective shape: attributeScores + spanScores (per-sentence), batch via {texts:[]}, honors requestedAttributes. For clie">
 <link rel="canonical" href="https://mtlm-router.intrane.fr/lanes/perspective.html">
 <script type="application/ld+json">{
  "@context":"https://schema.org","@type":"SoftwareApplication",
  "name":"mtlm-router perspective lane","applicationCategory":"DeveloperApplication",
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
- "description":"POST /v1/comments:analyze \u2014 Perspective-shaped attributeScores from the mod_text composite (TOXICITY/INSULT/THREAT/IDENTITY_ATTACK/PROFANITY/SEXUALLY_EXPLICIT/SPAM + matched_rule evidence). For clients migrating off the sunsetting Perspective API.",
+ "description":"POST /v1/comments:analyze \u2014 full Perspective shape: attributeScores + spanScores (per-sentence), batch via {texts:[]}, honors requestedAttributes. For clients migrating off the sunsetting Perspective API.",
  "url":"https://mtlm-router.intrane.fr/lanes/perspective.html",
  "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.8.0.lanepack.tar.gz",
  "softwareVersion":"0.8.0","license":"Apache-2.0",
@@ -30,7 +30,7 @@
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
 <p class="mono text-gray-500 text-sm mb-6">perspective@0.8.0 · 36 routes</p>
-<p class="text-gray-400 text-sm mb-4">POST /v1/comments:analyze — Perspective-shaped attributeScores from the mod_text composite (TOXICITY/INSULT/THREAT/IDENTITY_ATTACK/PROFANITY/SEXUALLY_EXPLICIT/SPAM + matched_rule evidence). For clients migrating off the sunsetting Perspective API.</p>
+<p class="text-gray-400 text-sm mb-4">POST /v1/comments:analyze — full Perspective shape: attributeScores + spanScores (per-sentence), batch via {texts:[]}, honors requestedAttributes. For clients migrating off the sunsetting Perspective API.</p>
 <p class="text-gray-300 text-sm mb-8"></p>
 
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8" id="try">
