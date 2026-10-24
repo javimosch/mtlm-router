@@ -168,6 +168,13 @@ LANES_META = {
         "examples": ["im going to kill you tonight", "i want to stab someone", "the action movie had violence", "i will stab anyone who tries"],
         "honest": "Covers direct threat formulas and graphic-violence references — the last mod_policy 'unchecked' category with a text lane. Distinct from extremism (ideological) and harassment (abuse): this is raw physical-harm signal.",
     },
+    "weapons": {
+        "expert": "weapons",
+        "title": "Weapon-transaction detection",
+        "desc": "Flags weapon-sale phrasing — 'buy a gun', 'need an AK47', 'ghost gun kit', 'untraceable firearm' — at ~0ms. Anchored to transaction verbs, not weapon names alone. Flags the category; doesn't judge legality.",
+        "examples": ["buy a gun online", "need an ak47 for the job", "ghost gun kit available", "untraceable firearm for sale"],
+        "honest": "Like nsfw flags explicit phrasing, weapons flags sale phrasing — a legal hunting-store mention still hits 'weapons' because the lane reports the *category*, not intent. That's the honest contract for a rules lane.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"

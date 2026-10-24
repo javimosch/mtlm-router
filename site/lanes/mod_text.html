@@ -8,8 +8,8 @@
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
  "description":"One request \u2192 the full text-moderation verdict across 17 classes: self-harm, extremism, scam, harassment, PII (email/phone/IBAN/card/crypto), unsafe links, spam, profanity \u2014 severity-ordered so the worst violation wins. 'matched_rule' names the firing check.",
  "url":"https://mtlm-router.intrane.fr/lanes/mod_text.html",
- "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.3.0.lanepack.tar.gz",
- "softwareVersion":"0.3.0","license":"Apache-2.0",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.4.0.lanepack.tar.gz",
+ "softwareVersion":"0.4.0","license":"Apache-2.0",
  "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
 }</script>
 <script type="application/ld+json">{
@@ -29,7 +29,7 @@
   <h1 class="text-3xl font-bold">All-in-one text moderation</h1>
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
-<p class="mono text-gray-500 text-sm mb-6">mod_text@0.3.0 · 17 routes</p>
+<p class="mono text-gray-500 text-sm mb-6">mod_text@0.4.0 · 21 routes</p>
 <p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict across 17 classes: self-harm, extremism, scam, harassment, PII (email/phone/IBAN/card/crypto), unsafe links, spam, profanity — severity-ordered so the worst violation wins. &#x27;matched_rule&#x27; names the firing check.</p>
 <p class="text-gray-300 text-sm mb-8"></p>
 
@@ -53,8 +53,8 @@
   <p id="lp-err" class="text-red-400 text-sm mt-3 hidden"></p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
-  <h2 class="text-lg font-bold mb-2">Taxonomy (17 routes)</h2>
-  <p class="mono text-gray-400 text-sm">clean, self_harm, extremist, scam, suspicious, harassment, pii_email, pii_phone, pii_iban, pii_card, pii_crypto, link_unsafe, link_adult, link_gambling, link_phishing, spam …</p>
+  <h2 class="text-lg font-bold mb-2">Taxonomy (21 routes)</h2>
+  <p class="mono text-gray-400 text-sm">clean, self_harm, extremist, hate, violent, scam, suspicious, harassment, pii_email, pii_phone, pii_iban, pii_card, pii_crypto, link_unsafe, link_adult, link_gambling …</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Honest limits</h2>
@@ -62,9 +62,9 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@0.3.0 --apply --appliance .
-python3 tools/lane_repro.py mod_text-0.3.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
-  <p class="text-gray-600 text-xs mt-2 mono">sha256: 1de23754017c465784341a2e… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.3.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@0.4.0 --apply --appliance .
+python3 tools/lane_repro.py mod_text-0.4.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: 1454771a5997380738185736… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.4.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>
