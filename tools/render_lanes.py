@@ -161,6 +161,13 @@ LANES_META = {
         "examples": ["kill all the immigrants", "heil hitler", "i disagree with their policies", "those filthy subhuman parasites"],
         "honest": "Targets hate SPEECH, not opinions — 'i disagree with their policies' is clean by design. Anchored to dehumanization and violence shapes, not ideology terms alone.",
     },
+    "violence": {
+        "expert": "violence",
+        "title": "Threats & graphic violence",
+        "desc": "Flags explicit threat and violence phrasing — 'im going to kill you', 'i want to stab someone' — while contextual mentions ('action movie violence') stay clean. Anchored to threat verbs, not the word 'violence'.",
+        "examples": ["im going to kill you tonight", "i want to stab someone", "the action movie had violence", "i will stab anyone who tries"],
+        "honest": "Covers direct threat formulas and graphic-violence references — the last mod_policy 'unchecked' category with a text lane. Distinct from extremism (ideological) and harassment (abuse): this is raw physical-harm signal.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
