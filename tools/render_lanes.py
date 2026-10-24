@@ -266,6 +266,13 @@ LANES_META = {
         "examples": ["this is microsoft support calling", "i am from the irs", "there is a warrant for your arrest", "i work for microsoft as an engineer"],
         "honest": "Covers the named-authority shape — sophisticated social engineering (subtle urgency, mixed tactics) needs a semantic lane. 'i work for microsoft' stays clean by design.",
     },
+    "job_scam": {
+        "expert": "job_scam",
+        "title": "Employment fraud",
+        "desc": "Flags job-scam phrasing — 'earn 500 per week from home', 'pay a small fee to start', 'no experience guaranteed income' — the employment-fraud lane.",
+        "examples": ["earn 500 per week from home", "pay a small fee to start", "no experience needed guaranteed income", "apply for the engineering job"],
+        "honest": "FTC-tracked fraud shape — legit work-from-home postings can hit (the patterns are the promise, not the legitimacy). This is the deterministic tripwire.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
