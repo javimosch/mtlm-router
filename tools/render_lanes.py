@@ -203,6 +203,13 @@ LANES_META = {
         "examples": ["send your seed phrase to verify", "claim your free airdrop now", "connect wallet to claim rewards", "i bought bitcoin on coinbase"],
         "honest": "Catches the scam vocabulary — a legit airdrop announcement also hits because the lane reports the *shape*, not the source. 'i bought bitcoin on coinbase' is clean by design.",
     },
+    "malware": {
+        "expert": "malware",
+        "title": "Malware-deployment phrasing",
+        "desc": "Flags malware-deployment phrasing — 'deploy the payload', 'c2 server', 'reverse shell', 'install the keylogger' — at ~0ms. Anchored to deploy/install/connect verbs, not malware names alone.",
+        "examples": ["deploy the payload to the target", "c2 server at 192.168.1.5", "reverse shell to my box", "the antivirus found malware"],
+        "honest": "Deployment-phrasing detection — 'the antivirus found malware' is clean by design (discussion, not deployment). Anchored to action verbs, so a security-blog mention stays out.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
