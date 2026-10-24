@@ -259,6 +259,13 @@ LANES_META = {
         "examples": ["her real name is jane doe", "he got doxxed last night", "posting his home address", "send me your address to ship the gift"],
         "honest": "Distinct from piirules (which detects PII *present* in the text) — this flags the threat to publish. Self-disclosure can hit too — a self-address is PII-adjacent anyway.",
     },
+    "impersonation": {
+        "expert": "impersonation",
+        "title": "Authority impersonation",
+        "desc": "Flags authority-impersonation phrasing — 'this is microsoft support', 'i am from the irs', 'warrant for your arrest' — the scam-caller lane.",
+        "examples": ["this is microsoft support calling", "i am from the irs", "there is a warrant for your arrest", "i work for microsoft as an engineer"],
+        "honest": "Covers the named-authority shape — sophisticated social engineering (subtle urgency, mixed tactics) needs a semantic lane. 'i work for microsoft' stays clean by design.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
