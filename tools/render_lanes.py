@@ -189,6 +189,13 @@ LANES_META = {
         "examples": ["your account has been suspended", "verify your billing info", "unusual sign-in activity detected", "the meeting is scheduled"],
         "honest": "Catches the lure vocabulary, not domain reputation (link_safety's job). A real 'verify your email' from a legitimate service also hits — the lane reports the *shape*, not the source.",
     },
+    "piracy": {
+        "expert": "piracy",
+        "title": "Warez / crack / keygen",
+        "desc": "Flags piracy-content phrasing — 'download the cracked version', 'keygen for adobe', 'torrent the movie' — at ~0ms. Anchored to warez vocabulary, not download intent.",
+        "examples": ["download the cracked version", "keygen for adobe suite", "torrent the movie for free", "i bought the software legally"],
+        "honest": "Catches the vocabulary — a legal 'crack the code' discussion or 'torrent the open dataset' would also hit. Flags the *category*, like every rules lane.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
