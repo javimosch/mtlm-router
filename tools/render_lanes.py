@@ -182,6 +182,13 @@ LANES_META = {
         "examples": ["bet 50 on the game tonight", "check out this online casino", "win real money now", "place a wager"],
         "honest": "Catches content references — a legitimate blackjack strategy discussion also hits 'gambling' because the lane reports the *category*, not intent or legality. Same contract as weapons/nsfw.",
     },
+    "phish": {
+        "expert": "phish",
+        "title": "Credential-harvesting / phishing",
+        "desc": "Flags phishing lure phrasing — 'your account has been suspended', 'verify your billing info', 'unusual sign-in activity' — at ~0ms. Distinct from scam_detect (generic fraud): phish targets the *harvesting* shape.",
+        "examples": ["your account has been suspended", "verify your billing info", "unusual sign-in activity detected", "the meeting is scheduled"],
+        "honest": "Catches the lure vocabulary, not domain reputation (link_safety's job). A real 'verify your email' from a legitimate service also hits — the lane reports the *shape*, not the source.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
