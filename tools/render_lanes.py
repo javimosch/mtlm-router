@@ -154,6 +154,13 @@ LANES_META = {
         "examples": ["check out this porn site", "free onlyfans content", "send nudes pls", "watch the movie tonight"],
         "honest": "Direct-reference detection — catches explicit phrasing; euphemism, context, and implication are model problems. link_safety covers the *link* side of adult content; this covers the text itself.",
     },
+    "hate": {
+        "expert": "hate",
+        "title": "Hate speech & dehumanization",
+        "desc": "Flags hate-speech shapes — ethnic-cleansing calls, dehumanizing terms ('subhuman', 'vermin'), glorification markers ('heil hitler', 'race war') — while political disagreement stays clean. ~0ms.",
+        "examples": ["kill all the immigrants", "heil hitler", "i disagree with their policies", "those filthy subhuman parasites"],
+        "honest": "Targets hate SPEECH, not opinions — 'i disagree with their policies' is clean by design. Anchored to dehumanization and violence shapes, not ideology terms alone.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
