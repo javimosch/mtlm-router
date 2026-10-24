@@ -196,6 +196,13 @@ LANES_META = {
         "examples": ["download the cracked version", "keygen for adobe suite", "torrent the movie for free", "i bought the software legally"],
         "honest": "Catches the vocabulary — a legal 'crack the code' discussion or 'torrent the open dataset' would also hit. Flags the *category*, like every rules lane.",
     },
+    "crypto_scam": {
+        "expert": "crypto_scam",
+        "title": "Crypto-scam / wallet fraud",
+        "desc": "Flags crypto-fraud phrasing — 'send your seed phrase', 'claim your free airdrop', 'connect wallet to claim' — at ~0ms. Distinct from scam_detect (generic fraud) and pii_rules (address extraction): this is the harvesting/fraud vocabulary.",
+        "examples": ["send your seed phrase to verify", "claim your free airdrop now", "connect wallet to claim rewards", "i bought bitcoin on coinbase"],
+        "honest": "Catches the scam vocabulary — a legit airdrop announcement also hits because the lane reports the *shape*, not the source. 'i bought bitcoin on coinbase' is clean by design.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
