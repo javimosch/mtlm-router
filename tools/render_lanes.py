@@ -147,6 +147,13 @@ LANES_META = {
         "examples": ["buy weed online cheap", "need a plug for the weekend", "my doctor prescribed xanax", "pickup some molly for the party"],
         "honest": "Catches deal/sale phrasing, not pharmacology discussion — 'my doctor prescribed xanax' is clean by design. The hard part is distinguishing context; that's why it's anchored to transaction verbs, not drug names alone.",
     },
+    "nsfw": {
+        "expert": "nsfw",
+        "title": "Explicit / adult-content detection",
+        "desc": "Flags explicit-content references — adult sites, escort services, 'send nudes' solicitation — as 'nsfw' vs 'clean' at ~0ms. Separate from link_safety's adult-domain check: this catches the phrasing even without a URL.",
+        "examples": ["check out this porn site", "free onlyfans content", "send nudes pls", "watch the movie tonight"],
+        "honest": "Direct-reference detection — catches explicit phrasing; euphemism, context, and implication are model problems. link_safety covers the *link* side of adult content; this covers the text itself.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
