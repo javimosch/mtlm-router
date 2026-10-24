@@ -238,6 +238,13 @@ LANES_META = {
         "examples": ["send me a steam gift card", "my deployed soldier boyfriend needs money", "wire via western union", "i love my wife"],
         "honest": "Covers the direct-ask shape — subtler emotional grooming needs a semantic lane, not regex. This is the deterministic first pass on the known fraud shapes.",
     },
+    "grooming": {
+        "expert": "grooming",
+        "title": "Child-safety grooming signals",
+        "desc": "Flags known grooming phrasing — 'dont tell your parents', 'are you home alone', 'send me a pic', 'our little secret' — the trust-and-safety first pass on child-safety signals.",
+        "examples": ["dont tell your parents about us", "are you home alone", "send me a pic", "the weather is nice today"],
+        "honest": "Covers the explicit-phrase shape — subtle emotional grooming, coded language, and context-dependent signals need a semantic lane. This is a safety tripwire, not a full detector.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
