@@ -252,6 +252,13 @@ LANES_META = {
         "examples": ["i have your nudes pay or i share", "send bitcoin or i will post your photos", "your family will see the video", "i have a nice photo of the beach"],
         "honest": "Covers the explicit-threat shape — implied extortion and coded threats need a semantic lane. This is the deterministic tripwire on the known patterns.",
     },
+    "doxxing": {
+        "expert": "doxxing",
+        "title": "Doxxing / expose-others",
+        "desc": "Flags expose-others phrasing — 'posting his home address', 'doxxed', 'her real name is', 'drop their info' — the threat-to-publish lane.",
+        "examples": ["her real name is jane doe", "he got doxxed last night", "posting his home address", "send me your address to ship the gift"],
+        "honest": "Distinct from piirules (which detects PII *present* in the text) — this flags the threat to publish. Self-disclosure can hit too — a self-address is PII-adjacent anyway.",
+    },
 }
 
 CARD_STYLE = "bg-gray-900 border border-gray-800 rounded-xl p-6"
