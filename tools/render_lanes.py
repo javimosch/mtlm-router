@@ -108,9 +108,9 @@ LANES_META = {
     "mod_text": {
         "expert": "mod_text",
         "title": "All-in-one text moderation",
-        "desc": "One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. 'matched_rule' names the firing check.",
+        "desc": "One request → the full text-moderation verdict across 40 classes (EN + FR/DE/ES severe-class coverage): self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. 'matched_rule' names the firing check.",
         "examples": ["i want to die", "send your seed phrase", "buy a gun online", "check out bit.ly/abc123", "a perfectly normal comment"],
-        "honest": "Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable) and doesn't pretend to understand context the way a big guard model does. That's the honest contract.",
+        "honest": "Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable). ~1-8ms at zero-forward, 40 classes. Multilingual: EN + FR/DE/ES injection, harassment, self_harm, violent, profane — the severe classes covered in the languages EU customers face.",
     },
     "extremism": {
         "expert": "extremism",

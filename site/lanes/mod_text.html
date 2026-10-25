@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>All-in-one text moderation — mtlm-router lane mod_text</title>
-<meta name="description" content="One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, pira">
+<meta name="description" content="One request → the full text-moderation verdict across 40 classes (EN + FR/DE/ES severe-class coverage): self-harm, extremism, hate, violence, weapons, malw">
 <link rel="canonical" href="https://mtlm-router.intrane.fr/lanes/mod_text.html">
 <script type="application/ld+json">{
  "@context":"https://schema.org","@type":"SoftwareApplication",
  "name":"mtlm-router mod_text lane","applicationCategory":"DeveloperApplication",
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
- "description":"One request \u2192 the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity \u2014 severity-ordered so th",
+ "description":"One request \u2192 the full text-moderation verdict across 40 classes (EN + FR/DE/ES severe-class coverage): self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NS",
  "url":"https://mtlm-router.intrane.fr/lanes/mod_text.html",
  "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-1.0.2.lanepack.tar.gz",
  "softwareVersion":"1.0.2","license":"Apache-2.0",
@@ -30,7 +30,7 @@
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
 <p class="mono text-gray-500 text-sm mb-6">mod_text@1.0.2 · 40 routes</p>
-<p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. &#x27;matched_rule&#x27; names the firing check.</p>
+<p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict across 40 classes (EN + FR/DE/ES severe-class coverage): self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. &#x27;matched_rule&#x27; names the firing check.</p>
 <p class="text-gray-300 text-sm mb-8"></p>
 
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8" id="try">
@@ -68,7 +68,7 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Honest limits</h2>
-  <p class="text-gray-400 text-sm">Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable) and doesn&#x27;t pretend to understand context the way a big guard model does. That&#x27;s the honest contract.</p>
+  <p class="text-gray-400 text-sm">Pattern coverage, not semantic moderation — it catches what its rules describe (deterministic, auditable, extendable). ~1-8ms at zero-forward, 40 classes. Multilingual: EN + FR/DE/ES injection, harassment, self_harm, violent, profane — the severe classes covered in the languages EU customers face.</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
