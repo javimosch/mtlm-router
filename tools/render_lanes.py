@@ -378,7 +378,7 @@ document.getElementById('lp-form').addEventListener('submit',function(e){{
 fetch('https://api.mtlm-router.intrane.fr/v1/stats')
  .then(function(r){{return r.json();}})
  .then(function(d){{
-   var L=(d.by_lane||{{}})[LP_EXPERT];if(!L)return;
+   var L=(d.lanes||{{}})[LP_EXPERT];if(!L)return;
    document.getElementById('lp-stats').style.display='';
    document.getElementById('ls-dec').textContent=L.decisions||0;
    document.getElementById('ls-24').textContent=L.last24h||0;
