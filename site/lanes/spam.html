@@ -52,6 +52,16 @@
   </div>
   <p id="lp-err" class="text-red-400 text-sm mt-3 hidden"></p>
 </div>
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8" id="lp-stats" style="display:none">
+  <h2 class="text-lg font-bold mb-1">Live — <span class="mono text-cyan-300">spam</span> on production</h2>
+  <div class="grid sm:grid-cols-4 gap-3 text-center mt-4">
+    <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">decisions</div><div id="ls-dec" class="mono text-cyan-300 text-lg"></div></div>
+    <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">last 24h</div><div id="ls-24" class="mono text-lg"></div></div>
+    <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">delegate rate</div><div id="ls-del" class="mono text-lg"></div></div>
+    <div class="bg-gray-950 border border-gray-800 rounded-lg p-3"><div class="text-xs text-gray-500">avg conf</div><div id="ls-conf" class="mono text-lg"></div></div>
+  </div>
+  <p class="text-gray-500 text-xs mt-3 text-center">live from <a href="/vigie.html" class="text-cyan-400 hover:underline">vigie</a> · aggregate stats, no request text</p>
+</div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Taxonomy (2 routes)</h2>
   <p class="mono text-gray-400 text-sm">clean, spam</p>
@@ -95,6 +105,18 @@ document.getElementById('lp-form').addEventListener('submit',function(e){
      document.getElementById('lp-action').textContent=d.action||'—';
      document.getElementById('lp-meta').textContent=(d.set_size!=null?'set '+d.set_size:'—')+' · '+(d.latency_ms!=null?d.latency_ms+'ms':'');
      var cands=(d.candidates||[]).map(function(c){return c.route;}).slice(0,3).join(', ');
+}
+// live stats widget — public /v1/stats, no auth
+fetch('https://api.mtlm-router.intrane.fr/v1/stats')
+ .then(function(r){return r.json();})
+ .then(function(d){
+   var L=(d.by_lane||{})[LP_EXPERT];if(!L)return;
+   document.getElementById('lp-stats').style.display='';
+   document.getElementById('ls-dec').textContent=L.decisions||0;
+   document.getElementById('ls-24').textContent=L.last24h||0;
+   document.getElementById('ls-del').textContent=((L.delegate_rate||0)*100).toFixed(0)+'%';
+   document.getElementById('ls-conf').textContent=(L.avg_conf||0).toFixed(2);
+ }).catch(function(){});
      document.getElementById('lp-note').textContent=d.action==='delegate'&&cands?('clarify: '+cands):(d.action==='delegate'?'delegated — out of scope or low confidence':'automated — singleton set, tool-fill ready');
      lpTrack('lane_demo_result',{action:d.action,route:d.route,set_size:d.set_size});
    })
