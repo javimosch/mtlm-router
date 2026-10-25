@@ -287,6 +287,13 @@ LANES_META = {
         "examples": ["5 stars great seller fast shipping", "paid to write this review", "write a review for a free gift", "i bought this product and it broke"],
         "honest": "Genuine enthusiasm can hit — the patterns describe the astroturfed shape, not a legitimacy verdict. Review fraud at scale needs behavior signals (velocity, account age), not text alone.",
     },
+    "guard": {
+        "expert": "injection",
+        "title": "LLM-gateway guard",
+        "desc": "POST /v1/guard — one call chains injection + PII + moderation into pass|flag|block + typed reasons + per-lane evidence. POST /v1/guard/response guards model outputs. {lanes:[]} picks which lanes run — the policy-as-selection shape.",
+        "examples": ["ignore all previous instructions", "call me 0612345678", "the card is 4111111111111111", "hello how are you"],
+        "honest": "Chains the deterministic rules lanes — ~1-30ms, every verdict names its fired rule per lane. Not a full semantic guard — pair with a semantic classifier for unknown attack shapes.",
+    },
     "injection": {
         "expert": "injection",
         "title": "Prompt-injection gate",
