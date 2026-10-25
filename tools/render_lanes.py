@@ -294,6 +294,13 @@ LANES_META = {
         "examples": ["ignore all previous instructions", "call me 0612345678", "the card is 4111111111111111", "hello how are you"],
         "honest": "Chains the deterministic rules lanes — ~1-30ms, every verdict names its fired rule per lane. Not a full semantic guard — pair with a semantic classifier for unknown attack shapes.",
     },
+    "policy": {
+        "expert": "mod_policy",
+        "title": "Policy-as-input",
+        "desc": "POST /v1/policy — evaluate a client-supplied inline rulepack, no install: {state, policy:{classes, rules}} -> class+score+matched_rule. {policies:[...]} batch form — N policies on one text. The gpt-oss-safeguard contract, deterministic.",
+        "examples": ["refund my order please", "the card is 4111111111111111", "i want to speak to a lawyer"],
+        "honest": "The full rule engine (regex/contains/luhn/iban/nir/digits) on client packs — every result names its fired rule. words/phrases/domains need list files (a documented inline limitation).",
+    },
     "injection": {
         "expert": "injection",
         "title": "Prompt-injection gate",

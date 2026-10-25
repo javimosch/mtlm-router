@@ -8,8 +8,8 @@
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
  "description":"One request \u2192 the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity \u2014 severity-ordered so th",
  "url":"https://mtlm-router.intrane.fr/lanes/mod_text.html",
- "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.9.0.lanepack.tar.gz",
- "softwareVersion":"0.9.0","license":"Apache-2.0",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-1.0.0.lanepack.tar.gz",
+ "softwareVersion":"1.0.0","license":"Apache-2.0",
  "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
 }</script>
 <script type="application/ld+json">{
@@ -29,7 +29,7 @@
   <h1 class="text-3xl font-bold">All-in-one text moderation</h1>
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
-<p class="mono text-gray-500 text-sm mb-6">mod_text@0.9.0 · 38 routes</p>
+<p class="mono text-gray-500 text-sm mb-6">mod_text@1.0.0 · 40 routes</p>
 <p class="text-gray-400 text-sm mb-4">One request → the full text-moderation verdict across 29 classes: self-harm, extremism, hate, violence, weapons, malware, scam, crypto-scam, phishing, piracy, harassment, PII (email/phone/IBAN/card/crypto/NIR), unsafe links, shorteners, spam, drugs, gambling, NSFW, profanity — severity-ordered so the worst violation wins. &#x27;matched_rule&#x27; names the firing check.</p>
 <p class="text-gray-300 text-sm mb-8"></p>
 
@@ -63,8 +63,8 @@
   <p class="text-gray-500 text-xs mt-3 text-center">live from <a href="/vigie.html" class="text-cyan-400 hover:underline">vigie</a> · aggregate stats, no request text</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
-  <h2 class="text-lg font-bold mb-2">Taxonomy (38 routes)</h2>
-  <p class="mono text-gray-400 text-sm">clean, self_harm, extremist, grooming, sextortion, hate, violent, weapons, malware, scam, suspicious, crypto_scam, romance_scam, phish, impersonation, job_scam …</p>
+  <h2 class="text-lg font-bold mb-2">Taxonomy (40 routes)</h2>
+  <p class="mono text-gray-400 text-sm">clean, self_harm, injection, extraction, extremist, grooming, sextortion, hate, violent, weapons, malware, scam, suspicious, crypto_scam, romance_scam, phish …</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Honest limits</h2>
@@ -72,9 +72,9 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@0.9.0 --apply --appliance .
-python3 tools/lane_repro.py mod_text-0.9.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
-  <p class="text-gray-600 text-xs mt-2 mono">sha256: 24db2ab10a797b431f2feb0c… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-0.9.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py mod_text@1.0.0 --apply --appliance .
+python3 tools/lane_repro.py mod_text-1.0.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: 7e2e73eb0deb1fc3cb826321… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/mod_text-1.0.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>
