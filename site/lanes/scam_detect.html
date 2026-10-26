@@ -8,8 +8,8 @@
  "operatingSystem":"any (CPU)","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
  "description":"Classifies messages as 'clean', 'suspicious' or 'scam' over classic fraud shapes: lottery/prize, crypto-doubling, gift-card demands, IRS/impersonation, advance-fee openers. 'suspicious' is the honest middle tier \u2014 soft signals like urgency language escalate rather than convict.",
  "url":"https://mtlm-router.intrane.fr/lanes/scam_detect.html",
- "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/scam_detect-0.1.0.lanepack.tar.gz",
- "softwareVersion":"0.1.0","license":"Apache-2.0",
+ "downloadUrl":"https://github.com/javimosch/mtlm-heads/raw/master/lanes/scam_detect-0.2.0.lanepack.tar.gz",
+ "softwareVersion":"0.2.0","license":"Apache-2.0",
  "author":{"@type":"Organization","name":"intrane","url":"https://mtlm-router.intrane.fr"}
 }</script>
 <script type="application/ld+json">{
@@ -29,7 +29,7 @@
   <h1 class="text-3xl font-bold">Scam &amp; fraud phrasing detection</h1>
   <span class="mono text-xs px-2 py-1 rounded border text-green-300 border-green-800 bg-green-950">free · certified</span>
 </div>
-<p class="mono text-gray-500 text-sm mb-6">scam_detect@0.1.0 · 3 routes</p>
+<p class="mono text-gray-500 text-sm mb-6">scam_detect@0.2.0 · 2 routes</p>
 <p class="text-gray-400 text-sm mb-4">Classifies messages as &#x27;clean&#x27;, &#x27;suspicious&#x27; or &#x27;scam&#x27; over classic fraud shapes: lottery/prize, crypto-doubling, gift-card demands, IRS/impersonation, advance-fee openers. &#x27;suspicious&#x27; is the honest middle tier — soft signals like urgency language escalate rather than convict.</p>
 <p class="text-gray-300 text-sm mb-8"></p>
 
@@ -63,8 +63,8 @@
   <p class="text-gray-500 text-xs mt-3 text-center">live from <a href="/vigie.html" class="text-cyan-400 hover:underline">vigie</a> · aggregate stats, no request text</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
-  <h2 class="text-lg font-bold mb-2">Taxonomy (3 routes)</h2>
-  <p class="mono text-gray-400 text-sm">clean, suspicious, scam</p>
+  <h2 class="text-lg font-bold mb-2">Taxonomy (2 routes)</h2>
+  <p class="mono text-gray-400 text-sm">clean, scam_detect</p>
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Honest limits</h2>
@@ -72,9 +72,9 @@
 </div>
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
   <h2 class="text-lg font-bold mb-2">Install</h2>
-  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py scam_detect@0.1.0 --apply --appliance .
-python3 tools/lane_repro.py scam_detect-0.1.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
-  <p class="text-gray-600 text-xs mt-2 mono">sha256: b8cf0aa43d5a3d04e849fe7e… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/scam_detect-0.1.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
+  <pre class="mono text-xs bg-gray-950 border border-gray-800 rounded p-3 overflow-x-auto">python3 tools/lane_install.py scam_detect@0.2.0 --apply --appliance .
+python3 tools/lane_repro.py scam_detect-0.2.0.lanepack.tar.gz --url http://localhost:8402   # re-run the published eval yourself</pre>
+  <p class="text-gray-600 text-xs mt-2 mono">sha256: bd48522faa08e157900c4aea… · Apache-2.0 · <a data-track="lane_pack_dl" href="https://github.com/javimosch/mtlm-heads/raw/master/lanes/scam_detect-0.2.0.lanepack.tar.gz" class="text-cyan-400 hover:underline">download lanepack</a></p>
 </div>
 <div class="bg-gray-900 border border-cyan-800 rounded-xl p-6">
   <div class="mono text-cyan-300 text-sm mb-1">NEED YOUR OWN ROUTES?</div>
