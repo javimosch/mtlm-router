@@ -239,22 +239,24 @@ function setS(s){{S=s;Array.prototype.forEach.call(document.querySelectorAll('#t
  chips.innerHTML=CH[s].map(function(c){{return '<button type="button">'+esc(c)+'</button>'}}).join('');
  Array.prototype.forEach.call(chips.querySelectorAll('button'),function(b){{b.addEventListener('click',function(){{inp.value=b.textContent;run();}});}});
  out.innerHTML='<span class="muted">—</span>';}}
-function run(){{var t=inp.value.trim();if(t.length<3)return;out.innerHTML='<span class="muted">'+T.wait+'</span>';
+var busy=false,sb=document.querySelector('#tri-form button');
+function lock(on){{busy=on;sb.disabled=on;inp.disabled=on;sb.style.opacity=on?'.55':'';sb.style.cursor=on?'wait':'';Array.prototype.forEach.call(chips.querySelectorAll('button'),function(b){{b.disabled=on;}});}}
+function run(){{var t=inp.value.trim();if(busy||t.length<3)return;lock(true);out.innerHTML='<span class="muted">'+T.wait+'</span>';
  fetch('https://api.mtlm-router.intrane.fr/demo/triage',{{method:'POST',headers:{{'content-type':'application/json'}},body:JSON.stringify({{sector:S,text:t}})}})
  .then(function(r){{if(r.status===429)throw 'lim';return r.json()}}).then(function(d){{if(!d||!d.decision)throw 'err';
   var lab=d.decision==='auto'?T.auto:(d.decision==='autre'?T.autre:T.review),cl=d.decision==='auto'?'ok':'warn';
   var cat=d.decision==='autre'?'':'<div class="cat">'+esc(d.category)+'</div>';
   out.innerHTML='<div>'+cat+'<div class="verdict '+cl+'">'+lab+' <span class="muted" style="font-weight:400">· '+T.conf+' '+Math.round(d.confidence*100)+'%</span></div></div>';
   if(window.vigie)vigie('triage',{{sector:S,decision:d.decision,page:'tri-mail'}});
- }}).catch(function(e){{out.innerHTML='<span class="warn">'+(e==='lim'?T.lim:T.err)+'</span>';}});}}
+ }}).catch(function(e){{out.innerHTML='<span class="warn">'+(e==='lim'?T.lim:T.err)+'</span>';}}).then(function(){{lock(false);}});}}
 Array.prototype.forEach.call(document.querySelectorAll('#tri-seg button'),function(b){{b.addEventListener('click',function(){{setS(b.dataset.s)}})}});
 document.getElementById('tri-form').addEventListener('submit',function(e){{e.preventDefault();run();}});setS('transport');
 var lf=document.getElementById('lead-form');lf.addEventListener('submit',function(ev){{ev.preventDefault();
  var msg=document.getElementById('lead-msg'),fd=new FormData(lf),f={{}};fd.forEach(function(v,k){{f[k]=v;}});if(f.website)return;delete f.website;
- msg.textContent=T.f_sending;
+ var lb=lf.querySelector('button');if(lb.disabled)return;lb.disabled=true;lb.style.opacity='.55';msg.textContent=T.f_sending;
  fetch('https://bkn.intrane.fr/v1/hooks/forms',{{method:'POST',headers:{{'content-type':'application/json'}},body:JSON.stringify({{form:'mtlm-leads',fields:f}})}})
  .then(function(r){{return r.json()}}).then(function(x){{if(x&&x.ok){{msg.textContent=T.f_ok;lf.reset();if(window.vigie)vigie('lead',{{form:'mtlm-leads',niche:'tri-mail'}});}}else{{msg.textContent=(x&&x.error)||T.f_ko;}}}})
- .catch(function(){{msg.textContent=T.f_ko;}});}});
+ .catch(function(){{msg.textContent=T.f_ko;}}).then(function(){{lb.disabled=false;lb.style.opacity='';}});}});
 document.addEventListener('click',function(e){{var t=e.target.closest('[data-track]');if(t&&window.vigie)vigie(t.getAttribute('data-track'),{{page:location.pathname}});}});
 }})();
 </script>
