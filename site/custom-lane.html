@@ -4,7 +4,7 @@
 <link rel="canonical" href="https://mtlm-router.intrane.fr/custom-lane.html">
 <style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style><script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script></head>
 <body class="max-w-3xl mx-auto px-6 py-14">
-<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/pricing.html" class="text-cyan-400 hover:underline">pricing</a> / custom lane · <a href="/mtlm-router/custom-lane-fr" class="text-cyan-400 hover:underline">FR</a></p>
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/pricing.html" class="text-cyan-400 hover:underline">pricing</a> / custom lane · <a href="/custom-lane-fr" class="text-cyan-400 hover:underline">FR</a></p>
 <h1 class="text-3xl font-bold mb-2">Custom lane intake</h1>
 <p class="text-gray-400 text-sm mb-8">€149 one-off · ~3 business days · you get a <span class="mono">.head</span> trained on your corpus + eval report + calibrated abstention threshold + one free re-train after a week of shadow traffic. Filling this replaces the first two email round-trips — answer these well and the next step is a lane, not a questionnaire.</p>
 
@@ -36,14 +36,22 @@
       </select>
     </div>
   </div>
-  <div>
-    <label class="text-xs text-gray-500 mb-1 block">What happens on a wrong route? (helps set the abstention target)</label>
-    <select name="risk" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
-      <option>ticket lands in the wrong queue — annoying, recoverable</option>
-      <option>customer-visible action fires — needs high abstention</option>
-      <option>regulated / contractual — needs per-class bounds + audit trail</option>
-    </select>
-  </div>
+  <fieldset class="grid gap-2">
+    <legend class="text-sm text-gray-300 mb-1">What happens if a request is sent to the wrong place?</legend>
+    <p class="text-xs text-gray-500 mb-1">This sets how cautious the model is: the more a mistake costs you, the more it hands doubtful requests to a human instead of deciding.</p>
+    <label class="flex gap-3 items-start bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-700 has-[:checked]:border-cyan-500">
+      <input type="radio" name="risk" value="wrong queue" checked class="mt-1 accent-cyan-500">
+      <span><span class="text-gray-100 text-sm font-medium block">Mild — someone notices and moves it</span><span class="text-gray-500 text-xs">e.g. a support ticket lands in the wrong team's queue. Annoying, fixed in a minute. The model decides on its own as often as possible.</span></span>
+    </label>
+    <label class="flex gap-3 items-start bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-700 has-[:checked]:border-cyan-500">
+      <input type="radio" name="risk" value="customer-visible action" class="mt-1 accent-cyan-500">
+      <span><span class="text-gray-100 text-sm font-medium block">Serious — something happens the customer sees</span><span class="text-gray-500 text-xs">e.g. an automatic reply, a refund or a booking is triggered. The model only acts when it is very sure and hands the rest to a human.</span></span>
+    </label>
+    <label class="flex gap-3 items-start bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-700 has-[:checked]:border-cyan-500">
+      <input type="radio" name="risk" value="regulated" class="mt-1 accent-cyan-500">
+      <span><span class="text-gray-100 text-sm font-medium block">Critical — legal, financial or contractual impact</span><span class="text-gray-500 text-xs">e.g. medical, insurance or banking decisions. Strict limits per category, a full audit trail of every decision, and the most cautious setting.</span></span>
+    </label>
+  </fieldset>
   <textarea name="notes" rows="3" placeholder="Anything else — languages, existing taxonomy file, deadline" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600 w-full"></textarea>
   <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
   <input type="hidden" name="src" id="cl-src" value="">

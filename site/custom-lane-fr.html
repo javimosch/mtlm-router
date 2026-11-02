@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Demande de tête sur mesure — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
 <meta name="description" content="Lancez une tête de routage sur mesure : envoyez votre table de routes et recevez une .head calibrée pour votre domaine sous ~3 jours ouvrés.">
-<link rel="canonical" href="https://mtlm-router.intrane.fr/mtlm-router/custom-lane-fr">
+<link rel="canonical" href="https://mtlm-router.intrane.fr/custom-lane-fr">
 <style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style><script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script></head>
 <body class="max-w-3xl mx-auto px-6 py-14">
-<p class="mono text-xs text-gray-500 mb-2"><a href="/mtlm-router/fr" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/mtlm-router/fr#pricing" class="text-cyan-400 hover:underline">tarifs</a> / tête sur mesure · <a href="/mtlm-router/custom-lane" class="text-cyan-400 hover:underline">EN</a></p>
+<p class="mono text-xs text-gray-500 mb-2"><a href="/fr" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/fr#pricing" class="text-cyan-400 hover:underline">tarifs</a> / tête sur mesure · <a href="/custom-lane" class="text-cyan-400 hover:underline">EN</a></p>
 <h1 class="text-3xl font-bold mb-2">Demande de tête sur mesure</h1>
 <p class="text-gray-400 text-sm mb-8">149 € HT, une fois · ~3 jours ouvrés · vous recevez une <span class="mono">.head</span> entraînée sur vos données, un rapport d'évaluation, un seuil d'abstention calibré et un ré-entraînement offert après une semaine de trafic en observation. Ce formulaire remplace les deux premiers échanges de mails : bien rempli, l'étape suivante est votre tête, pas un questionnaire.</p>
 
@@ -36,14 +36,22 @@
       </select>
     </div>
   </div>
-  <div>
-    <label class="text-xs text-gray-500 mb-1 block">Que se passe-t-il en cas de mauvaise route ? (fixe le niveau d'abstention)</label>
-    <select name="risk" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
-      <option value="wrong queue">le ticket arrive dans la mauvaise file — gênant, rattrapable</option>
-      <option value="customer-visible action">une action visible du client se déclenche — forte abstention</option>
-      <option value="regulated">réglementé / contractuel — bornes par classe + piste d'audit</option>
-    </select>
-  </div>
+  <fieldset class="grid gap-2">
+    <legend class="text-sm text-gray-300 mb-1">Que se passe-t-il si une demande part au mauvais endroit ?</legend>
+    <p class="text-xs text-gray-500 mb-1">Cela règle la prudence du modèle : plus une erreur vous coûte cher, plus il laisse les cas douteux à un humain au lieu de décider.</p>
+    <label class="flex gap-3 items-start bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-700 has-[:checked]:border-cyan-500">
+      <input type="radio" name="risk" value="wrong queue" checked class="mt-1 accent-cyan-500">
+      <span><span class="text-gray-100 text-sm font-medium block">Bénin — quelqu'un s'en aperçoit et la déplace</span><span class="text-gray-500 text-xs">ex. un ticket arrive dans la file d'une autre équipe. Gênant, corrigé en une minute. Le modèle décide seul aussi souvent que possible.</span></span>
+    </label>
+    <label class="flex gap-3 items-start bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-700 has-[:checked]:border-cyan-500">
+      <input type="radio" name="risk" value="customer-visible action" class="mt-1 accent-cyan-500">
+      <span><span class="text-gray-100 text-sm font-medium block">Sérieux — une action visible du client se déclenche</span><span class="text-gray-500 text-xs">ex. une réponse automatique, un remboursement ou une réservation part. Le modèle n'agit que s'il est très sûr et laisse le reste à un humain.</span></span>
+    </label>
+    <label class="flex gap-3 items-start bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-700 has-[:checked]:border-cyan-500">
+      <input type="radio" name="risk" value="regulated" class="mt-1 accent-cyan-500">
+      <span><span class="text-gray-100 text-sm font-medium block">Critique — impact juridique, financier ou contractuel</span><span class="text-gray-500 text-xs">ex. décisions médicales, d'assurance ou bancaires. Limites strictes par catégorie, traçabilité complète de chaque décision et réglage le plus prudent.</span></span>
+    </label>
+  </fieldset>
   <textarea name="notes" rows="3" placeholder="Autre chose — langues, taxonomie existante, échéance" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600 w-full"></textarea>
   <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
   <input type="hidden" name="src" id="cl-src" value="">

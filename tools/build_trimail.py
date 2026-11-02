@@ -180,12 +180,12 @@ def page(k):
     faq = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in d["faq"])
     tj = json.dumps({x: d[x] for x in ("wait", "auto", "review", "autre", "conf", "lim", "err", "f_sending", "f_ok", "f_ko")}, ensure_ascii=False)
     chips = json.dumps(CHIPS[k], ensure_ascii=False)
-    tech_href = "/mtlm-router/fr" if k == "fr" else "/mtlm-router"
+    tech_href = "/fr" if k == "fr" else "/"
     return f"""<!DOCTYPE html>
 <html lang="{d['lang']}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(d['title'])}</title>
 <meta name="description" content="{esc(d['desc'])}">
-<link rel="alternate" hreflang="{'en' if k == 'fr' else 'fr'}" href="https://mtlm-router.intrane.fr/mtlm-router/{d['other']}">
+<link rel="alternate" hreflang="{'en' if k == 'fr' else 'fr'}" href="https://mtlm-router.intrane.fr/{d['other']}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f6f4a'/><rect x='7' y='9' width='18' height='14' rx='2' fill='none' stroke='white' stroke-width='2.5'/><path d='M10 15h12' stroke='white' stroke-width='2.5'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -194,7 +194,7 @@ def page(k):
 </head><body>
 <header><div class="wrap bar">
   <a class="brand" href="#"><i></i>Tri Mail</a>
-  <nav><a class="hide" href="#essai">{d['nav_try']}</a><a class="hide" href="#tarif">{d['nav_offer']}</a><a href="/mtlm-router/{d['other']}">{d['other_label']}</a><a class="btn sm" style="margin-left:18px;color:var(--accent-ink)" href="#audit" data-track="tm_nav_audit">{d['nav_cta']}</a></nav>
+  <nav><a class="hide" href="#essai">{d['nav_try']}</a><a class="hide" href="#tarif">{d['nav_offer']}</a><a href="/{d['other']}">{d['other_label']}</a><a class="btn sm" style="margin-left:18px;color:var(--accent-ink)" href="#audit" data-track="tm_nav_audit">{d['nav_cta']}</a></nav>
 </div></header>
 <main>
 <div class="wrap hero">
