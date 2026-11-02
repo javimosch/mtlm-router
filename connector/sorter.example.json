@@ -1,0 +1,21 @@
+{
+  "imap_host": "mail.example.fr",
+  "imap_port": 993,
+  "imap_ssl": true,
+  "imap_user": "contact@example.fr",
+  "imap_password": "set MTLM_IMAP_PASSWORD instead",
+  "source_folder": "INBOX",
+  "mode": "dry-run",
+  "prefix": "Tri",
+  "review_folder": "A verifier",
+  "threshold": 0.6,
+  "engine": "http://127.0.0.1:8410/v1/systemone",
+  "poll_seconds": 60,
+  "categories": {
+    "devis": "demande de prix ou de cotation",
+    "suivi": "où en est une livraison ou un enlèvement",
+    "litige": "réclamation, dommage, refus",
+    "facture": "facture ou paiement",
+    "autre": "rien de tout cela"
+  }
+}
