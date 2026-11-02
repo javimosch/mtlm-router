@@ -4,7 +4,7 @@
 <link rel="canonical" href="https://mtlm-router.intrane.fr/custom-lane.html">
 <style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style><script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script></head>
 <body class="max-w-3xl mx-auto px-6 py-14">
-<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/pricing.html" class="text-cyan-400 hover:underline">pricing</a> / custom lane</p>
+<p class="mono text-xs text-gray-500 mb-2"><a href="/" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/pricing.html" class="text-cyan-400 hover:underline">pricing</a> / custom lane · <a href="/mtlm-router/custom-lane-fr" class="text-cyan-400 hover:underline">FR</a></p>
 <h1 class="text-3xl font-bold mb-2">Custom lane intake</h1>
 <p class="text-gray-400 text-sm mb-8">€149 one-off · ~3 business days · you get a <span class="mono">.head</span> trained on your corpus + eval report + calibrated abstention threshold + one free re-train after a week of shadow traffic. Filling this replaces the first two email round-trips — answer these well and the next step is a lane, not a questionnaire.</p>
 
@@ -26,20 +26,20 @@
     <div>
       <label class="text-xs text-gray-500 mb-1 block">Requests / day (rough)</label>
       <select name="volume" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
-        <option value="">&lt; 100</option><option>100–1k</option><option>1k–10k</option><option>10k+</option>
+        <option value="<100">&lt; 100</option><option>100–1k</option><option>1k–10k</option><option>10k+</option>
       </select>
     </div>
     <div>
       <label class="text-xs text-gray-500 mb-1 block">Deployment</label>
       <select name="deployment" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
-        <option value="">self-hosted appliance</option><option>hosted API</option><option>undecided</option>
+        <option>self-hosted appliance</option><option>hosted API</option><option>undecided</option>
       </select>
     </div>
   </div>
   <div>
     <label class="text-xs text-gray-500 mb-1 block">What happens on a wrong route? (helps set the abstention target)</label>
     <select name="risk" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
-      <option value="">ticket lands in the wrong queue — annoying, recoverable</option>
+      <option>ticket lands in the wrong queue — annoying, recoverable</option>
       <option>customer-visible action fires — needs high abstention</option>
       <option>regulated / contractual — needs per-class bounds + audit trail</option>
     </select>

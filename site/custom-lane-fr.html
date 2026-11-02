@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demande de tête sur mesure — mtlm-router</title><script src="https://cdn.tailwindcss.com"></script>
+<meta name="description" content="Lancez une tête de routage sur mesure : envoyez votre table de routes et recevez une .head calibrée pour votre domaine sous ~3 jours ouvrés.">
+<link rel="canonical" href="https://mtlm-router.intrane.fr/mtlm-router/custom-lane-fr">
+<style>.mono{font-family:ui-monospace,monospace}body{background:#030712;color:#d1d5db}</style><script defer src="https://vigie.intrane.fr/vigie.js" data-site="mtlm-router.intrane.fr"></script></head>
+<body class="max-w-3xl mx-auto px-6 py-14">
+<p class="mono text-xs text-gray-500 mb-2"><a href="/mtlm-router/fr" class="text-cyan-400 hover:underline">mtlm-router</a> / <a href="/mtlm-router/fr#pricing" class="text-cyan-400 hover:underline">tarifs</a> / tête sur mesure · <a href="/mtlm-router/custom-lane" class="text-cyan-400 hover:underline">EN</a></p>
+<h1 class="text-3xl font-bold mb-2">Demande de tête sur mesure</h1>
+<p class="text-gray-400 text-sm mb-8">149 € HT, une fois · ~3 jours ouvrés · vous recevez une <span class="mono">.head</span> entraînée sur vos données, un rapport d'évaluation, un seuil d'abstention calibré et un ré-entraînement offert après une semaine de trafic en observation. Ce formulaire remplace les deux premiers échanges de mails : bien rempli, l'étape suivante est votre tête, pas un questionnaire.</p>
+
+<div class="bg-gray-900 border border-cyan-800 rounded-xl p-4 mb-8 text-sm text-gray-300">
+  <strong class="text-cyan-300">Une bonne table de routes :</strong> 5 à 50 routes, chacune une <em>décision</em> et non un thème (« reinitialiser_mot_de_passe », pas « mots de passe »), avec 3 à 10 formulations réelles par route — plus elles sont brutes, mieux elles apprennent la frontière. Tout ce qui suit reste privé ; vos données ne servent jamais aux têtes publiques.
+</div>
+
+<form id="cl-form" class="bg-gray-900 border border-gray-800 rounded-xl p-5 grid gap-4">
+  <div class="grid md:grid-cols-2 gap-4">
+    <input name="email" type="email" required placeholder="vous@entreprise.fr *" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="company" type="text" placeholder="Entreprise / intégrateur" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+  </div>
+  <input name="domain" type="text" required placeholder="Domaine — ex. « tri des sinistres assurance », « tickets IT » *" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+  <div>
+    <label class="text-xs text-gray-500 mb-1 block">Table de routes — une par ligne, <span class="mono">nom_route : formulations d'exemple</span> *</label>
+    <textarea name="routes" required rows="8" placeholder="reinitialiser_mdp : j'ai oublié mon mot de passe ; impossible de me connecter ; encore bloqué&#10;question_facture : où est ma facture ; pourquoi ce prélèvement ; expliquez ces frais&#10;hors_sujet : (laissez vide — nous la construisons)" class="mono text-xs bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600 w-full"></textarea>
+  </div>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="text-xs text-gray-500 mb-1 block">Demandes / jour (ordre de grandeur)</label>
+      <select name="volume" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
+        <option value="<100">&lt; 100</option><option>100–1k</option><option>1k–10k</option><option>10k+</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mb-1 block">Déploiement</label>
+      <select name="deployment" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
+        <option value="self-hosted appliance">appliance auto-hébergée</option><option value="hosted API">API hébergée</option><option value="undecided">à décider</option>
+      </select>
+    </div>
+  </div>
+  <div>
+    <label class="text-xs text-gray-500 mb-1 block">Que se passe-t-il en cas de mauvaise route ? (fixe le niveau d'abstention)</label>
+    <select name="risk" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-300 w-full">
+      <option value="wrong queue">le ticket arrive dans la mauvaise file — gênant, rattrapable</option>
+      <option value="customer-visible action">une action visible du client se déclenche — forte abstention</option>
+      <option value="regulated">réglementé / contractuel — bornes par classe + piste d'audit</option>
+    </select>
+  </div>
+  <textarea name="notes" rows="3" placeholder="Autre chose — langues, taxonomie existante, échéance" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600 w-full"></textarea>
+  <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+  <input type="hidden" name="src" id="cl-src" value="">
+  <button type="submit" class="bg-cyan-700 hover:bg-cyan-600 text-white font-medium px-6 py-3 rounded-lg">Envoyer la demande</button>
+  <p id="cl-msg" class="text-gray-400 text-sm text-center"></p>
+</form>
+
+<p class="text-gray-500 text-sm mt-6 text-center">Vous préférez un mail ? Mêmes informations à <a data-track="cta_custom_lane" href="mailto:javi@intrane.fr?subject=mtlm-router%20custom%20head" class="text-cyan-400 hover:underline">javi@intrane.fr</a> — le formulaire évite simplement les allers-retours.</p>
+
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.vigie)vigie('custom_lane_view',{page:location.pathname});
+var src=new URLSearchParams(location.search);var l=src.get('lane');if(l){document.getElementById('cl-src').value='lane:'+l;var d=document.querySelector('input[name=domain]');if(d&&!d.value)d.value=l;}
+var f=document.getElementById('cl-form'),msg=document.getElementById('cl-msg');
+f.addEventListener('submit',function(ev){ev.preventDefault();var fd=new FormData(f),fields={};fd.forEach(function(v,k){fields[k]=v;});
+msg.textContent='Envoi…';fields.lang='fr';
+fetch('https://bkn.intrane.fr/v1/hooks/forms',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({form:'mtlm-custom-lane',fields:fields})})
+.then(function(r){return r.json()}).then(function(d){
+if(d&&d.ok){msg.textContent='Reçu — nous revenons vers vous sous 1 jour ouvré avec une proposition ou des questions.';f.reset();if(window.vigie)vigie('custom_lane_submit',{domain:(fields.domain||'').slice(0,40)});}
+else{msg.textContent=(d&&d.error)||'Échec de l\u2019envoi.';if(window.vigie)vigie('custom_lane_error',{err:'rejected'});}})
+.catch(function(){msg.textContent='Échec de l\u2019envoi — écrivez à javi@intrane.fr';if(window.vigie)vigie('custom_lane_error',{err:'network'});});});});
+document.addEventListener('click',function(e){var t=e.target.closest('[data-track]');if(t&&window.vigie)vigie(t.getAttribute('data-track'),{href:t.getAttribute('href')||'',page:location.pathname});});
+</script>
+</body></html>
