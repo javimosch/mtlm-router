@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://trimail.intrane.fr/sitemap.xml

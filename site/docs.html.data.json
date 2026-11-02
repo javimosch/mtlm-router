@@ -18,5 +18,6 @@
   "nav_docs": "Docs",
   "municipal_slug": "municipal",
   "inbox_slug": "inbox",
-  "biz_label": "For businesses: Tri Mail, installed on your premises →"
+  "biz_label": "For businesses: Tri Mail, installed on your premises →",
+  "biz_url": "https://trimail.intrane.fr/en"
 }
