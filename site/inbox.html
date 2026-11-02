@@ -79,15 +79,26 @@
   </div>
 </div>
 
-<div class="text-center mb-8">
-  <h2 class="text-3xl font-bold mb-4">Bring a mailbox export, get the number.</h2>
-  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
-    The path to a pilot is one labeled export away. We train the head and show you the
-    holdout accuracy on <em>your</em> data first — then you decide whether to embed the appliance,
-    under your brand, at your price.
-  </p>
-  <div class="flex flex-wrap justify-center gap-4">
-    <a href="{{.root}}/" class="border border-cyan-800 text-cyan-300 px-8 py-3 rounded-lg text-lg font-medium hover:border-cyan-500 transition-colors">Technical overview →</a>
-    <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity accent-glow">Get in touch</a>
-  </div>
+<div id="pilot" class="text-center mb-8">
+  <h2 class="text-3xl font-bold mb-4">30-day pilot — €490 flat.</h2>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-6">Start free: send 25 anonymized emails from your shared mailbox and get a triage report within 48 h (route, confidence, what would be set aside). If the number works for you, the pilot: a head trained on your export, 30 days in service, weekly accuracy and abstention report. Then maintenance from €150/month — or the appliance on your premises.</p>
+  <form id="lead-form" class="max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-5 grid gap-3 text-left">
+    <input name="email" type="email" required placeholder="youCompanyompany.com" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="company" type="text" placeholder="Company" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="use_case" type="text" placeholder="Which emails? e.g. quotes / tracking / disputes / invoices" class="bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+    <input name="website" type="text" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+    <input type="hidden" name="lang" value="en"><input type="hidden" name="niche" value="inbox-pilot">
+    <button type="submit" class="hero-gradient text-white px-5 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">Request the free audit (25 emails)</button>
+    <p id="lead-msg" class="text-gray-400 text-sm text-center"></p>
+    <p class="text-gray-600 text-xs text-center">Stored in our EU backend, used only for the audit. No newsletter.</p>
+  </form>
+  <p class="mt-6"><a href="{{.root}}/" class="text-cyan-300 hover:text-cyan-200">Technical view →</a></p>
 </div>
+<script>
+(function(){var lf=document.getElementById('lead-form');if(!lf)return;lf.addEventListener('submit',function(ev){ev.preventDefault();
+var msg=document.getElementById('lead-msg'),fd=new FormData(lf),fields={};fd.forEach(function(v,k){fields[k]=v;});if(fields.website)return;delete fields.website;
+msg.textContent="Sending…";
+fetch('https://bkn.intrane.fr/v1/hooks/forms',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({form:'mtlm-leads',fields:fields})})
+.then(function(r){return r.json()}).then(function(x){if(x&&x.ok){msg.textContent="Thanks — you will hear from us within 48 h with next steps.";lf.reset();if(window.vigie)vigie('lead',{form:'mtlm-leads',niche:'inbox-pilot'});}else{msg.textContent=(x&&x.error)||"Could not send — email javi@intrane.fr";}})
+.catch(function(){msg.textContent="Could not send — email javi@intrane.fr";});});})();
+</script>
