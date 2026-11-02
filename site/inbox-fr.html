@@ -79,6 +79,37 @@
   </div>
 </div>
 
+<div id="essai" class="mb-20">
+  <h2 class="text-3xl font-bold mb-3 text-center">Essayez sur vos propres mails</h2>
+  <p class="text-gray-400 text-center max-w-2xl mx-auto mb-6">Choisissez votre métier, collez l'objet ou la première phrase d'un mail, et regardez où il serait rangé. C'est le vrai moteur, en direct.</p>
+  <div class="max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-xl p-5 grid gap-3">
+    <div class="flex flex-wrap gap-2 justify-center"><button type="button" data-s="transport" class="tri-sec text-sm rounded-full px-4 py-1 border border-gray-700 text-gray-300">Transport</button><button type="button" data-s="syndic" class="tri-sec text-sm rounded-full px-4 py-1 border border-gray-700 text-gray-300">Syndic / gestion</button><button type="button" data-s="compta" class="tri-sec text-sm rounded-full px-4 py-1 border border-gray-700 text-gray-300">Cabinet comptable</button></div>
+    <div id="tri-chips" class="flex flex-wrap gap-2"></div>
+    <form id="tri-form" class="flex gap-2">
+      <input id="tri-text" maxlength="300" required placeholder="Collez l'objet ou le début d'un mail…" class="flex-1 min-w-0 bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-600 focus:outline-none focus:border-cyan-600">
+      <button class="hero-gradient text-white px-5 py-3 rounded-lg font-medium">Trier</button>
+    </form>
+    <div id="tri-out" class="text-center min-h-[3rem]"></div>
+  </div>
+</div>
+<script>
+(function(){var CH={"transport": ["Bonjour, pouvez-vous me faire un devis pour 12 palettes Lyon-Chambéry jeudi ?", "Où en est la livraison CMR 44821 ? Elle devait arriver hier.", "La marchandise est arrivée abîmée, 3 cartons écrasés.", "Relance : règlement de la facture de septembre"], "syndic": ["Fuite d'eau au plafond de ma salle de bain, que dois-je faire ?", "L'ascenseur est encore en panne depuis lundi.", "Je ne comprends pas mon relevé de charges du 3e trimestre.", "Quand aura lieu la prochaine AG ?"], "compta": ["Vous trouverez ci-joint les factures d'achat d'octobre.", "Embauche d'un salarié au 1er décembre, que vous faut-il ?", "Rappel : échéance de TVA du 19 novembre.", "Découvrez notre nouveau logiciel de caisse !"]},S='transport',T={"wait": "Analyse…", "auto": "Trié automatiquement", "review": "Mis de côté pour un humain", "autre": "Publicité / hors sujet", "conf": "confiance", "lim": "Limite de démo atteinte, réessayez dans une heure.", "err": "Le moteur ne répond pas, réessayez."};
+var out=document.getElementById('tri-out'),inp=document.getElementById('tri-text'),chips=document.getElementById('tri-chips');
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function setS(s){S=s;Array.prototype.forEach.call(document.querySelectorAll('.tri-sec'),function(b){b.className='tri-sec text-sm rounded-full px-4 py-1 border '+(b.dataset.s===s?'bg-cyan-900 border-cyan-700 text-cyan-200':'border-gray-700 text-gray-300');});
+ chips.innerHTML=CH[s].map(function(c){return '<button type="button" class="tri-chip text-xs text-left rounded-lg px-3 py-1 bg-gray-800 border border-gray-700 text-gray-300">'+esc(c)+'</button>'}).join('');
+ Array.prototype.forEach.call(chips.querySelectorAll('.tri-chip'),function(b){b.addEventListener('click',function(){inp.value=b.textContent;run();});});out.innerHTML='';}
+function run(){var t=inp.value.trim();if(t.length<3)return;out.innerHTML='<span class="text-gray-500">'+T.wait+'</span>';
+ fetch('https://api.mtlm-router.intrane.fr/demo/triage',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sector:S,text:t})})
+ .then(function(r){if(r.status===429)throw 'lim';return r.json()}).then(function(d){if(!d||!d.decision)throw 'err';
+  var lab=d.decision==='auto'?T.auto:(d.decision==='autre'?T.autre:T.review),col=d.decision==='auto'?'text-green-400':'text-amber-400';
+  var cat=d.decision==='autre'?'':'<span class="mono text-lg text-gray-100">'+esc(d.category)+'</span> · ';
+  out.innerHTML='<div>'+cat+'<span class="text-sm text-gray-400">'+T.conf+' '+Math.round(d.confidence*100)+'%</span></div><div class="'+col+' font-medium">'+lab+'</div>';
+  if(window.vigie)vigie('triage',{sector:S,decision:d.decision});
+ }).catch(function(e){out.innerHTML='<span class="text-amber-400">'+(e==='lim'?T.lim:T.err)+'</span>';});}
+Array.prototype.forEach.call(document.querySelectorAll('.tri-sec'),function(b){b.addEventListener('click',function(){setS(b.dataset.s)})});
+document.getElementById('tri-form').addEventListener('submit',function(e){e.preventDefault();run();});setS('transport');})();
+</script>
 <div id="pilot" class="text-center mb-8">
   <h2 class="text-3xl font-bold mb-4">Installé chez vous — 490 € HT, une seule fois.</h2>
   <p class="text-amber-400 text-sm mb-6">Tarif de lancement réservé aux 3 premiers clients.</p>
