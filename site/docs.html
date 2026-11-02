@@ -325,6 +325,12 @@ python3 tools/lane_install.py mylane@0.9.0 --apply --appliance .
 
 <div class="mb-10 bg-gray-900 border border-gray-800 rounded-xl p-6" id="hosted-api">
   <h2 class="text-xl font-bold mb-3">Hosted API — api.mtlm-router.intrane.fr</h2>
+  <p class="text-gray-300 text-sm mb-2"><strong>Quickstart — 2 commands.</strong> 1) create a wallet (free starter credit, no card); 2) call the API with it.</p>
+  <div class="mb-4"><pre class="mono text-xs whitespace-pre-wrap"># 1. wallet -> copy the "token" (pw_…) from the answer
+curl -s -X POST https://peage.intrane.fr/v1/wallets -H 'content-type: application/json' -d '{"email":"you@company.com"}'
+
+# 2. first decision
+curl -s -X POST https://api.mtlm-router.intrane.fr/v1/route -H 'X-Peage-Wallet: pw_…' -d '{"state":"my card was declined","expert":"bank77"}'</pre></div>
   <p class="text-gray-400 text-sm mb-4">The same runtime, metered per decision on the <a href="https://peage.intrane.fr" class="text-cyan-400 hover:underline" target="_blank" rel="noopener">peage</a> rail (EUR). The hosted instance serves all catalog lanes; pin one with <code class="mono">"expert"</code>.</p>
   <pre class="mono text-sm overflow-x-auto"><span class="text-gray-500"># free metadata (no wallet)</span>
 curl -s https://api.mtlm-router.intrane.fr/v1/lanes        <span class="text-gray-500"># installed expert lanes</span>
