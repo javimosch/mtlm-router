@@ -32,7 +32,7 @@ TRADE_L = {"fr": {"medical": "Cabinet médical", "syndic": "Syndic", "comptable"
 
 COMP = {
  "en": [
-  ("S2D (MTLM)", None, "Fixed decisions trained per use case", "Plain CPU, your servers", "~88M (encoder) + tiny head", "Yes — measured on real calls", "Threshold set on real outcomes", "Self-host, commercial"),
+  ("S2D (MTLM)", None, "Fixed decisions trained per use case", "Plain CPU, your servers", "~88M (encoder) + tiny head", "Yes — measured on real calls (and English)", "Threshold set on real outcomes", "Self-host, commercial"),
   ("Hume Audio Decision API", "https://dev.hume.ai/audio-decisions/docs/overview", "Any question about an audio file", "Hume cloud only", "Not published", "Not published", "Agreement with human raters (70.7%)", "Paid API"),
   ("DuplexJev", "https://docs.pipecat.ai/api-reference/server/extensions/pipecat-duplexjev", "Multiple-choice decisions for voice agents", "GPU (vLLM)", "4B / 32B", "Not published", "Not published", "Open weights; reported non-commercial"),
   ("AudioJev", "https://arxiv.org/abs/2610.01293", "Any question, 2–36 answers", "GPU", "~3–5B (Qwen2.5-Omni)", "Not stated", "Answer-order consistency only", "Qwen research licence"),
@@ -40,7 +40,7 @@ COMP = {
   ("marimba", "https://arxiv.org/abs/2611.18330", "Typed speech decisions (turn end, language, terms)", "Not stated", "0.6B (Qwen3-ASR)", "No (pt-BR, English)", "AUROC on research sets", "CC BY 4.0"),
  ],
  "fr": [
-  ("S2D (MTLM)", None, "Décisions fixes, entraînées par cas d'usage", "CPU standard, vos serveurs", "~88M (encodeur) + mini-tête", "Oui — mesuré sur de vrais appels", "Seuil fixé sur des résultats réels", "Auto-hébergé, commercial"),
+  ("S2D (MTLM)", None, "Décisions fixes, entraînées par cas d'usage", "CPU standard, vos serveurs", "~88M (encodeur) + mini-tête", "Oui — mesuré sur de vrais appels (et anglais)", "Seuil fixé sur des résultats réels", "Auto-hébergé, commercial"),
   ("Hume Audio Decision API", "https://dev.hume.ai/audio-decisions/docs/overview", "N'importe quelle question sur un audio", "Cloud Hume uniquement", "Non publié", "Non publié", "Accord avec des annotateurs (70,7 %)", "API payante"),
   ("DuplexJev", "https://docs.pipecat.ai/api-reference/server/extensions/pipecat-duplexjev", "Choix multiples pour agents vocaux", "GPU (vLLM)", "4B / 32B", "Non publié", "Non publié", "Poids ouverts ; non commercial (rapporté)"),
   ("AudioJev", "https://arxiv.org/abs/2610.01293", "N'importe quelle question, 2–36 réponses", "GPU", "~3–5B (Qwen2.5-Omni)", "Non précisé", "Cohérence d'ordre des réponses seulement", "Licence recherche Qwen"),
@@ -84,8 +84,8 @@ FR = dict(
         ("2 · Installation chez vous", "S2D apprend vos motifs d'appel et s'installe sur votre machine ou votre serveur. Aucun abonnement cloud."),
         ("3 · Vous gardez la main", "Vous voyez chaque décision et réglez le seuil avec nous : plus prudent, plus d'appels passent à un humain.")],
  tech_h="Pour les techniciens", tech_p="Un encodeur de parole (~88M paramètres, classe Whisper-small) et une mini-couche de décision, sur un CPU 6 cœurs. Mesuré sur MInDS-14 français (PolyAI, vrais clients bancaires) : 269 appels jamais vus à l'entraînement.",
- nums=[("S2D seul", "84,0 %", "de bonnes décisions, ~0,4 s par appel"), ("Cascade", "88,9 %", "66,5 % décidés par S2D · 2 erreurs"), ("Transcription seule", "85,9 %", "~11 s par appel"), ("Tests d'accueil", "0 erreur", "en décision automatique (jeux synthétiques)")],
- num_note="Limites honnêtes : les données d'accueil sont synthétiques ; sur des formulations jamais entendues, S2D ne décide seul qu'environ 26 % du temps, le reste passe par la transcription. Les questions d'information pure (horaires, documents) sont son point faible actuel.",
+ nums=[("S2D seul · FR", "84,0 %", "de bonnes décisions, ~0,4 s par appel"), ("Cascade · FR", "88,9 %", "66,5 % décidés par S2D · 2 erreurs"), ("Transcription · FR", "85,9 %", "~11 s par appel"), ("Anglais · vrais appels", "93,0 %", "sur 904 appels bancaires MInDS-14 (US, UK, AU) · 0 erreur parmi les 31 % décidés seuls · ~0,7 s")],
+ num_note="Limites honnêtes : les données d'accueil sont synthétiques ; sur des formulations jamais entendues, S2D ne décide seul qu'environ 26 % du temps, le reste passe par la transcription. Les questions d'information pure (horaires, documents) sont son point faible actuel. Tests d'accueil synthétiques : 0 erreur automatique en français ; en anglais 1 sur 109 (accent jamais entendu).",
  mk_h="Le seul à tourner sur un CPU, chez vous", mk_p="D'autres font de la « parole→décision », mais sur des LLM audio à milliards de paramètres, sur GPU ou dans leur cloud. S2D est le micro-modèle qui tient sur votre machine.",
  mk_cols=["", "Ce qu'il décide", "Tourne sur", "Taille", "Français", "Calibration", "Licence"],
  mk_src="D'après la documentation ou l'article de chaque projet, novembre 2026. « Non publié » = aucun chiffre public trouvé.",
@@ -110,8 +110,8 @@ EN = dict(
  slot_h="Drop-in <em>before</em> your STT.", slot_p="S2D is an HTTP JSON call: audio in, decision out. It is designed to sit in front of the speech-to-text step of a voice stack — Pipecat, LiveKit Agents, an Asterisk dialplan — and short-circuit the turns it is sure about.",
  slot=[("1", "Audio in", "The caller's first turn, 16 kHz mono. No text is produced."), ("2", "Decide", "Encoder + tiny head → one probability per intent, ~0.3–0.5 s on CPU."), ("3", "Act or fall through", "Above a calibrated bar: act. Below: call your STT + LLM as today. Nothing is lost.")],
  nums_h="Measured, <em>not promised</em>.", nums_p="One 6-core CPU. Real calls = MInDS-14 French (PolyAI, real bank customers), report half: 269 calls never used for training.",
- nums=[("s2d alone", "84.0%", "right · ~0.4 s/call"), ("cascade", "88.9%", "right · 66.5% decided by S2D · 2 wrong"), ("stt chain alone", "85.9%", "right · ~11 s/call"), ("front-desk gate", "0 wrong", "auto-decisions on held-out voices, accents, wordings (synthetic)")],
- num_note="Limits: front-desk training data is synthetic; on unseen wordings S2D decides alone ~26% of the time. Plain information questions are its current weak spot. English is in training.",
+ nums=[("s2d alone · fr", "84.0%", "right · ~0.4 s/call"), ("cascade · fr", "88.9%", "right · 66.5% decided by S2D · 2 wrong"), ("stt chain · fr", "85.9%", "right · ~11 s/call"), ("english · real calls", "93.0%", "right on 904 MInDS-14 bank calls (US, UK, AU) · 0 wrong in the 31% decided alone · ~0.7 s")],
+ num_note="Limits: front-desk training data is synthetic; on unseen wordings S2D decides alone ~26% of the time. Plain information questions are its current weak spot. Synthetic front-desk gate: 0 wrong auto-decisions in French; 1 of 109 in English (unseen accent). French figures above: 269 real French calls.",
  mk_h="Everyone else went <em>big</em>.", mk_p="Speech-to-decision is suddenly a category — built on billion-parameter audio LLMs, on GPUs or in someone's cloud. S2D is the other corner: micro model, CPU-only, self-hosted, with published French numbers on real calls.",
  niche=[("Micro, not mega", "~88M parameters vs 0.6B–32B. Fits next to your telephony."), ("CPU, not GPU", "No accelerator to buy or rent."), ("Your servers", "Audio never leaves your network."), ("The trade-off", "Fixed intents trained for you — not any question typed at runtime.")],
  mk_cols=["", "Decides", "Runs on", "Size", "French", "Calibration", "Licence"],
