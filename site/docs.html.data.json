@@ -19,5 +19,12 @@
   "municipal_slug": "municipal",
   "inbox_slug": "inbox",
   "biz_label": "For businesses: Tri Mail, installed on your premises →",
-  "biz_url": "https://trimail.intrane.fr/en"
+  "biz_url": "https://trimail.intrane.fr/en",
+  "nav_voice": "Voice agents",
+  "voice_url": "https://voice.intrane.fr/",
+  "nav_mail": "Email triage",
+  "voice_label": "For voice agents: MTLM Voice →",
+  "nav_s2d": "S2D",
+  "s2d_url": "https://s2d.intrane.fr/",
+  "s2d_label": "Decide from the voice: MTLM S2D →"
 }

@@ -19,5 +19,12 @@
   "inbox_slug": "inbox-fr",
   "nav_docs": "Docs",
   "biz_label": "Pour les entreprises : Tri Mail, installé chez vous →",
-  "biz_url": "https://trimail.intrane.fr/"
+  "biz_url": "https://trimail.intrane.fr/",
+  "nav_voice": "Agents vocaux",
+  "voice_url": "https://voice.intrane.fr/fr",
+  "nav_mail": "Tri des mails",
+  "voice_label": "Pour les agents vocaux : MTLM Voice →",
+  "nav_s2d": "S2D",
+  "s2d_url": "https://s2d.intrane.fr/fr",
+  "s2d_label": "Décider depuis la voix : MTLM S2D →"
 }

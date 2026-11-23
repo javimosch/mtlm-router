@@ -106,6 +106,9 @@
         <div class="flex items-center space-x-4">
           <a href="/" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_product}}</a>
           <a href="/docs" class="text-gray-400 hover:text-white text-sm hidden sm:inline">{{.nav_docs}}</a>
+          <a data-track="nav_voice" href="{{.voice_url}}" class="text-gray-400 hover:text-white text-sm hidden md:inline">{{.nav_voice}}</a>
+          <a data-track="nav_s2d" href="{{.s2d_url}}" class="text-gray-400 hover:text-white text-sm hidden md:inline">{{.nav_s2d}}</a>
+          <a data-track="nav_trimail" href="{{.biz_url}}" class="text-gray-400 hover:text-white text-sm hidden md:inline">{{.nav_mail}}</a>
           <a href="{{.alt_lang_url}}" class="text-cyan-400 hover:text-cyan-300 text-sm mono border border-cyan-800 rounded px-2 py-1" title="{{.alt_lang_title}}">{{.alt_lang_label}}</a>
           <a href="{{.github}}" target="_blank" rel="noopener" class="hero-gradient text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity accent-glow">
             GitHub
@@ -120,7 +123,7 @@
   <footer class="bg-gray-900 border-t border-gray-800 mt-20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
       <p class="text-gray-500 text-sm">mtlm-router — trained, compiled and served in <a href="{{.machin}}" class="text-cyan-400 hover:underline">machin/MFL</a>. No GPU, no cloud, no dependencies.</p>
-      <a data-track="footer_trimail" href="{{.biz_url}}" class="text-cyan-400 text-sm hover:underline">{{.biz_label}}</a>
+      <div class="flex flex-col items-center gap-1"><a data-track="footer_voice" href="{{.voice_url}}" class="text-cyan-400 text-sm hover:underline">{{.voice_label}}</a><a data-track="footer_s2d" href="{{.s2d_url}}" class="text-cyan-400 text-sm hover:underline">{{.s2d_label}}</a><a data-track="footer_trimail" href="{{.biz_url}}" class="text-cyan-400 text-sm hover:underline">{{.biz_label}}</a></div>
       <p class="text-gray-600 text-xs mono">Apache-2.0 · part of <a href="https://intrane.fr" class="text-cyan-400 hover:underline">intrane</a></p>
     </div>
   </footer>
